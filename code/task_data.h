@@ -29,7 +29,4 @@ typedef union task_data {
   load_data_t load_data;
 } task_data_t;
 
-task_data_t* form_task_data(operation_t operation, ...);
-void destroy_task_data(task_data_t* task_data);
-
 #endif //TASK_DATA_H

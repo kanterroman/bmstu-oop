@@ -16,7 +16,6 @@ find_package(Qt6 COMPONENTS
 add_executable(main.exe
         main.cpp
         mainwindow.cpp
-        task_data.cpp
 )
 target_link_libraries(main.exe
         Qt::Core

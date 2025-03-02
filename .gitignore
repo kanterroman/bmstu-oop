@@ -34,3 +34,6 @@
 # Clion files
 .idea
 code/cmake-build-debug
+
+# Linter
+.clang-format
