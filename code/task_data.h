@@ -22,11 +22,4 @@ typedef struct load_data {
   char *filepath;
 } load_data_t;
 
-typedef union task_data {
-  move_data_t move_data;
-  rotate_data_t rotate_data;
-  scale_data_t scale_data;
-  load_data_t load_data;
-} task_data_t;
-
 #endif //TASK_DATA_H
