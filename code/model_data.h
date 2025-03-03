@@ -13,7 +13,15 @@ typedef struct model_scale
     double factor;
 } model_scale_t;
 
+typedef struct model_vector
+{
+    double x;
+    double y;
+    double z;
+} model_vector_t;
+
 model_rotate_t init_model_rotate(double x_rad, double y_rad, double z_rad);
 model_scale_t init_model_scale(double factor);
+model_vector_t init_model_vector(double x, double y, double z);
 
 #endif //MODEL_DATA_H

@@ -16,6 +16,13 @@ find_package(Qt6 COMPONENTS
 add_executable(main.exe
         main.cpp
         mainwindow.cpp
+        converters.cpp
+        file_input.cpp
+        handler.cpp
+        model.cpp
+        model_data.cpp
+        point.cpp
+        task.cpp
 )
 target_link_libraries(main.exe
         Qt::Core

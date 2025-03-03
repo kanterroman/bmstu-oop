@@ -3,6 +3,9 @@
 
 #include "operation_codes.h"
 
+#include <QLineF>
+#include <QList>
+
 typedef struct move_data {
   int dx;
   int dy;
@@ -19,7 +22,11 @@ typedef struct scale_data {
 } scale_data_t;
 
 typedef struct load_data {
-  char *filepath;
+  const char *filepath;
 } load_data_t;
+
+typedef struct draw_data {
+    QList<QLineF> edges;
+} draw_data_t;
 
 #endif //TASK_DATA_H

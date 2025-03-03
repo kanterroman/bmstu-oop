@@ -1,81 +1,103 @@
 #include "handler.h"
 
 #include <stdio.h>
+#include "model.h"
 #include "converters.h"
+#include "file_input.h"
 
-status_t handle_move(const move_data_t &data);
-status_t handle_scale(const scale_data_t &data);
-status_t handle_rotate(const rotate_data_t &data);
-status_t handle_load(const load_data_t &data);
-void handle_destroy();
+status_t handle_move(model_t &model, const move_data_t &data);
+status_t handle_scale(model_t &model, const scale_data_t &data);
+status_t handle_rotate(model_t &model, const rotate_data_t &data);
+status_t handle_load(model_t &model, const load_data_t &data);
+void handle_destroy(model_t &model);
+status_t handle_draw(draw_data_t &data, const model_t &model);
 // status_t draw_model();
 
 status_t handle_task(task_t &task)
 {
     status_t rc = OK;
 
+    static model_t model = {0};
+
     switch (task.operation)
     {
     case MOVE:
-        rc = handle_move(task.move_data);
+        rc = handle_move(model, task.move_data);
+        break;
     case SCALE:
-        rc = handle_scale(task.scale_data);
+        rc = handle_scale(model, task.scale_data);
+        break;
     case ROTATE:
-        rc = handle_rotate(task.rotate_data);
+        rc = handle_rotate(model, task.rotate_data);
+        break;
     case LOAD:
-        rc = handle_load(task.load_data);
+        rc = handle_load(model, task.load_data);
+        break;
     case QUIT:
-        handle_destroy();
+        handle_destroy(model);
+        break;
     }
 
-    // if (rc == OK && task.operation != QUIT) Хз пока
-    //     draw_model();
+    if (rc == OK && task.operation != QUIT)
+        rc = handle_draw(task.draw_data, model);
 
     return rc;
 }
 
-status_t handle_move(const move_data_t &data)
+status_t handle_move(model_t &model, const move_data_t &data)
 {
-    if (!model_exists())
+    if (!validate_fields(model))
         return ERROR;
 
     model_move_t model_data = convert_move_data(data);
-    move_model(model_data);
+    move_model(model, model_data);
 
     return OK;
 }
 
-status_t handle_scale(const scale_data_t &data)
+status_t handle_scale(model_t &model, const scale_data_t &data)
 {
-    if (!model_exists())
+    if (!validate_fields(model))
         return ERROR;
 
     model_scale_t model_data = convert_scale_data(data);
-    scale_model(model_data);
-
-    return OK;
-}
-
-status_t handle_rotate(const rotate_data_t &data)
-{
-    if (!model_exists())
-        return ERROR;
-
-    model_rotate_t model_data = convert_rotate_data(data);
-    rotate_model(model_data);
-
-    return OK;
-}
-
-status_t handle_load(const load_data_t &data)
-{
-    FILE *src = fopen(data.filepath, "r");
-    status_t rc = init_model(src);
+    status_t rc = scale_model(model, model_data);
 
     return rc;
 }
 
-void handle_destroy()
+status_t handle_rotate(model_t &model, const rotate_data_t &data)
 {
-    destroy_model();
+    if (!validate_fields(model))
+        return ERROR;
+
+    model_rotate_t model_data = convert_rotate_data(data);
+    rotate_model(model, model_data);
+
+    return OK;
+}
+
+status_t handle_load(model_t &model, const load_data_t &data)
+{
+    FILE *src = fopen(data.filepath, "r");
+    status_t rc = read_model(model, src);
+    if (rc != FILE_ERROR)
+        fclose(src);
+
+    return rc;
+}
+
+void handle_destroy(model_t &model)
+{
+    destroy_model(model);
+}
+
+status_t handle_draw(draw_data_t &data, const model_t &model)
+{
+    if (!validate_fields(model))
+        return NOT_INIT_ERROR;
+
+    convert_draw_data(data, model);
+
+    return OK;
 }
