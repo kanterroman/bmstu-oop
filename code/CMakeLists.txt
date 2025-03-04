@@ -9,20 +9,21 @@ set(CMAKE_CXX_COMPILER clang++)
 
 find_package(Qt6 COMPONENTS
         Core
-        Gui
+        gui
         Widgets
         REQUIRED)
 
+include_directories(include)
 add_executable(main.exe
         main.cpp
-        mainwindow.cpp
-        converters.cpp
-        file_input.cpp
-        handler.cpp
-        model.cpp
-        model_data.cpp
-        point.cpp
-        task.cpp
+        gui/mainwindow.cpp
+        model_view_converters/converters.cpp
+        model_input/file_input.cpp
+        model_view_converters/handler.cpp
+        model/model.cpp
+        model/model_data.cpp
+        model/point.cpp
+        model_view_converters/task.cpp
 )
 target_link_libraries(main.exe
         Qt::Core

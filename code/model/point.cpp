@@ -1,5 +1,10 @@
 #include "point.h"
+
 #include "math.h"
+
+static void rotate_x(point_t &point, double angle);
+static void rotate_y(point_t &point, double angle);
+static void rotate_z(point_t &point, double angle);
 
 point_t init_point(double x, double y, double z)
 {
@@ -7,11 +12,6 @@ point_t init_point(double x, double y, double z)
     point.x = x;
     point.y = y;
     point.z = z;
-    return point;
-}
-
-point_t from_point(point_t &point)
-{
     return point;
 }
 
@@ -47,6 +47,17 @@ point_t divide_by_int(const point_t &point, int divisor)
     return init_point(point.x / divisor, point.y / divisor, point.z / divisor);
 }
 
+void rotate_point(point_t &point, const point_t &rotation_center, const model_rotate_t &angle)
+{
+    point = substr_points(point, rotation_center);
+
+    rotate_x(point, angle.x_rad);
+    rotate_y(point, angle.y_rad);
+    rotate_z(point, angle.z_rad);
+
+    point = add_points(point, rotation_center);
+}
+
 void rotate_x(point_t &point, double angle)
 {
     double y = point.y;
@@ -69,15 +80,4 @@ void rotate_z(point_t &point, double angle)
     double y = point.y;
     point.x = cos(angle) * x - sin(angle) * y;
     point.y = sin(angle) * x + cos(angle) * y;
-}
-
-void rotate_point(point_t &point, const point_t &rotation_center, const model_rotate_t &angle)
-{
-    point = substr_points(point, rotation_center);
-
-    rotate_x(point, angle.x_rad);
-    rotate_y(point, angle.y_rad);
-    rotate_z(point, angle.z_rad);
-
-    point = add_points(point, rotation_center);
 }

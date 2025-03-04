@@ -1,6 +1,6 @@
 #include "task.h"
 
-move_data_t init_move_task(int dx, int dy)
+move_data_t init_move_task(const int dx, const int dy)
 {
     move_data_t data;
 
@@ -10,7 +10,7 @@ move_data_t init_move_task(int dx, int dy)
     return data;
 }
 
-rotate_data_t init_rotate_task(int dx, int dy, int dz)
+rotate_data_t init_rotate_task(const int dx, const int dy, const int dz)
 {
     rotate_data_t data;
 
@@ -21,7 +21,7 @@ rotate_data_t init_rotate_task(int dx, int dy, int dz)
     return data;
 }
 
-scale_data_t init_scale_task(double factor)
+scale_data_t init_scale_task(const double factor)
 {
     scale_data_t data;
 

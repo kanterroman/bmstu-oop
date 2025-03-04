@@ -1,17 +1,15 @@
 #include "handler.h"
 
-#include <stdio.h>
-#include "model.h"
 #include "converters.h"
 #include "file_input.h"
+#include "model.h"
 
-status_t handle_move(model_t &model, const move_data_t &data);
-status_t handle_scale(model_t &model, const scale_data_t &data);
-status_t handle_rotate(model_t &model, const rotate_data_t &data);
-status_t handle_load(model_t &model, const load_data_t &data);
-void handle_destroy(model_t &model);
-status_t handle_draw(draw_data_t &data, const model_t &model);
-// status_t draw_model();
+static status_t handle_move(model_t &model, const move_data_t &data);
+static status_t handle_scale(model_t &model, const scale_data_t &data);
+static status_t handle_rotate(model_t &model, const rotate_data_t &data);
+static status_t handle_load(model_t &model, const load_data_t &data);
+static void handle_destroy(model_t &model);
+static status_t handle_draw(draw_data_t &data, const model_t &model);
 
 status_t handle_task(task_t &task)
 {
@@ -46,10 +44,10 @@ status_t handle_task(task_t &task)
 
 status_t handle_move(model_t &model, const move_data_t &data)
 {
-    if (!validate_fields(model))
-        return ERROR;
+    if (!fields_exist(model))
+        return NOT_INIT_ERROR;
 
-    model_move_t model_data = convert_move_data(data);
+    point_t model_data = convert_move_data(data);
     move_model(model, model_data);
 
     return OK;
@@ -57,8 +55,8 @@ status_t handle_move(model_t &model, const move_data_t &data)
 
 status_t handle_scale(model_t &model, const scale_data_t &data)
 {
-    if (!validate_fields(model))
-        return ERROR;
+    if (!fields_exist(model))
+        return NOT_INIT_ERROR;
 
     model_scale_t model_data = convert_scale_data(data);
     status_t rc = scale_model(model, model_data);
@@ -68,13 +66,13 @@ status_t handle_scale(model_t &model, const scale_data_t &data)
 
 status_t handle_rotate(model_t &model, const rotate_data_t &data)
 {
-    if (!validate_fields(model))
-        return ERROR;
+    if (!fields_exist(model))
+        return NOT_INIT_ERROR;
 
     model_rotate_t model_data = convert_rotate_data(data);
-    rotate_model(model, model_data);
+    status_t rc = rotate_model(model, model_data);
 
-    return OK;
+    return rc;
 }
 
 status_t handle_load(model_t &model, const load_data_t &data)
@@ -92,9 +90,9 @@ void handle_destroy(model_t &model)
     destroy_model(model);
 }
 
-status_t handle_draw(draw_data_t &data, const model_t &model)
+status_t  handle_draw(draw_data_t &data, const model_t &model)
 {
-    if (!validate_fields(model))
+    if (!fields_exist(model))
         return NOT_INIT_ERROR;
 
     convert_draw_data(data, model);

@@ -3,10 +3,12 @@
 
 typedef enum status {
     OK,
-    ERROR,
     NOT_INIT_ERROR,
     MALLOC_ERROR,
     FILE_ERROR,
+    FILE_FORMAT_ERROR,
+    ZERO_DIVISION_ERROR,
+    WRONG_SCALE_ERROR,
     FORMAT_ERROR
 } status_t;
 

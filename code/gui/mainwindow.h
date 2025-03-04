@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow
   private:
     void draw(draw_data_t &data);
     void show_error(status_t rc);
+    void show_warning(const char *error_string);
     Ui::MainWindow *ui;
     QImage image;
     task_t task;

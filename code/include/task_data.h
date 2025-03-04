@@ -1,8 +1,6 @@
 #ifndef TASK_DATA_H
 #define TASK_DATA_H
 
-#include "operation_codes.h"
-
 #include <QLineF>
 #include <QList>
 

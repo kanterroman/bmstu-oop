@@ -1,6 +1,6 @@
 #include "mainwindow.h"
-
 #include "ui_mainwindow.h"
+
 #include <QMessageBox>
 #include "handler.h"
 
@@ -17,31 +17,35 @@
 
 #define NODE_RADIUS 3
 
-// OK,
-// ERROR,
-// NOT_INIT_ERROR,
-// MALLOC_ERROR,
-// FILE_ERROR,
-// FORMAT_ERROR
+void MainWindow::show_warning(const char *error_string)
+{
+    QMessageBox::warning(ui->centralwidget, "", error_string);
+}
 
 void MainWindow::show_error(status_t rc)
 {
     switch (rc)
     {
     case NOT_INIT_ERROR:
-        QMessageBox::about(ui->centralwidget, "", "Загрузите модель");
+        show_warning("Загрузите модель");
         break;
     case MALLOC_ERROR:
-        QMessageBox::about(ui->centralwidget, "", "Ошибка при выделении памяти");
+        show_warning("Ошибка при выделении памяти");
         break;
     case FILE_ERROR:
-        QMessageBox::about(ui->centralwidget, "", "Ошибка при открытии файла");
+        show_warning("Ошибка при открытии файла");
         break;
-    case FORMAT_ERROR:
-        QMessageBox::about(ui->centralwidget, "", "Ошибка при чтении файла");
+    case FILE_FORMAT_ERROR:
+        show_warning("Ошибка при чтении файла");
+        break;
+    case ZERO_DIVISION_ERROR:
+        show_warning("При выполнении произошло деление на ноль");
+        break;
+    case WRONG_SCALE_ERROR:
+        show_warning("Множитель масштабирования должен быть больше 0");
         break;
     default:
-        QMessageBox::about(ui->centralwidget, "", "Huh");
+        show_warning("Неизвестная ошибка");
         break;
     }
 }
@@ -51,6 +55,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     auto *scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
+    QRegularExpression regExp("[0-9]+\.[0-9]*");
+    auto *validator = new QRegularExpressionValidator(regExp, ui->lineEdit);
+    ui->lineEdit->setValidator(validator);
     image = QImage(WIDTH, HEIGHT, QImage::Format_RGB32);
 }
 
@@ -59,6 +66,7 @@ MainWindow::~MainWindow()
     task.operation = QUIT;
     handle_task(task);
     delete ui->graphicsView->scene();
+    delete ui->lineEdit->validator();
     delete ui;
 }
 
