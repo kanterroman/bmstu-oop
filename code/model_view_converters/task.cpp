@@ -32,18 +32,27 @@ scale_data_t init_scale_task(const double factor)
 
 load_data_t init_load_task(const char *filepath)
 {
-    load_data_t data;
-
-    data.filepath = filepath;
+    load_data_t data = filepath;
 
     return data;
 }
 
-draw_data_t init_draw_task()
+draw_data_t init_draw_task(const QGraphicsView *view)
 {
     draw_data_t data;
 
+    data.view = view;
     data.edges = QList<QLineF>();
 
     return data;
+}
+
+void clear_edges(QList<QLineF> &edges)
+{
+    edges.clear();
+}
+
+void clear_draw_data(draw_data_t &data)
+{
+    clear_edges(data.edges);
 }

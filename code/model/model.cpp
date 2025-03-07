@@ -3,23 +3,11 @@
 #include <stdlib.h>
 #include "float.h"
 
-static status_t find_model_barycenter(point_t &barycenter, const node_t *nodes, size_t size);
-static void scale_node(node_t &node, double factor);
-static void move_node(node_t &node, const point_t &move_vector);
-static void rotate_node(node_t &node, const model_rotate_t &data, const point_t &rot_center);
+static status_t find_model_barycenter(point_t &barycenter, const point_t *points, const size_t size);
 
 bool fields_exist(const model_t &model)
 {
-    return model.nodes && model.edges;
-}
-
-node_t init_node(const point_t &point)
-{
-    node_t node;
-
-    node.point = point;
-
-    return node;
+    return model.points && model.edges;
 }
 
 edge_t init_edge(const int first, const int second)
@@ -32,22 +20,22 @@ edge_t init_edge(const int first, const int second)
     return edge;
 }
 
-status_t init_model(model_t &model, const size_t nodes_num, const size_t edges_num)
+status_t init_model(model_t &model, const size_t points_num, const size_t edges_num)
 {
     status_t rc = OK;
 
-    if (nodes_num < 1)
+    if (points_num < 1)
     {
         rc = FORMAT_ERROR;
     }
     else
     {
-        model.nodes = (node_t *)malloc(nodes_num * sizeof(node_t));
+        model.points = (point_t *)malloc(points_num * sizeof(point_t));
         model.edges = (edge_t *)malloc(edges_num * sizeof(edge_t));
         if (fields_exist(model))
         {
             model.edges_size = 0;
-            model.nodes_size = 0;
+            model.points_size = 0;
         }
         else
         {
@@ -59,18 +47,18 @@ status_t init_model(model_t &model, const size_t nodes_num, const size_t edges_n
     return rc;
 }
 
-status_t add_node(model_t &model, const node_t &node)
+status_t append_point(model_t &model, const point_t &point)
 {
     if (!fields_exist(model))
         return NOT_INIT_ERROR;
 
-    model.nodes[model.nodes_size] = node;
-    model.nodes_size++;
+    model.points[model.points_size] = point;
+    model.points_size++;
 
     return OK;
 }
 
-status_t add_edge(model_t &model, const edge_t &edge)
+status_t append_edge(model_t &model, const edge_t &edge)
 {
     if (!model.edges)
         return NOT_INIT_ERROR;
@@ -85,7 +73,7 @@ status_t add_edge(model_t &model, const edge_t &edge)
 
 void destroy_model(const model_t &model)
 {
-    free(model.nodes);
+    free(model.points);
     free(model.edges);
 }
 
@@ -97,12 +85,15 @@ status_t scale_model(model_t &model, const model_scale_t &data)
     if (data.factor < DBL_EPSILON)
         return WRONG_SCALE_ERROR;
 
-    for (size_t i = 0; i < model.nodes_size; i++)
+    point_t barycenter;
+    status_t rc = find_model_barycenter(barycenter, model.points, model.points_size);
+
+    for (size_t i = 0; rc == OK && i < model.points_size; i++)
     {
-        scale_node(model.nodes[i], data.factor);
+        scale_point(model.points[i], barycenter, data.factor);
     }
 
-    return OK;
+    return rc;
 }
 
 
@@ -111,9 +102,9 @@ status_t move_model(model_t &model, const point_t &move_vector)
     if (!fields_exist(model))
         return NOT_INIT_ERROR;
 
-    for (size_t i = 0; i < model.nodes_size; i++)
+    for (size_t i = 0; i < model.points_size; i++)
     {
-       move_node(model.nodes[i], move_vector);
+       move_point(model.points[i], move_vector);
     }
 
     return OK;
@@ -125,17 +116,17 @@ status_t rotate_model(model_t &model, const model_rotate_t &data)
         return NOT_INIT_ERROR;
 
     point_t barycenter;
-    status_t rc = find_model_barycenter(barycenter, model.nodes, model.nodes_size);
+    status_t rc = find_model_barycenter(barycenter, model.points, model.points_size);
 
-    for (size_t i = 0; i < model.nodes_size; i++)
+    for (size_t i = 0; rc == OK && i < model.points_size; i++)
     {
-        rotate_node(model.nodes[i], data, barycenter);
+        rotate_point(model.points[i], barycenter, data);
     }
 
     return rc;
 }
 
-status_t find_model_barycenter(point_t &barycenter, const node_t *nodes, const size_t size)
+status_t find_model_barycenter(point_t &barycenter, const point_t *points, const size_t size)
 {
     if (size == 0)
         return ZERO_DIVISION_ERROR;
@@ -144,25 +135,10 @@ status_t find_model_barycenter(point_t &barycenter, const node_t *nodes, const s
 
     for (int i = 0; i < size; i++)
     {
-        coord_sum = add_points(nodes[i].point, coord_sum);
+        coord_sum = add_points(points[i], coord_sum);
     }
 
     barycenter = divide_by_int(coord_sum, (int)size);
 
     return OK;
-}
-
-void scale_node(node_t &node, const double factor)
-{
-    node.point = multip_point(node.point, factor);
-}
-
-void move_node(node_t &node, const point_t &move_vector)
-{
-    node.point = add_points(node.point, move_vector);
-}
-
-void rotate_node(node_t &node, const model_rotate_t &data, const point_t &rot_center)
-{
-    rotate_point(node.point, rot_center, data);
 }

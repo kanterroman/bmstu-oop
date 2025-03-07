@@ -28,11 +28,12 @@ class MainWindow : public QMainWindow
     void on_load_btn_clicked();
 
   private:
-    void draw(draw_data_t &data);
-    void show_error(status_t rc);
+    void show_error_desc(status_t rc);
     void show_warning(const char *error_string);
     Ui::MainWindow *ui;
-    QImage image;
     task_t task;
 };
+
+status_t draw(draw_data_t &data);
+
 #endif // MAINWINDOW_H

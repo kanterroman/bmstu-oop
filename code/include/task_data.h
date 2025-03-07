@@ -3,6 +3,7 @@
 
 #include <QLineF>
 #include <QList>
+#include <QGraphicsView>
 
 typedef struct move_data {
   int dx;
@@ -19,12 +20,11 @@ typedef struct scale_data {
   double scale_factor;
 } scale_data_t;
 
-typedef struct load_data {
-  const char *filepath;
-} load_data_t;
+typedef const char *load_data_t;
 
 typedef struct draw_data {
     QList<QLineF> edges;
+    const QGraphicsView *view;
 } draw_data_t;
 
 #endif //TASK_DATA_H

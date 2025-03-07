@@ -4,8 +4,8 @@
 #include <QMessageBox>
 #include "handler.h"
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1200
+#define HEIGHT 800
 
 #define MODEL_COLOR_R 0
 #define MODEL_COLOR_G 0
@@ -15,17 +15,19 @@
 #define CANVAS_COLOR_G 255
 #define CANVAS_COLOR_B 255
 
-#define NODE_RADIUS 3
+#define POINT_RADIUS 2
 
 void MainWindow::show_warning(const char *error_string)
 {
     QMessageBox::warning(ui->centralwidget, "", error_string);
 }
 
-void MainWindow::show_error(status_t rc)
+void MainWindow::show_error_desc(const status_t rc)
 {
     switch (rc)
     {
+    case OK:
+        break;
     case NOT_INIT_ERROR:
         show_warning("Загрузите модель");
         break;
@@ -44,6 +46,15 @@ void MainWindow::show_error(status_t rc)
     case WRONG_SCALE_ERROR:
         show_warning("Множитель масштабирования должен быть больше 0");
         break;
+    case WRONG_ARGS_ERROR:
+        show_warning("Некорректное поведение программы");
+        break;
+    case GRAPHICS_ERROR:
+        show_warning("Графическое окно неинициализировано");
+        break;
+    case FORMAT_ERROR:
+        show_warning("Модель должна иметь хотя бы одну точку");
+        break;
     default:
         show_warning("Неизвестная ошибка");
         break;
@@ -55,10 +66,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     auto *scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
+
     QRegularExpression regExp("[0-9]+\.[0-9]*");
     auto *validator = new QRegularExpressionValidator(regExp, ui->lineEdit);
+
     ui->lineEdit->setValidator(validator);
-    image = QImage(WIDTH, HEIGHT, QImage::Format_RGB32);
+
+    task.draw_data = init_draw_task(ui->graphicsView);
 }
 
 MainWindow::~MainWindow()
@@ -81,9 +95,7 @@ void MainWindow::on_move_btn_clicked()
     status_t rc = handle_task(task);
 
     if (rc != OK)
-        show_error(rc);
-    else
-        draw(task.draw_data);
+        show_error_desc(rc);
 }
 
 void MainWindow::on_scale_btn_clicked()
@@ -96,9 +108,7 @@ void MainWindow::on_scale_btn_clicked()
     status_t rc = handle_task(task);
 
     if (rc != OK)
-        show_error(rc);
-    else
-        draw(task.draw_data);
+        show_error_desc(rc);
 }
 
 void MainWindow::on_rotate_btn_clicked()
@@ -113,9 +123,7 @@ void MainWindow::on_rotate_btn_clicked()
     status_t rc = handle_task(task);
 
     if (rc != OK)
-        show_error(rc);
-    else
-        draw(task.draw_data);
+        show_error_desc(rc);
 }
 
 void MainWindow::on_load_btn_clicked()
@@ -128,31 +136,43 @@ void MainWindow::on_load_btn_clicked()
     status_t rc = handle_task(task);
 
     if (rc != OK)
-        show_error(rc);
-    else
-        draw(task.draw_data);
+        show_error_desc(rc);
 }
 
-void MainWindow::draw(draw_data_t &data)
+void draw_point(QPainter &p, const QPointF &point)
 {
+    p.drawEllipse(point, POINT_RADIUS, POINT_RADIUS);
+}
+
+void draw_edge(QPainter &p, const QLineF &edge)
+{
+    p.drawLine(edge);
+}
+
+status_t draw(draw_data_t &data)
+{
+    if (!data.view)
+        return GRAPHICS_ERROR;
+
+    QImage image(WIDTH, HEIGHT, QImage::Format_RGB32);
+
     image.fill(QColor(CANVAS_COLOR_R, CANVAS_COLOR_G, CANVAS_COLOR_B));
 
     QPainter p(&image);
-    p.setPen(QColor(MODEL_COLOR_R, MODEL_COLOR_G, MODEL_COLOR_B));
+    p.setPen(QPen(QColor(MODEL_COLOR_R, MODEL_COLOR_G, MODEL_COLOR_B)));
 
     for (auto edge : data.edges)
     {
-        QPointF first = edge.p1();
-        QPointF second = edge.p2();
-        p.drawEllipse(first, NODE_RADIUS, NODE_RADIUS);
-        p.drawEllipse(second, NODE_RADIUS, NODE_RADIUS);
-        p.drawLine(edge);
+        draw_point(p, edge.p1());
+        draw_point(p, edge.p2());
+        draw_edge(p, edge);
     }
 
     p.end();
 
     QPixmap pixmap = QPixmap::fromImage(image);
-    ui->graphicsView->scene()->clear();
-    ui->graphicsView->scene()->addPixmap(pixmap);
-    data.edges.clear();
+    data.view->scene()->clear();
+    data.view->scene()->addPixmap(pixmap);
+
+    return OK;
 }

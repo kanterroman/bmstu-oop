@@ -9,7 +9,9 @@ typedef enum status {
     FILE_FORMAT_ERROR,
     ZERO_DIVISION_ERROR,
     WRONG_SCALE_ERROR,
-    FORMAT_ERROR
+    FORMAT_ERROR,
+    GRAPHICS_ERROR,
+    WRONG_ARGS_ERROR,
 } status_t;
 
 #endif //STATUS_CODES_H

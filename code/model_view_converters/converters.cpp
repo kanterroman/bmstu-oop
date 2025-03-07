@@ -1,7 +1,7 @@
 #include "converters.h"
 
-static double to_rad(double ang);
-static void append_edge(QList<QLineF> &edges, const node_t &first, const node_t &second);
+static double to_rad(const double ang);
+static void append_edge(QList<QLineF> &edges, const point_t &first, const point_t &second);
 static QPointF to_qpointf(const point_t &point);
 
 point_t convert_move_data(const move_data_t &data)
@@ -28,8 +28,8 @@ void convert_draw_data(draw_data_t &data, const model_t &model)
     for (size_t i = 0; i < model.edges_size; i++)
     {
         edge_t cur_edge = model.edges[i];
-        append_edge(data.edges, model.nodes[cur_edge.first - 1],
-            model.nodes[cur_edge.second - 1]);
+        append_edge(data.edges, model.points[cur_edge.first - 1],
+            model.points[cur_edge.second - 1]);
     }
 }
 
@@ -38,9 +38,9 @@ double to_rad(const double ang)
     return ang * M_PI / 180;
 }
 
-void append_edge(QList<QLineF> &edges, const node_t &first, const node_t &second)
+void append_edge(QList<QLineF> &edges, const point_t &first, const point_t &second)
 {
-    edges.append(QLineF(to_qpointf(first.point), to_qpointf(second.point)));
+    edges.append(QLineF(to_qpointf(first), to_qpointf(second)));
 }
 
 QPointF to_qpointf(const point_t &point)

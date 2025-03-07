@@ -3,11 +3,12 @@
 #include "converters.h"
 #include "file_input.h"
 #include "model.h"
+#include "../gui/mainwindow.h"
 
 static status_t handle_move(model_t &model, const move_data_t &data);
 static status_t handle_scale(model_t &model, const scale_data_t &data);
 static status_t handle_rotate(model_t &model, const rotate_data_t &data);
-static status_t handle_load(model_t &model, const load_data_t &data);
+static status_t handle_load(model_t &model, const char *filepath);
 static void handle_destroy(model_t &model);
 static status_t handle_draw(draw_data_t &data, const model_t &model);
 
@@ -15,10 +16,13 @@ status_t handle_task(task_t &task)
 {
     status_t rc = OK;
 
-    static model_t model = {0};
+    static model_t model;
 
     switch (task.operation)
     {
+    case LOAD:
+        rc = handle_load(model, task.load_data);
+        break;
     case MOVE:
         rc = handle_move(model, task.move_data);
         break;
@@ -27,9 +31,6 @@ status_t handle_task(task_t &task)
         break;
     case ROTATE:
         rc = handle_rotate(model, task.rotate_data);
-        break;
-    case LOAD:
-        rc = handle_load(model, task.load_data);
         break;
     case QUIT:
         handle_destroy(model);
@@ -75,12 +76,12 @@ status_t handle_rotate(model_t &model, const rotate_data_t &data)
     return rc;
 }
 
-status_t handle_load(model_t &model, const load_data_t &data)
+status_t handle_load(model_t &model, const load_data_t filepath)
 {
-    FILE *src = fopen(data.filepath, "r");
-    status_t rc = read_model(model, src);
-    if (rc != FILE_ERROR)
-        fclose(src);
+    if (!filepath)
+        return FORMAT_ERROR;
+
+    status_t rc = read_model(model, filepath);
 
     return rc;
 }
@@ -90,12 +91,14 @@ void handle_destroy(model_t &model)
     destroy_model(model);
 }
 
-status_t  handle_draw(draw_data_t &data, const model_t &model)
+status_t handle_draw(draw_data_t &data, const model_t &model)
 {
     if (!fields_exist(model))
         return NOT_INIT_ERROR;
 
     convert_draw_data(data, model);
+    status_t rc = draw(data);
+    clear_draw_data(data);
 
-    return OK;
+    return rc;
 }

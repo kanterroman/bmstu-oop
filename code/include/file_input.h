@@ -5,7 +5,6 @@
 #include "status_codes.h"
 #include "model.h"
 
-
-status_t read_model(model_t &model, FILE *in);
+status_t read_model(model_t &model, const char *filepath);
 
 #endif //FILE_INPUT_H
