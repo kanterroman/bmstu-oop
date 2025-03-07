@@ -4,7 +4,6 @@
 #include "file_input.h"
 #include "model.h"
 #include "drawer.h"
-#include "../gui/mainwindow.h"
 
 static status_t handle_move(model_t &model, const move_data_t &data);
 static status_t handle_scale(model_t &model, const scale_data_t &data);
