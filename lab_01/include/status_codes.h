@@ -1,0 +1,17 @@
+#ifndef STATUS_CODES_H
+#define STATUS_CODES_H
+
+typedef enum status {
+    OK,
+    NOT_INIT_ERROR,
+    MALLOC_ERROR,
+    FILE_ERROR,
+    FILE_FORMAT_ERROR,
+    ZERO_DIVISION_ERROR,
+    WRONG_SCALE_ERROR,
+    FORMAT_ERROR,
+    GRAPHICS_ERROR,
+    WRONG_ARGS_ERROR,
+} status_t;
+
+#endif //STATUS_CODES_H
