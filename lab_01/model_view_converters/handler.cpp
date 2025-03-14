@@ -97,7 +97,7 @@ static status_t handle_draw(canvas_t canvas, const model_t &model)
     if (!fields_exist(model) || !canvas)
         return NOT_INIT_ERROR;
 
-    status_t rc = draw(model, canvas);
+    status_t rc = draw(canvas, model);
 
     return rc;
 }

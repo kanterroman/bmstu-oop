@@ -1,6 +1,5 @@
 #ifndef TASK_DATA_H
 #define TASK_DATA_H
-#include "drawer.h"
 
 typedef struct move_data {
   int dx;

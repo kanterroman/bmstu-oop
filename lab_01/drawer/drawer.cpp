@@ -1,31 +1,31 @@
 #include "drawer.h"
 
+#include <QColor>
+
 #define POINT_RADIUS 2
 
 void display_model(canvas_t canvas);
-status_t draw_figure(const model_t &model, canvas_t canvas);
-status_t init_drawer_tools(canvas_t canvas);
+status_t draw_figure(canvas_t canvas, const model_t &model);
+status_t init_drawer_tools(canvas_t canvas, int width, int height, QColor font_color, QColor lines_color);
 void destroy_drawer_tools(canvas_t canvas);
 bool validate_canvas(canvas_t canvas);
-status_t draw_ellipse(canvas_t canvas, point_t &center, double rad);
-status_t draw_line(canvas_t canvas, point_t &beg, point_t &end);
+status_t draw_ellipse(canvas_t canvas, const point_t &center, const double rad);
+status_t draw_line(canvas_t canvas, const point_t &beg, const point_t &end);
 status_t refresh_canvas(canvas_t canvas);
 
-status_t draw(const model_t &model, canvas_t canvas)
+status_t draw(canvas_t canvas, const model_t &model)
 {
     if (!validate_canvas(canvas) || !fields_exist(model))
         return NOT_INIT_ERROR;
-    status_t rc = OK;
 
-    if (rc == OK)
-        rc = draw_figure(model, canvas);
+    status_t rc = draw_figure(canvas, model);
     if (rc == OK)
         display_model(canvas);
 
     return OK;
 }
 
-status_t draw_figure(const model_t &model, canvas_t canvas)
+status_t draw_figure(canvas_t canvas, const model_t &model)
 {
     if (!validate_canvas(canvas))
         return NOT_INIT_ERROR;

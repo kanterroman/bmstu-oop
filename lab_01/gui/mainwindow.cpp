@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QMessageBox>
 #include "drawer.h"
 #include "handler.h"
-#include <QMessageBox>
 
 #define IMAGE_COLOR_R 255
 #define IMAGE_COLOR_G 255
@@ -15,6 +15,11 @@
 #define MODEL_COLOR_R 0
 #define MODEL_COLOR_G 0
 #define MODEL_COLOR_B 0
+
+void init_canvas_(QGraphicsView *view, canvas_t canvas);
+void destroy_painter(QPainter *painter);
+QPointF to_qpointf(const point_t &point);
+void refresh_scene(QGraphicsScene *scene, QPixmap &pixmap);
 
 struct canvas
 {
@@ -28,17 +33,17 @@ bool validate_canvas(canvas_t canvas)
     return canvas && canvas->view;
 }
 
-status_t init_drawer_tools(canvas_t canvas)
+status_t init_drawer_tools(canvas_t canvas, int width, int height, QColor font_color, QColor lines_color)
 {
     if (!validate_canvas(canvas))
         return NOT_INIT_ERROR;
 
     status_t rc = OK;
 
-    canvas->image = new(std::nothrow) QImage(WIDTH, HEIGHT, QImage::Format_RGB32);
-    canvas->image->fill(QColor(IMAGE_COLOR_R, IMAGE_COLOR_G, IMAGE_COLOR_B));
+    canvas->image = new(std::nothrow) QImage(width, height, QImage::Format_RGB32);
+    canvas->image->fill(font_color);
     canvas->painter = new(std::nothrow) QPainter(canvas->image);
-    canvas->painter->setPen(QColor(MODEL_COLOR_R, MODEL_COLOR_G, MODEL_COLOR_B));
+    canvas->painter->setPen(lines_color);
 
     if (!canvas->painter || !canvas->image)
         rc = MALLOC_ERROR;
@@ -56,7 +61,8 @@ void init_canvas_(QGraphicsView *view, canvas_t canvas)
     if (canvas)
     {
         canvas->view = view;
-        init_drawer_tools(canvas);
+        init_drawer_tools(canvas, WIDTH, HEIGHT, QColor(IMAGE_COLOR_R, IMAGE_COLOR_G, IMAGE_COLOR_B),
+            QColor(MODEL_COLOR_R, MODEL_COLOR_G, MODEL_COLOR_B));
     }
 }
 
@@ -78,13 +84,13 @@ void destroy_drawer_tools(canvas_t canvas)
     }
 }
 
-QPointF to_qpointf(point_t &point)
+QPointF to_qpointf(const point_t &point)
 {
     QPointF pt = QPointF(point.x, point.y);
     return pt;
 }
 
-status_t draw_line(canvas_t canvas, point_t &beg, point_t &end)
+status_t draw_line(canvas_t canvas, const point_t &beg, const point_t &end)
 {
     if (!validate_canvas(canvas) || !canvas->painter)
         return NOT_INIT_ERROR;
@@ -102,7 +108,7 @@ status_t refresh_canvas(canvas_t canvas)
     return OK;
 }
 
-status_t draw_ellipse(canvas_t canvas, point_t &center, double rad)
+status_t draw_ellipse(canvas_t canvas, const point_t &center, const double rad)
 {
     if (!validate_canvas(canvas) || !canvas->painter)
         return NOT_INIT_ERROR;
@@ -131,6 +137,9 @@ void destroy_canvas(canvas_t canvas)
     destroy_drawer_tools(canvas);
     free(canvas);
 }
+
+
+
 
 void MainWindow::show_warning(const char *error_string)
 {

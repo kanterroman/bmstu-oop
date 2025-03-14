@@ -3,6 +3,7 @@
 
 #include "operation_codes.h"
 #include "task_data.h"
+#include "drawer.h"
 
 typedef struct task
 {
