@@ -1,8 +1,136 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QMessageBox>
+#include "drawer.h"
 #include "handler.h"
+#include <QMessageBox>
+
+#define IMAGE_COLOR_R 255
+#define IMAGE_COLOR_G 255
+#define IMAGE_COLOR_B 255
+
+#define WIDTH 1200
+#define HEIGHT 800
+
+#define MODEL_COLOR_R 0
+#define MODEL_COLOR_G 0
+#define MODEL_COLOR_B 0
+
+struct canvas
+{
+    QGraphicsView *view;
+    QImage *image;
+    QPainter *painter;
+};
+
+bool validate_canvas(canvas_t canvas)
+{
+    return canvas && canvas->view;
+}
+
+status_t init_drawer_tools(canvas_t canvas)
+{
+    if (!validate_canvas(canvas))
+        return NOT_INIT_ERROR;
+
+    status_t rc = OK;
+
+    canvas->image = new(std::nothrow) QImage(WIDTH, HEIGHT, QImage::Format_RGB32);
+    canvas->image->fill(QColor(IMAGE_COLOR_R, IMAGE_COLOR_G, IMAGE_COLOR_B));
+    canvas->painter = new(std::nothrow) QPainter(canvas->image);
+    canvas->painter->setPen(QColor(MODEL_COLOR_R, MODEL_COLOR_G, MODEL_COLOR_B));
+
+    if (!canvas->painter || !canvas->image)
+        rc = MALLOC_ERROR;
+
+    return rc;
+}
+
+canvas_t init_canvas()
+{
+    return (canvas_t)malloc(sizeof(canvas));
+}
+
+void init_canvas_(QGraphicsView *view, canvas_t canvas)
+{
+    if (canvas)
+    {
+        canvas->view = view;
+        init_drawer_tools(canvas);
+    }
+}
+
+void destroy_painter(QPainter *painter)
+{
+    if (painter)
+        painter->end();
+    delete painter;
+}
+
+void destroy_drawer_tools(canvas_t canvas)
+{
+    if (canvas)
+    {
+        destroy_painter(canvas->painter);
+        delete canvas->image;
+        canvas->painter = NULL;
+        canvas->image = NULL;
+    }
+}
+
+QPointF to_qpointf(point_t &point)
+{
+    QPointF pt = QPointF(point.x, point.y);
+    return pt;
+}
+
+status_t draw_line(canvas_t canvas, point_t &beg, point_t &end)
+{
+    if (!validate_canvas(canvas) || !canvas->painter)
+        return NOT_INIT_ERROR;
+    QPointF first = to_qpointf(beg);
+    QPointF second = to_qpointf(end);
+    canvas->painter->drawLine(first, second);
+    return OK;
+}
+
+status_t refresh_canvas(canvas_t canvas)
+{
+    if (!canvas->image)
+        return NOT_INIT_ERROR;
+    canvas->image->fill(QColor(IMAGE_COLOR_R, IMAGE_COLOR_G, IMAGE_COLOR_B));
+    return OK;
+}
+
+status_t draw_ellipse(canvas_t canvas, point_t &center, double rad)
+{
+    if (!validate_canvas(canvas) || !canvas->painter)
+        return NOT_INIT_ERROR;
+    QPointF ctr = to_qpointf(center);
+    canvas->painter->drawEllipse(ctr, rad, rad);
+    return OK;
+}
+
+void refresh_scene(QGraphicsScene *scene, QPixmap &pixmap)
+{
+    if (scene)
+    {
+        scene->clear();
+        scene->addPixmap(pixmap);
+    }
+}
+
+void display_model(canvas_t canvas)
+{
+    QPixmap pixmap = QPixmap::fromImage(*canvas->image);
+    refresh_scene(canvas->view->scene(), pixmap);
+}
+
+void destroy_canvas(canvas_t canvas)
+{
+    destroy_drawer_tools(canvas);
+    free(canvas);
+}
 
 void MainWindow::show_warning(const char *error_string)
 {
@@ -48,6 +176,7 @@ void MainWindow::show_error_desc(const status_t rc)
     }
 }
 
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -56,10 +185,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     QRegularExpression regExp("[0-9]+\.[0-9]*");
     auto *validator = new QRegularExpressionValidator(regExp, ui->lineEdit);
-
     ui->lineEdit->setValidator(validator);
 
-    task.draw_data = init_draw_task(ui->graphicsView);
+    task.canvas = init_canvas();
+    init_canvas_(ui->graphicsView, task.canvas);
 }
 
 MainWindow::~MainWindow()
@@ -83,6 +212,8 @@ void MainWindow::on_move_btn_clicked()
 
     if (rc != OK)
         show_error_desc(rc);
+    else
+        send_draw();
 }
 
 void MainWindow::on_scale_btn_clicked()
@@ -96,6 +227,8 @@ void MainWindow::on_scale_btn_clicked()
 
     if (rc != OK)
         show_error_desc(rc);
+    else
+        send_draw();
 }
 
 void MainWindow::on_rotate_btn_clicked()
@@ -111,6 +244,8 @@ void MainWindow::on_rotate_btn_clicked()
 
     if (rc != OK)
         show_error_desc(rc);
+    else
+        send_draw();
 }
 
 void MainWindow::on_load_btn_clicked()
@@ -122,6 +257,16 @@ void MainWindow::on_load_btn_clicked()
 
     status_t rc = handle_task(task);
 
+    if (rc != OK)
+        show_error_desc(rc);
+    else
+        send_draw();
+}
+
+void MainWindow::send_draw()
+{
+    task.operation = DRAW;
+    status_t rc = handle_task(task);
     if (rc != OK)
         show_error_desc(rc);
 }

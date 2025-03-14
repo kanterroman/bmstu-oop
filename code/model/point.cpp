@@ -72,7 +72,7 @@ void scale_point(point_t &point, const point_t &scale_center, const double facto
     point = add_points(point, scale_center);
 }
 
-void rotate_x(point_t &point, const double angle)
+static void rotate_x(point_t &point, const double angle)
 {
     double y = point.y;
     double z = point.z;
@@ -80,7 +80,7 @@ void rotate_x(point_t &point, const double angle)
     point.z = sin(angle) * y + cos(angle) * z;
 }
 
-void rotate_y(point_t &point, const double angle)
+static void rotate_y(point_t &point, const double angle)
 {
     double x = point.x;
     double z = point.z;
@@ -88,7 +88,7 @@ void rotate_y(point_t &point, const double angle)
     point.z = -sin(angle) * x + cos(angle) * z;
 }
 
-void rotate_z(point_t &point, const double angle)
+static void rotate_z(point_t &point, const double angle)
 {
     double x = point.x;
     double y = point.y;

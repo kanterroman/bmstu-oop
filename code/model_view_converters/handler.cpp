@@ -1,16 +1,16 @@
 #include "handler.h"
 
 #include "converters.h"
+#include "drawer.h"
 #include "file_input.h"
 #include "model.h"
-#include "drawer.h"
 
 static status_t handle_move(model_t &model, const move_data_t &data);
 static status_t handle_scale(model_t &model, const scale_data_t &data);
 static status_t handle_rotate(model_t &model, const rotate_data_t &data);
 static status_t handle_load(model_t &model, const char *filepath);
-static void handle_destroy(model_t &model);
-static status_t handle_draw(draw_data_t &data, const model_t &model);
+static void handle_destroy(model_t &model, canvas_t canvas);
+static status_t handle_draw(canvas_t canvas, const model_t &model);
 
 status_t handle_task(task_t &task)
 {
@@ -32,18 +32,18 @@ status_t handle_task(task_t &task)
     case ROTATE:
         rc = handle_rotate(model, task.rotate_data);
         break;
+    case DRAW:
+        rc = handle_draw(task.canvas, model);
+        break;
     case QUIT:
-        handle_destroy(model);
+        handle_destroy(model, task.canvas);
         break;
     }
-
-    if (rc == OK && task.operation != QUIT)
-        rc = handle_draw(task.draw_data, model);
 
     return rc;
 }
 
-status_t handle_move(model_t &model, const move_data_t &data)
+static status_t handle_move(model_t &model, const move_data_t &data)
 {
     if (!fields_exist(model))
         return NOT_INIT_ERROR;
@@ -54,7 +54,7 @@ status_t handle_move(model_t &model, const move_data_t &data)
     return OK;
 }
 
-status_t handle_scale(model_t &model, const scale_data_t &data)
+static status_t handle_scale(model_t &model, const scale_data_t &data)
 {
     if (!fields_exist(model))
         return NOT_INIT_ERROR;
@@ -65,7 +65,7 @@ status_t handle_scale(model_t &model, const scale_data_t &data)
     return rc;
 }
 
-status_t handle_rotate(model_t &model, const rotate_data_t &data)
+static status_t handle_rotate(model_t &model, const rotate_data_t &data)
 {
     if (!fields_exist(model))
         return NOT_INIT_ERROR;
@@ -76,7 +76,7 @@ status_t handle_rotate(model_t &model, const rotate_data_t &data)
     return rc;
 }
 
-status_t handle_load(model_t &model, const load_data_t filepath)
+static status_t handle_load(model_t &model, const load_data_t filepath)
 {
     if (!filepath)
         return FORMAT_ERROR;
@@ -86,19 +86,18 @@ status_t handle_load(model_t &model, const load_data_t filepath)
     return rc;
 }
 
-void handle_destroy(model_t &model)
+static void handle_destroy(model_t &model, canvas_t canvas)
 {
     destroy_model(model);
+    destroy_canvas(canvas);
 }
 
-status_t handle_draw(draw_data_t &data, const model_t &model)
+static status_t handle_draw(canvas_t canvas, const model_t &model)
 {
-    if (!fields_exist(model))
+    if (!fields_exist(model) || !canvas)
         return NOT_INIT_ERROR;
 
-    convert_draw_data(data, model);
-    status_t rc = draw(data);
-    clear_draw_data(data);
+    status_t rc = draw(model, canvas);
 
     return rc;
 }

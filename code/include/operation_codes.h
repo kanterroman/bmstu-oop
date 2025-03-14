@@ -7,6 +7,7 @@ typedef enum operation
     SCALE,
     ROTATE,
     LOAD,
+    DRAW,
     QUIT
 } operation_t;
 

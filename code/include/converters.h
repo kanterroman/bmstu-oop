@@ -7,7 +7,6 @@
 point_t convert_move_data(const move_data_t &data);
 model_rotate_t convert_rotate_data(const rotate_data_t &data);
 model_scale_t convert_scale_data(const scale_data_t &data);
-void convert_draw_data(draw_data_t &data, const model_t &model);
 
 
 #endif //CONVERTERS_H

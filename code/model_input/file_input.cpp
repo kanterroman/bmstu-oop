@@ -1,7 +1,9 @@
 #include "file_input.h"
 
 static status_t open_file(FILE **in, const char *filepath);
-static status_t read_nodes(model_t &model, FILE *in, const size_t nodes_num);
+static status_t read_point(point_t &point, FILE *in);
+static status_t read_points(model_t &model, FILE *in, const size_t nodes_num);
+static status_t read_edge(edge_t &edge, FILE *in);
 static status_t read_edges(model_t &model, FILE *in, const size_t edges_num);
 
 status_t read_model(model_t &model, const char *filepath)
@@ -18,15 +20,13 @@ status_t read_model(model_t &model, const char *filepath)
             rc = FILE_FORMAT_ERROR;
     }
 
-    if (rc != OK)
-    {
-    }
+    if (rc != OK) {}
     else
     {
         model_t buf;
         rc = init_model(buf, nodes_num, edges_num);
         if (rc == OK)
-            rc = read_nodes(buf, in, nodes_num);
+            rc = read_points(buf, in, nodes_num);
         if (rc == OK)
             rc = read_edges(buf, in, edges_num);
         if (rc != OK)
@@ -44,7 +44,7 @@ status_t read_model(model_t &model, const char *filepath)
     return rc;
 }
 
-status_t open_file(FILE **in, const char *filepath)
+static status_t open_file(FILE **in, const char *filepath)
 {
     if (!in || !filepath)
         return WRONG_ARGS_ERROR;
@@ -58,45 +58,68 @@ status_t open_file(FILE **in, const char *filepath)
     return rc;
 }
 
-status_t read_nodes(model_t &model, FILE *in, const size_t nodes_num)
+static status_t read_point(point_t &point, FILE *in)
+{
+    status_t rc = OK;
+
+    double x, y, z;
+    if (fscanf(in, "%lf %lf %lf", &x, &y, &z) != 3)
+        rc = FILE_FORMAT_ERROR;
+    if (rc == OK)
+        point = init_point(x, y, z);
+
+    return rc;
+}
+
+static status_t read_points(model_t &model, FILE *in, const size_t nodes_num)
 {
     if (!in)
         return FILE_ERROR;
 
     status_t rc = OK;
 
+    point_t point;
     for (size_t i = 0; i < nodes_num && rc == OK; i++)
     {
-        double x, y, z;
-
-        if (fscanf(in, "%lf %lf %lf", &x, &y, &z) != 3)
-            rc = FILE_FORMAT_ERROR;
+        rc = read_point(point, in);
 
         if (rc == OK)
-            rc = append_point(model, init_point(x, y, z));
+            rc = append_point(model, point);
     }
 
     return rc;
 }
 
-status_t read_edges(model_t &model, FILE *in, const size_t edges_num)
+static status_t read_edge(edge_t &edge, FILE *in)
+{
+    status_t rc = OK;
+
+    int first, second;
+    if (fscanf(in, "%d %d", &first, &second) != 2)
+        rc = FILE_FORMAT_ERROR;
+    if (rc == OK)
+        edge = init_edge(first, second);
+
+    return rc;
+}
+
+static status_t read_edges(model_t &model, FILE *in, const size_t edges_num)
 {
     if (!in)
         return WRONG_ARGS_ERROR;
 
     status_t rc = OK;
 
+    edge_t edge;
     for (size_t i = 0; i < edges_num && rc == OK; i++)
     {
-        int first = (int)model.points_size + 1, second = (int)model.points_size + 1;
-        if (fscanf(in, "%d %d", &first, &second) != 2)
-            rc = FILE_FORMAT_ERROR;
+        rc = read_edge(edge, in);
 
-        if (first > model.points_size || second > model.points_size)
+        if (rc == OK && edge.first > model.points_size || edge.second > model.points_size)
             rc = FILE_FORMAT_ERROR;
 
         if (rc == OK)
-            rc = append_edge(model, init_edge(first, second));
+            rc = append_edge(model, edge);
     }
 
     return rc;

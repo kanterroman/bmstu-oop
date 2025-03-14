@@ -88,10 +88,9 @@ status_t scale_model(model_t &model, const model_scale_t &data)
     point_t barycenter;
     status_t rc = find_model_barycenter(barycenter, model.points, model.points_size);
 
-    for (size_t i = 0; rc == OK && i < model.points_size; i++)
-    {
-        scale_point(model.points[i], barycenter, data.factor);
-    }
+    if (rc == OK)
+        for (size_t i = 0; i < model.points_size; i++)
+            scale_point(model.points[i], barycenter, data.factor);
 
     return rc;
 }
@@ -126,7 +125,7 @@ status_t rotate_model(model_t &model, const model_rotate_t &data)
     return rc;
 }
 
-status_t find_model_barycenter(point_t &barycenter, const point_t *points, const size_t size)
+static status_t find_model_barycenter(point_t &barycenter, const point_t *points, const size_t size)
 {
     if (size == 0)
         return ZERO_DIVISION_ERROR;

@@ -1,9 +1,12 @@
-#ifndef DRAWER_H
-#define DRAWER_H
+#ifndef CANVAS_H
+#define CANVAS_H
 
+#include "model.h"
 #include "status_codes.h"
-#include "task_data.h"
 
-status_t draw(draw_data_t &data);
+typedef struct canvas *canvas_t;
+canvas_t init_canvas();
+status_t draw(const model_t &model, canvas_t canvas);
+void destroy_canvas(canvas_t canvas);
 
-#endif //DRAWER_H
+#endif //CANVAS_H

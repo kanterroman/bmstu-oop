@@ -25,7 +25,6 @@ add_executable(main.exe
         model/point.cpp
         model_view_converters/task.cpp
         drawer/drawer.cpp
-        drawer/drawer_impl.cpp
 )
 target_link_libraries(main.exe
         Qt::Core

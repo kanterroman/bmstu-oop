@@ -1,9 +1,6 @@
 #ifndef TASK_DATA_H
 #define TASK_DATA_H
-
-#include <QLineF>
-#include <QList>
-#include <QGraphicsView>
+#include "drawer.h"
 
 typedef struct move_data {
   int dx;
@@ -21,10 +18,5 @@ typedef struct scale_data {
 } scale_data_t;
 
 typedef const char *load_data_t;
-
-typedef struct draw_data {
-    QList<QLineF> edges;
-    const QGraphicsView *view;
-} draw_data_t;
 
 #endif //TASK_DATA_H
