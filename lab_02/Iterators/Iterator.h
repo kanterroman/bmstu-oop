@@ -40,8 +40,8 @@ private:
     Iterator(const std::shared_ptr<value_type[]>& arr, const std::shared_ptr<size_t> &size,
         size_t index = 0) noexcept;
 
-    void assertInBounds();
-    void assertNotExpired();
+    void assertInBounds(const char *file, int line, const char *func);
+    void assertNotExpired(const char *file, int line, const char *func);
 
     std::weak_ptr<value_type[]> array;
 };

@@ -38,11 +38,7 @@ Iterator<T> & Iterator<T>::operator=(const Iterator &iter) noexcept
 template <typename T>
 std::strong_ordering Iterator<T>::operator<=>(const Iterator &iter) const noexcept
 {
-    if (this->index < iter.index)
-        return std::strong_ordering::less;
-    if (this->index == iter.index)
-        return std::strong_ordering::equal;
-    return std::strong_ordering::greater;
+    return this->index <=> iter.index;
 }
 
 template <typename T>
@@ -104,8 +100,8 @@ typename Iterator<T>::difference_type Iterator<T>::operator-(const Iterator &ite
 template <typename T>
 typename Iterator<T>::reference Iterator<T>::operator*() const
 {
-    assertInBounds();
-    assertNotExpired();
+    assertInBounds(__FILE__, __LINE__, __FUNCTION__);
+    assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
     std::shared_ptr<T[]> a(this->array);
     return a[this->index];
@@ -114,8 +110,8 @@ typename Iterator<T>::reference Iterator<T>::operator*() const
 template <typename T>
 typename Iterator<T>::pointer Iterator<T>::operator->() const
 {
-    assertInBounds();
-    assertNotExpired();
+    assertInBounds(__FILE__, __LINE__, __FUNCTION__);
+    assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
     std::shared_ptr<T[]> a(this->array);
     return a.get() + this->index;
@@ -124,8 +120,8 @@ typename Iterator<T>::pointer Iterator<T>::operator->() const
 template <typename T>
 typename Iterator<T>::reference Iterator<T>::operator[](size_t index) const
 {
-    assertInBounds();
-    assertNotExpired();
+    assertInBounds(__FILE__, __LINE__, __FUNCTION__);
+    assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
     std::shared_ptr<T[]> a(this->array);
     return a[index];
@@ -140,17 +136,17 @@ Iterator<T>::Iterator(const std::shared_ptr<value_type[]> &arr, const std::share
 }
 
 template <typename T>
-void Iterator<T>::assertInBounds()
+void Iterator<T>::assertInBounds(const char *file, int line, const char *func)
 {
     if (this->index >= this->size)
-        throw IterOutOfBondsException(__FILE__, __LINE__, __FUNCTION__);
+        throw IterOutOfBondsException(file, line, func);
 }
 
 template <typename T>
-void Iterator<T>::assertNotExpired()
+void Iterator<T>::assertNotExpired(const char *file, int line, const char *func)
 {
     if (this->array.expired())
-        throw IterExpiredException(__FILE__, __LINE__, __FUNCTION__);
+        throw IterExpiredException(file, line, func);
 }
 
 template <typename T>

@@ -38,11 +38,7 @@ ConstIterator<T> & ConstIterator<T>::operator=(const ConstIterator &iter) noexce
 template <typename T>
 std::strong_ordering ConstIterator<T>::operator<=>(const ConstIterator &iter) const noexcept
 {
-    if (this->index < iter.index)
-        return std::strong_ordering::less;
-    if (this->index == iter.index)
-        return std::strong_ordering::equal;
-    return std::strong_ordering::greater;
+    return this->index <=> iter.index;
 }
 
 template <typename T>
@@ -104,8 +100,8 @@ typename ConstIterator<T>::difference_type ConstIterator<T>::operator-(const Con
 template <typename T>
 typename ConstIterator<T>::reference ConstIterator<T>::operator*() const
 {
-    assertInBounds();
-    assertNotExpired();
+    assertInBounds(__FILE__, __LINE__, __FUNCTION__);
+    assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
     std::shared_ptr<T[]> a(this->array);
     return a[this->index];
@@ -114,8 +110,8 @@ typename ConstIterator<T>::reference ConstIterator<T>::operator*() const
 template <typename T>
 typename ConstIterator<T>::pointer ConstIterator<T>::operator->() const
 {
-    assertInBounds();
-    assertNotExpired();
+    assertInBounds(__FILE__, __LINE__, __FUNCTION__);
+    assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
     std::shared_ptr<T[]> a(this->array);
     return a.get() + this->index;
@@ -140,17 +136,17 @@ ConstIterator<T>::ConstIterator(const std::shared_ptr<value_type[]> &arr, const 
 }
 
 template <typename T>
-void ConstIterator<T>::assertInBounds()
+void ConstIterator<T>::assertInBounds(const char *file, int line, const char *func)
 {
     if (this->index >= this->size)
-        throw IterOutOfBondsException(__FILE__, __LINE__, __FUNCTION__);
+        throw IterOutOfBondsException(file, line, func);
 }
 
 template <typename T>
-void ConstIterator<T>::assertNotExpired()
+void ConstIterator<T>::assertNotExpired(const char *file, int line, const char *func)
 {
     if (this->array.expired())
-        throw IterExpiredException(__FILE__, __LINE__, __FUNCTION__);
+        throw IterExpiredException(file, line, func);
 }
 
 template <typename T>
