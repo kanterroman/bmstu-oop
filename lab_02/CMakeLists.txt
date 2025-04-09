@@ -11,4 +11,10 @@ add_executable(lab_02 main.cpp
         Iterators/ConstIterator.h
         Iterators/ConstIterator.hpp
         Exceptions/BaseException.h
-        Exceptions/IterExceptions.h)
+        Exceptions/IterExceptions.h
+        Vector/BaseVector.h
+        Vector/Vector.h
+        Vector/Vector.hpp
+        Exceptions/VectorExceptions.h
+        Vector/VectorConcepts.h
+        Vector/VectorConcepts.h)

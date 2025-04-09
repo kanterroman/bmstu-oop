@@ -58,7 +58,7 @@ template <typename T>
 ConstIterator<T> ConstIterator<T>::operator++(int) noexcept
 {
     ConstIterator copy(*this);
-    ++this;
+    ++*this;
     return copy;
 }
 
@@ -73,7 +73,7 @@ template <typename T>
 ConstIterator<T> ConstIterator<T>::operator--(int) noexcept
 {
     ConstIterator copy(*this);
-    --this;
+    --*this;
     return copy;
 }
 
@@ -128,7 +128,7 @@ typename ConstIterator<T>::reference ConstIterator<T>::operator[](size_t index) 
 }
 
 template <typename T>
-ConstIterator<T>::ConstIterator(const std::shared_ptr<value_type[]> &arr, const std::shared_ptr<size_t> &size,
+ConstIterator<T>::ConstIterator(const std::shared_ptr<value_type[]> &arr,size_t size,
     size_t index) noexcept : array(arr)
 {
     this->size = size;
@@ -136,14 +136,14 @@ ConstIterator<T>::ConstIterator(const std::shared_ptr<value_type[]> &arr, const 
 }
 
 template <typename T>
-void ConstIterator<T>::assertInBounds(const char *file, int line, const char *func)
+void ConstIterator<T>::assertInBounds(const char *file, int line, const char *func) const
 {
     if (this->index >= this->size)
         throw IterOutOfBondsException(file, line, func);
 }
 
 template <typename T>
-void ConstIterator<T>::assertNotExpired(const char *file, int line, const char *func)
+void ConstIterator<T>::assertNotExpired(const char *file, int line, const char *func) const
 {
     if (this->array.expired())
         throw IterExpiredException(file, line, func);

@@ -1,11 +1,12 @@
-#include "Iterators/Iterator.h"
 #include "Iterators/Iterator.hpp"
-#include "Iterators/ConstIterator.h"
+#include "Iterators/ConstIterator.hpp"
+#include "Vector/BaseVector.h"
+#include "Vector/Vector.hpp"
 
 int main()
 {
-    // ConstIterator<int> c{};
-    //
-    // decltype(auto) a = c[3];
-    // a = 3;
+    // Создание
+    Vector<int> v1;
+    Vector<int> v2(5);
+    Vector<int> zv(3, 0);
 }

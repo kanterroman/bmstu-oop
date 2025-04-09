@@ -9,7 +9,7 @@ public:
 
 protected:
     size_t index = 0;
-    std::weak_ptr<size_t> size;
+    size_t size = 0;
 };
 
 #endif //BASEITERATOR_H

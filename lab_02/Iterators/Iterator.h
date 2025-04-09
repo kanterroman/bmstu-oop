@@ -4,9 +4,14 @@
 #include "BaseIterator.h"
 
 template <typename T>
+class Vector;
+
+template <typename T>
 class Iterator : public BaseIterator
 {
 public:
+    friend class Vector<T>;
+
     using iterator_category = std::random_access_iterator_tag;
     using value_type = T;
     using difference_type = ptrdiff_t;
@@ -37,11 +42,11 @@ public:
     reference operator[](size_t index) const;
 
 private:
-    Iterator(const std::shared_ptr<value_type[]>& arr, const std::shared_ptr<size_t> &size,
+    Iterator(const std::shared_ptr<value_type[]>& arr, size_t size,
         size_t index = 0) noexcept;
 
-    void assertInBounds(const char *file, int line, const char *func);
-    void assertNotExpired(const char *file, int line, const char *func);
+    void assertInBounds(const char *file, int line, const char *func) const;
+    void assertNotExpired(const char *file, int line, const char *func) const;
 
     std::weak_ptr<value_type[]> array;
 };

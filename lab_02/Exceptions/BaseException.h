@@ -13,6 +13,7 @@ public:
     [[nodiscard]] const char *what() const noexcept override
     {
         snprintf(errormsg, msglen, "Exception on %s:%d in %s : %s", filename, line, funcname, info);
+        return errormsg;
     }
 protected:
     static constexpr size_t msglen = 512;
