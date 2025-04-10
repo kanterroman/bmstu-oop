@@ -2,10 +2,11 @@
 #define VECTOR_H
 
 #include "BaseVector.h"
+#include "VectorConcepts.h"
 #include "../Iterators/Iterator.h"
 #include "../Iterators/ConstIterator.h"
 
-template <typename T>
+template <Storable T>
 class Vector : public BaseVector
 {
 public:
@@ -19,33 +20,41 @@ public:
     using size_type = size_t;
 #pragma endregion
 
+#pragma region statics
+    static Vector zeroVector(size_type n) requires HasZeroElement<T>;
+    static Vector unitVector(size_type n) requires HasUnitElement<T>;
+#pragma endregion
+
 #pragma region constructors/destructors and assignments
-    Vector() = default;
+    template <Convertible<T> U>
+    explicit Vector(const Vector<U>& v);
     Vector(const Vector& v);
     Vector(Vector&& v) noexcept;
-    Vector(std::initializer_list<value_type> lst);
+    Vector(std::initializer_list<T> lst);
     explicit Vector(size_type n);
     Vector(size_type n, const_reference v);
 
     Vector& operator=(const Vector& v);
-    Vector& operator=(Vector&& v) noexcept ;
+    template <Convertible<T> U>
+    Vector& operator=(const Vector<U>& v);
+    Vector& operator=(Vector&& v) noexcept;
 
     ~Vector() override;
 #pragma endregion
 
 #pragma region iterators
-    iterator begin();
-    iterator end();
-    const_iterator begin() const;
-    const_iterator end() const;
-    const_iterator cbegin() const;
-    const_iterator cend() const;
+    iterator begin() noexcept;
+    iterator end() noexcept;
+    const_iterator begin() const noexcept;
+    const_iterator end() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
 #pragma endregion
 
 #pragma region checks
     [[nodiscard]] bool empty() const noexcept;
-    [[nodiscard]] bool isZero() const noexcept;
-    [[nodiscard]] bool isUnit() const noexcept;
+    [[nodiscard]] bool isZero() const noexcept requires HasZeroElement<T> && std::regular<T>;
+    [[nodiscard]] bool isUnit() const noexcept requires HasUnitElement<T> && std::regular<T>;
 #pragma endregion
 
 #pragma region getters
@@ -55,58 +64,97 @@ public:
 #pragma endregion
 
 #pragma region setters
-    void setElement(const value_type &value, size_type index);
+    template <Convertible<T> U>
+    void setElement(const U &value, size_type index);
     reference operator[](size_type index);
 #pragma endregion
 
 #pragma region two vector
-    Vector operator+(const Vector &v) const;
-    Vector operator-(const Vector &v) const;
-    Vector operator*(const Vector &v) const;
-    Vector operator/(const Vector &v) const;
+    template <Addable<T> U>
+    decltype(auto) operator+(const Vector<U> &v) const;
+    template <Substractable<T> U>
+    decltype(auto) operator-(const Vector<U> &v) const;
+    template <Multiplicable<T> U>
+    decltype(auto) operator*(const Vector<U> &v) const;
+    // TODO Zero val concept?
+    template <Divisible<T> U>
+    decltype(auto) operator/(const Vector<U> &v) const;
 
-    Vector& operator+=(const Vector &v);
-    Vector& operator-=(const Vector &v);
-    Vector& operator*=(const Vector &v);
-    Vector& operator/=(const Vector &v);
+    template <AddableAndAssignable<T> U>
+    Vector& operator+=(const Vector<U> &v);
+    template <SubstractableAndAssignable<T> U>
+    Vector& operator-=(const Vector<U> &v);
+    template <MultiplicableAndAssignable<T> U>
+    Vector& operator*=(const Vector<U> &v);
+    template <DivisibleAndAssignable<T> U>
+    Vector& operator/=(const Vector<U> &v);
 
-    bool operator==(const Vector & v) const;
-    bool equals(const Vector & v) const;
+    bool operator==(const Vector & v) const requires std::regular<T>;
+    bool operator==(const Vector & v) const requires std::regular<T> && std::is_floating_point_v<T>;
+    bool equals(const Vector & v) const requires std::regular<T>;
 
-    bool collinear(const Vector& v) const;
-    bool orthogonal(const Vector& v) const;
+    template <ComparableDivision<T> U>
+    bool colinear(const Vector<U>& v) const;
+    template <DotProductComputable<T> U>
+    bool orthogonal(const Vector<U>& v) const requires HasZeroElement<T>;
 
-    //TODO hmmm
-    double angle(const Vector& v) const;
+    template <AngleComputable<T> U>
+    double angle(const Vector<U>& v) const;
 
-    value_type dotProduct(const Vector& v) const;
-    Vector crossProduct(const Vector& v) const;
+    template <DotProductComputable<T> U>
+    decltype(auto) dotProduct(const Vector<U>& v) const;
+    template <MultiplicableAndSunstractable<T> U>
+    decltype(auto) crossProduct(const Vector<U>& v) const;
 #pragma endregion
 
 #pragma region vector and value
-    Vector operator+(value_type val);
-    Vector operator*(value_type val);
-    Vector operator-(value_type val);
-    Vector operator/(value_type val);
+    template <Addable<T> U>
+    decltype(auto) operator+(const U& val) const;
+    template <Addable<T> U>
+    decltype(auto) addVal(const U& val) const;
+    template <Multiplicable<T> U>
+    decltype(auto) operator*(const U& val) const;
+    template <Multiplicable<T> U>
+    decltype(auto) multipVal(const U& val) const;
+    template <Substractable<T> U>
+    decltype(auto) operator-(const U& val) const;
+    template <Substractable<T> U>
+    decltype(auto) substrVal(const U& val) const;
+    template <Divisible<T> U>
+    decltype(auto) operator/(const U& val) const;
+    template <Divisible<T> U>
+    decltype(auto) divideVal(const U& val) const;
 
-    Vector& operator+=(value_type val);
-    Vector& operator*=(value_type val);
-    Vector& operator-=(value_type val);
-    Vector& operator/=(value_type val);
+    template <AddableAndAssignable<T> U>
+    Vector& operator+=(const U &val);
+    template <AddableAndAssignable<T> U>
+    Vector& addValToThis(const U &val);
+    template <MultiplicableAndAssignable<T> U>
+    Vector& operator*=(const U& val);
+    template <MultiplicableAndAssignable<T> U>
+    Vector& multipValToThis(const U& val);
+    template <SubstractableAndAssignable<T> U>
+    Vector& operator-=(const U& val);
+    template <SubstractableAndAssignable<T> U>
+    Vector& substrValToThis(const U& val);
+    template <DivisibleAndAssignable<T> U>
+    Vector& operator/=(const U& val);
+    template <DivisibleAndAssignable<T> U>
+    Vector& divideValToThis(const U& val);
 #pragma endregion
 
 #pragma region solo vector
-    Vector operator-() const;
-    Vector reverse() const;
-    Vector& reversed() const;
+    decltype(auto) operator-() const requires Inversible<T>;
+    decltype(auto) reverse() const requires Inversible<T>;
+    Vector& reversed() const requires InversibleAndAssignable<T>;
 
-    Vector normalize() const;
-    Vector& normalized();
+    Vector normalize() const requires LengthComputable<T> && DivisibleAndAssignable<T, double>;
+    Vector& normalized() requires LengthComputable<T> && DivisibleAndAssignable<T, double>;
 
-    Vector &toZero();
-    Vector &toUnit();
+    Vector &toZero() requires HasZeroElement<T>;
+    Vector &toUnit() requires HasUnitElement<T>;
 
-    value_type length() const;
+    [[nodiscard]] double length() const requires LengthComputable<T>;
 #pragma endregion
 
 private:
@@ -114,24 +162,30 @@ private:
     void assertInBounds(size_type index, const char *file, int line, const char *func) const;
     void assertValidSize(size_type size, const char *file, int line, const char *func) const;
     void assertNotEmpty(const char *file, int line, const char *func) const;
-    void assertNoZeroes(const char *file, int line, const char *func) const;
+    template <HasZeroElement U>
+    void assertNoZeroes(const Vector<U>& v, const char *file, int line, const char *func) const;
     void assertNotZeroVal(const T& val, const char *file, int line, const char *func) const;
-    void assertNotZeroVecror(const char *file, int line, const char *func) const;
-    void assertSupportsCrossProduct(const char *file, int line, const char *func);
+    void assertNotZeroVector(const char *file, int line, const char *func) const;
+    void assertSupportsCrossProduct(const char *file, int line, const char *func) const;
     void assertEqDim(size_type otherDim, const char *file, int line, const char *func) const;
 #pragma endregion
     void allocate(size_type n);
-    Vector dim3CrossProduct(const Vector &v);
-    Vector dim7CrossProduct(const Vector &v);
+    template <MultiplicableAndSunstractable<T> U>
+    decltype(auto) dim3CrossProduct(const Vector<U> &v) const;
+    template <MultiplicableAndSunstractable<T> U>
+    decltype(auto) dim7CrossProduct(const Vector<U> &v) const;
 
     std::shared_ptr<value_type[]> data;
 };
 
+template <Storable T>
+std::ostream& operator<<(std::ostream& os, const Vector<T>& v) requires Outable<T>;
+
 #pragma region vector and value
-template <typename T>
-Vector<T> operator+(const T& val, const Vector<T> &v);
-template <typename T>
-Vector<T> operator*(const T& val, const Vector<T> &v);
+template <Storable T, Addable<T> U>
+decltype(auto) operator+(const U& val, const Vector<T> &v);
+template <Storable T, Multiplicable<T> U>
+decltype(auto) operator*(const U& val, const Vector<T> &v);
 #pragma endregion
 
 #endif //VECTOR_H

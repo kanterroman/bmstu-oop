@@ -2,8 +2,9 @@
 #define ITERATOR_H
 
 #include "BaseIterator.h"
+#include "../Vector/VectorConcepts.h"
 
-template <typename T>
+template <Storable T>
 class Vector;
 
 template <typename T>
@@ -45,7 +46,7 @@ private:
     Iterator(const std::shared_ptr<value_type[]>& arr, size_t size,
         size_t index = 0) noexcept;
 
-    void assertInBounds(const char *file, int line, const char *func) const;
+    void assertInBounds(size_t index, const char *file, int line, const char *func) const;
     void assertNotExpired(const char *file, int line, const char *func) const;
 
     std::weak_ptr<value_type[]> array;

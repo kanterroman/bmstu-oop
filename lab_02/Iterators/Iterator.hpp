@@ -100,7 +100,7 @@ typename Iterator<T>::difference_type Iterator<T>::operator-(const Iterator &ite
 template <typename T>
 typename Iterator<T>::reference Iterator<T>::operator*() const
 {
-    assertInBounds(__FILE__, __LINE__, __FUNCTION__);
+    assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
     std::shared_ptr<T[]> a(this->array);
@@ -110,7 +110,7 @@ typename Iterator<T>::reference Iterator<T>::operator*() const
 template <typename T>
 typename Iterator<T>::pointer Iterator<T>::operator->() const
 {
-    assertInBounds(__FILE__, __LINE__, __FUNCTION__);
+    assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
     std::shared_ptr<T[]> a(this->array);
@@ -120,7 +120,7 @@ typename Iterator<T>::pointer Iterator<T>::operator->() const
 template <typename T>
 typename Iterator<T>::reference Iterator<T>::operator[](size_t index) const
 {
-    assertInBounds(__FILE__, __LINE__, __FUNCTION__);
+    assertInBounds(index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
     std::shared_ptr<T[]> a(this->array);
@@ -136,9 +136,9 @@ Iterator<T>::Iterator(const std::shared_ptr<value_type[]> &arr, size_t size,
 }
 
 template <typename T>
-void Iterator<T>::assertInBounds(const char *file, int line, const char *func) const
+void Iterator<T>::assertInBounds(size_t index, const char *file, int line, const char *func) const
 {
-    if (this->index >= this->size)
+    if (index >= this->size)
         throw IterOutOfBondsException(file, line, func);
 }
 

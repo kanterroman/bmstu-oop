@@ -2,8 +2,9 @@
 #define CONSTITERATOR_H
 
 #include "BaseIterator.h"
+#include "../Vector/VectorConcepts.h"
 
-template <typename T>
+template <Storable T>
 class Vector;
 
 template <typename T>
@@ -16,7 +17,7 @@ public:
     using iterator_category = std::random_access_iterator_tag;
     using value_type = T;
     using difference_type = ptrdiff_t;
-    using pointer = const T*;
+    using pointer = const T*const;
     using reference = const T&;
 #pragma endregion
 
@@ -55,7 +56,7 @@ private:
 #pragma endregion
 
 #pragma region assertions
-    void assertInBounds(const char *file, int line, const char *func) const;
+    void assertInBounds(size_t index, const char *file, int line, const char *func) const;
     void assertNotExpired(const char *file, int line, const char *func) const;
 #pragma endregion
 
