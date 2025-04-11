@@ -98,6 +98,22 @@ typename Iterator<T>::difference_type Iterator<T>::operator-(const Iterator &ite
 }
 
 template <typename T>
+Iterator<T> Iterator<T>::operator+(ptrdiff_t inc) const noexcept
+{
+    Iterator newIter(*this);
+    newIter.index += inc;
+    return newIter;
+}
+
+template <typename T>
+Iterator<T> Iterator<T>::operator-(ptrdiff_t dec) const noexcept
+{
+    Iterator newIter(*this);
+    newIter.index -= dec;
+    return newIter;
+}
+
+template <typename T>
 typename Iterator<T>::reference Iterator<T>::operator*() const
 {
     assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
@@ -150,25 +166,9 @@ void Iterator<T>::assertNotExpired(const char *file, int line, const char *func)
 }
 
 template <typename T>
-Iterator<T> operator+(const Iterator<T> &iter, ptrdiff_t inc) noexcept
-{
-    Iterator<T> newIter(iter);
-    iter.index += inc;
-    return iter;
-}
-
-template <typename T>
 Iterator<T> operator+(ptrdiff_t inc, const Iterator<T> &iter) noexcept
 {
     return iter + inc;
-}
-
-template <typename T>
-Iterator<T> operator-(const Iterator<T> &iter, ptrdiff_t dec) noexcept
-{
-    Iterator<T> newIter(iter);
-    iter.index -= dec;
-    return iter;
 }
 
 template <typename T>

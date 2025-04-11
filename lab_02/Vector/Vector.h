@@ -52,9 +52,8 @@ public:
 #pragma endregion
 
 #pragma region checks
-    [[nodiscard]] bool empty() const noexcept;
-    [[nodiscard]] bool isZero() const noexcept requires HasZeroElement<T> && std::regular<T>;
-    [[nodiscard]] bool isUnit() const noexcept requires HasUnitElement<T> && std::regular<T>;
+    bool isZero() const noexcept requires HasZeroElement<T> && std::regular<T>;
+    bool isUnit() const noexcept requires HasUnitElement<T> && std::regular<T>;
 #pragma endregion
 
 #pragma region getters
@@ -76,7 +75,6 @@ public:
     decltype(auto) operator-(const Vector<U> &v) const;
     template <Multiplicable<T> U>
     decltype(auto) operator*(const Vector<U> &v) const;
-    // TODO Zero val concept?
     template <Divisible<T> U>
     decltype(auto) operator/(const Vector<U> &v) const;
 
@@ -95,16 +93,26 @@ public:
 
     template <ComparableDivision<T> U>
     bool colinear(const Vector<U>& v) const;
+    template <ComparableDivision<T> U>
+    bool operator||(const Vector<U>& v) const;
+    template <ComparableDivision<T> U>
+    bool colinear(const Vector<U>& v) const requires std::is_floating_point_v<T> && std::is_floating_point_v<U>;
     template <DotProductComputable<T> U>
     bool orthogonal(const Vector<U>& v) const requires HasZeroElement<T>;
+    template <DotProductComputable<T> U>
+    bool orthogonal(const Vector<U>& v) const requires HasZeroElement<T> && std::is_floating_point_v<T> && std::is_floating_point_v<U>;
 
     template <AngleComputable<T> U>
     double angle(const Vector<U>& v) const;
 
     template <DotProductComputable<T> U>
     decltype(auto) dotProduct(const Vector<U>& v) const;
+    template <DotProductComputable<T> U>
+    decltype(auto) operator^(const Vector<U>& v) const;
     template <MultiplicableAndSunstractable<T> U>
     decltype(auto) crossProduct(const Vector<U>& v) const;
+    template <MultiplicableAndSunstractable<T> U>
+    decltype(auto) operator&(const Vector<U>& v) const;
 #pragma endregion
 
 #pragma region vector and value
@@ -146,7 +154,7 @@ public:
 #pragma region solo vector
     decltype(auto) operator-() const requires Inversible<T>;
     decltype(auto) reverse() const requires Inversible<T>;
-    Vector& reversed() const requires InversibleAndAssignable<T>;
+    Vector& reversed() requires InversibleAndAssignable<T>;
 
     Vector normalize() const requires LengthComputable<T> && DivisibleAndAssignable<T, double>;
     Vector& normalized() requires LengthComputable<T> && DivisibleAndAssignable<T, double>;
@@ -154,18 +162,13 @@ public:
     Vector &toZero() requires HasZeroElement<T>;
     Vector &toUnit() requires HasUnitElement<T>;
 
-    [[nodiscard]] double length() const requires LengthComputable<T>;
+    double length() const requires LengthComputable<T>;
 #pragma endregion
 
 private:
 #pragma region assertions
     void assertInBounds(size_type index, const char *file, int line, const char *func) const;
     void assertValidSize(size_type size, const char *file, int line, const char *func) const;
-    void assertNotEmpty(const char *file, int line, const char *func) const;
-    template <HasZeroElement U>
-    void assertNoZeroes(const Vector<U>& v, const char *file, int line, const char *func) const;
-    void assertNotZeroVal(const T& val, const char *file, int line, const char *func) const;
-    void assertNotZeroVector(const char *file, int line, const char *func) const;
     void assertSupportsCrossProduct(const char *file, int line, const char *func) const;
     void assertEqDim(size_type otherDim, const char *file, int line, const char *func) const;
 #pragma endregion

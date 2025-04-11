@@ -9,7 +9,7 @@ int main()
 {
     // Создание
     {
-        Vector<int> v1(5);
+        Vector<int> v1(1);
         Vector<double> v2(5, 1);
         Vector<double> v3 = { 1, 2.0, 33 };
         Vector<int> v4 = v1;
@@ -87,9 +87,9 @@ int main()
         v_1 += v_2;
         std::cout << (v_1 == v_2) << v_1.equals(v_2) << std::endl;
 
-        Vector<double> v_1_ = { 12, 15, 2 };
-        Vector<int> v_2_ = { 120, 150, 20 };
-        std::cout << v_1_.colinear(v_2_) << std::endl;
+        Vector<int> v_1_ = { 12, 15, 2 };
+        Vector<double> v_2_ = { 1.2, 1.5, 0.2 };
+        std::cout << (v_1_ || v_2_) << std::endl;
 
         Vector<int> _v_1 = { 1, 0 };
         Vector<int> _v_2 = { 0, 1 };
@@ -110,5 +110,27 @@ int main()
         auto res = _v_7_1.crossProduct(_v_7_2);
         std::cout << res << std::endl;
         std::cout << res.angle(_v_7_1) << std::endl;
+    }
+    // Вектор и число
+    {
+        Vector<int> v1 = { 1, 2, 3, 4 };
+        double add = 1.5;
+        std::cout << (v1 + add) << std::endl;
+        std::cout << (v1 - add) << std::endl;
+        std::cout << (v1 * add) << std::endl;
+        std::cout << (v1 / add) << std::endl;
+    }
+    // Действия над вектором
+    {
+        Vector<double> v1 = { 1.1, 2.1, 3.1, 4 };
+        std::cout << -v1 << std::endl;
+        v1.reversed();
+        std::cout << -v1 << std::endl;
+        v1.reversed();
+        auto v2 = v1.normalize();
+        v1.normalized();
+        std::cout << v2 << v2.length() << std::endl;
+        std::cout << v1.toUnit() << std::endl;
+        std::cout << v2.toZero() << std::endl;
     }
 }

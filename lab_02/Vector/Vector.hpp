@@ -144,12 +144,6 @@ typename Vector<T>::const_iterator Vector<T>::cend() const noexcept
 }
 
 template <Storable T>
-bool Vector<T>::empty() const noexcept
-{
-    return begin() == end();
-}
-
-template <Storable T>
 bool Vector<T>::isZero() const noexcept requires HasZeroElement<T> && std::regular<T>
 {
     return std::ranges::all_of(*this, [](const T &el) {
@@ -250,7 +244,6 @@ template <Divisible<T> U>
 decltype(auto) Vector<T>::operator/(const Vector<U> &v) const
 {
     assertEqDim(v.size(), __FILE__, __LINE__, __FUNCTION__);
-    v.assertNoZeroes(v, __FILE__, __LINE__, __FUNCTION__);
 
     Vector<decltype(this->data[0] / v[0])> res(this->size_);
 
@@ -302,7 +295,6 @@ template <DivisibleAndAssignable<T> U>
 Vector<T> &Vector<T>::operator/=(const Vector<U> &v)
 {
     assertEqDim(v.size(), __FILE__, __LINE__, __FUNCTION__);
-    assertNoZeroes(v, __FILE__, __LINE__, __FUNCTION__);
 
     std::ranges::transform(v, *this, this->begin(), [](const U &el1, const T &el2) {
         return el2 / el1;
@@ -339,7 +331,6 @@ template <ComparableDivision<T> U>
 bool Vector<T>::colinear(const Vector<U> &v) const
 {
     assertEqDim(v.size(), __FILE__, __LINE__, __FUNCTION__);
-    assertNoZeroes(v, __FILE__, __LINE__, __FUNCTION__);
 
     decltype(auto) value = (*this)[0] / v[0];
     size_type i = 0;
@@ -349,10 +340,38 @@ bool Vector<T>::colinear(const Vector<U> &v) const
 }
 
 template <Storable T>
+template <ComparableDivision<T> U>
+bool Vector<T>::operator||(const Vector<U> &v) const
+{
+    return colinear(v);
+}
+
+template <Storable T>
+template <ComparableDivision<T> U>
+bool Vector<T>::colinear(const Vector<U> &v) const requires std::is_floating_point_v<T> && std::is_floating_point_v<U>
+{
+    assertEqDim(v.size(), __FILE__, __LINE__, __FUNCTION__);
+
+    decltype(auto) value = (*this)[0] / v[0];
+    size_type i = 0;
+    return std::ranges::all_of(*this, [&value, &i, &v](const T &el) {
+        return std::abs(el / v[i++] - value) < FLT_EPSILON;
+    });
+}
+
+template <Storable T>
 template <DotProductComputable<T> U>
 bool Vector<T>::orthogonal(const Vector<U> &v) const requires HasZeroElement<T>
 {
     return dotProduct(v) == T{0};
+}
+
+template <Storable T>
+template <DotProductComputable<T> U>
+bool Vector<T>::orthogonal(const Vector<U> &v) const requires HasZeroElement<T> && std::is_floating_point_v<T> && std::
+    is_floating_point_v<U>
+{
+    return std::abs(dotProduct(v) - T{0}) < FLT_EPSILON;
 }
 
 template <Storable T>
@@ -380,6 +399,13 @@ decltype(auto) Vector<T>::dotProduct(const Vector<U> &v) const
 }
 
 template <Storable T>
+template <DotProductComputable<T> U>
+decltype(auto) Vector<T>::operator^(const Vector<U> &v) const
+{
+    return dotProduct(v);
+}
+
+template <Storable T>
 template <MultiplicableAndSunstractable<T> U>
 decltype(auto) Vector<T>::crossProduct(const Vector<U> &v) const
 {
@@ -389,6 +415,13 @@ decltype(auto) Vector<T>::crossProduct(const Vector<U> &v) const
     if (this->size_ == 3)
         return dim3CrossProduct(v);
     return dim7CrossProduct(v);
+}
+
+template <Storable T>
+template <MultiplicableAndSunstractable<T> U>
+decltype(auto) Vector<T>::operator&(const Vector<U> &v) const
+{
+    return crossProduct(v);
 }
 
 template <Storable T>
@@ -525,16 +558,13 @@ Vector<T> & Vector<T>::multipValToThis(const U &val)
     return *this *= val;
 }
 
-// TODO REF
 template <Storable T>
 template <DivisibleAndAssignable<T> U>
 Vector<T> &Vector<T>::operator/=(const U& val)
 {
-    assertNonZero(val, __FILE__, __LINE__, __FUNCTION__)
-
-        * this | std::views::transform([&val](T &el) {
-            return el / val;
-        });
+    *this | std::views::transform([&val](T &el) {
+        return el / val;
+    });
 
     return *this;
 }
@@ -565,10 +595,10 @@ decltype(auto) Vector<T>::reverse() const requires Inversible<T>
 }
 
 template <Storable T>
-Vector<T> &Vector<T>::reversed() const requires InversibleAndAssignable<T>
+Vector<T> &Vector<T>::reversed() requires InversibleAndAssignable<T>
 {
     *this | std::views::transform([](T &el) {
-        el = -el;
+        return -el;
     });
 
     return *this;
@@ -577,12 +607,10 @@ Vector<T> &Vector<T>::reversed() const requires InversibleAndAssignable<T>
 template <Storable T>
 Vector<T> Vector<T>::normalize() const requires LengthComputable<T> && DivisibleAndAssignable<T, double>
 {
-    assertNotZeroVector(__FILE__, __LINE__, __FUNCTION__);
-
-    Vector ans(*this);
+    Vector ans(this->size_);
     double len = this->length();
 
-    ans | std::views::transform([&len](T &el) {
+    std::ranges::transform(*this, ans.begin(), [&len](const T &el) {
         return el / len;
     });
 
@@ -592,11 +620,9 @@ Vector<T> Vector<T>::normalize() const requires LengthComputable<T> && Divisible
 template <Storable T>
 Vector<T> &Vector<T>::normalized() requires LengthComputable<T> && DivisibleAndAssignable<T, double>
 {
-    assertNotZeroVector(__FILE__, __LINE__, __FUNCTION__);
-
     double len = this->length();
-    *this | std::views::transform([&len](T &el) {
-        el /= len;
+    std::ranges::transform(*this, this->begin(), [&len](T &el) {
+        return el / len;
     });
 
     return *this;
@@ -634,46 +660,15 @@ double Vector<T>::length() const requires LengthComputable<T>
 template <Storable T>
 void Vector<T>::assertInBounds(size_type index, const char *file, int line, const char *func) const
 {
-    if (index < 0 || index >= size_)
+    if (index >= size_)
         throw VectorOutOfBondsException(file, line, func);
 }
 
 template <Storable T>
 void Vector<T>::assertValidSize(size_type size, const char *file, int line, const char *func) const
 {
-    if (size <= 0)
+    if (size == 0)
         throw VectorInvalidSizeException(file, line, func);
-}
-
-template <Storable T>
-void Vector<T>::assertNotEmpty(const char *file, int line, const char *func) const
-{
-    if (this->empty())
-        throw VectorEmptyException(file, line, func);
-}
-
-template <Storable T>
-template <HasZeroElement U>
-void Vector<T>::assertNoZeroes(const Vector<U>& v, const char *file, int line, const char *func) const
-{
-    if (std::ranges::any_of(v, [](const U &el) {
-        return el == T{0};
-    }))
-        throw ZeroElemVectorException(file, line, func);
-}
-
-template <Storable T>
-void Vector<T>::assertNotZeroVal(const T &val, const char *file, int line, const char *func) const
-{
-    if (val == T{0})
-        throw ZeroValException(file, line, func);
-}
-
-template <Storable T>
-void Vector<T>::assertNotZeroVector(const char *file, int line, const char *func) const
-{
-    if (this->isZero())
-        throw ZeroVectorException(file, line, func);
 }
 
 template <Storable T>

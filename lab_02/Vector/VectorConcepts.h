@@ -2,6 +2,7 @@
 #define VECTORCONCEPTS_H
 
 #include <concepts>
+#include <iostream>
 
 template <typename T>
 concept Storable = std::semiregular<T>;
@@ -72,7 +73,7 @@ concept DivisibleAndAssignable = Divisible<T, U> && requires (const T& t, const 
 };
 
 template <typename T>
-concept LengthComputable = HasZeroElement<T> && Addable<T, T> && Multiplicable<T, T> &&
+concept LengthComputable = Addable<T, T> && Multiplicable<T, T> &&
     requires(T t1, T t2)
 {
     { t1 * t2 + t1 * t2 } -> std::convertible_to<double>;

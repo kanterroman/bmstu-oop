@@ -78,6 +78,22 @@ ConstIterator<T> ConstIterator<T>::operator--(int) noexcept
 }
 
 template <typename T>
+ConstIterator<T> ConstIterator<T>::operator+(ptrdiff_t inc) const noexcept
+{
+    ConstIterator newIter(*this);
+    newIter.index += inc;
+    return newIter;
+}
+
+template <typename T>
+ConstIterator<T> ConstIterator<T>::operator-(ptrdiff_t dec) const noexcept
+{
+    ConstIterator<T> newIter(*this);
+    newIter.index -= dec;
+    return newIter;
+}
+
+template <typename T>
 ConstIterator<T> & ConstIterator<T>::operator+=(difference_type offset) noexcept
 {
     this->index += offset;
@@ -150,25 +166,9 @@ void ConstIterator<T>::assertNotExpired(const char *file, int line, const char *
 }
 
 template <typename T>
-ConstIterator<T> operator+(const ConstIterator<T> &iter, ptrdiff_t inc) noexcept
-{
-    ConstIterator<T> newIter(iter);
-    iter.index += inc;
-    return iter;
-}
-
-template <typename T>
 ConstIterator<T> operator+(ptrdiff_t inc, const ConstIterator<T> &iter) noexcept
 {
     return iter + inc;
-}
-
-template <typename T>
-ConstIterator<T> operator-(const ConstIterator<T> &iter, ptrdiff_t dec) noexcept
-{
-    ConstIterator<T> newIter(iter);
-    iter.index -= dec;
-    return iter;
 }
 
 template <typename T>

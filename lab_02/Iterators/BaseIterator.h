@@ -1,6 +1,7 @@
 #ifndef BASEITERATOR_H
 #define BASEITERATOR_H
-#include <memory>
+
+#include <cstddef>
 
 class BaseIterator
 {

@@ -3,6 +3,7 @@
 
 #include "BaseIterator.h"
 #include "../Vector/VectorConcepts.h"
+#include <memory>
 
 template <Storable T>
 class Vector;
@@ -38,6 +39,10 @@ public:
     ConstIterator operator++(int) noexcept;
     ConstIterator& operator--() noexcept;
     ConstIterator operator--(int) noexcept;
+
+    ConstIterator operator+(ptrdiff_t inc) const noexcept;
+    ConstIterator operator-(ptrdiff_t dec) const noexcept;
+
     ConstIterator& operator+=(difference_type offset) noexcept;
     ConstIterator& operator-=(difference_type offset) noexcept;
     difference_type operator-(const ConstIterator &iter) const noexcept;
@@ -65,11 +70,7 @@ private:
 
 #pragma region math
 template <typename T>
-ConstIterator<T> operator+(const ConstIterator<T>& iter, ptrdiff_t inc) noexcept;
-template <typename T>
 ConstIterator<T> operator+(ptrdiff_t inc, const ConstIterator<T>& iter) noexcept;
-template <typename T>
-ConstIterator<T> operator-(const ConstIterator<T>& iter, ptrdiff_t dec) noexcept;
 template <typename T>
 ConstIterator<T> operator-(ptrdiff_t dec, const ConstIterator<T>& iter) noexcept;
 #pragma endregion

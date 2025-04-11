@@ -3,6 +3,7 @@
 
 #include "BaseIterator.h"
 #include "../Vector/VectorConcepts.h"
+#include <memory>
 
 template <Storable T>
 class Vector;
@@ -13,22 +14,27 @@ class Iterator : public BaseIterator
 public:
     friend class Vector<T>;
 
+#pragma region definitions
     using iterator_category = std::random_access_iterator_tag;
     using value_type = T;
     using difference_type = ptrdiff_t;
     using pointer = T*;
     using reference = T&;
+#pragma endregion
 
+#pragma region constructors and assignments
     Iterator() noexcept;
     Iterator(const Iterator& iter) noexcept;
-
-    explicit operator bool() const noexcept;
-
     Iterator& operator =(const Iterator& iter) noexcept;
+#pragma endregion
 
+#pragma region compares
+    explicit operator bool() const noexcept;
     std::strong_ordering operator<=>(const Iterator &iter) const noexcept;
     bool operator==(const Iterator &iter) const noexcept;
+#pragma endregion
 
+#pragma region math
     Iterator& operator++() noexcept;
     Iterator operator++(int) noexcept;
     Iterator& operator--() noexcept;
@@ -38,28 +44,34 @@ public:
     Iterator& operator-=(difference_type offset) noexcept;
     difference_type operator-(const Iterator &iter) const noexcept;
 
+    Iterator operator+(ptrdiff_t inc) const noexcept;
+    Iterator operator-(ptrdiff_t dec) const noexcept;
+#pragma endregion
+
+#pragma region data access
     reference operator*() const;
     pointer operator->() const;
     reference operator[](size_t index) const;
+#pragma endregion
 
 private:
     Iterator(const std::shared_ptr<value_type[]>& arr, size_t size,
         size_t index = 0) noexcept;
 
+#pragma region assertions
     void assertInBounds(size_t index, const char *file, int line, const char *func) const;
     void assertNotExpired(const char *file, int line, const char *func) const;
+#pragma endregion
 
     std::weak_ptr<value_type[]> array;
 };
 
-template <typename T>
-Iterator<T> operator+(const Iterator<T>& iter, ptrdiff_t inc) noexcept;
+#pragma region math
 template <typename T>
 Iterator<T> operator+(ptrdiff_t inc, const Iterator<T>& iter) noexcept;
 template <typename T>
-Iterator<T> operator-(const Iterator<T>& iter, ptrdiff_t dec) noexcept;
-template <typename T>
 Iterator<T> operator-(ptrdiff_t dec, const Iterator<T>& iter) noexcept;
+#pragma endregion
 
 static_assert(std::random_access_iterator<Iterator<int>>);
 
