@@ -25,7 +25,7 @@ Vector<T> Vector<T>::unitVector(size_type n) requires HasUnitElement<T>
 }
 
 template <Storable T>
-Vector<char> Vector<T>::fromString(std::string &str)
+Vector<char> Vector<T>::fromString(const std::string &str)
 {
     Vector<char> v(str.size());
     std::ranges::copy(str, v.begin());
@@ -227,6 +227,12 @@ typename Vector<T>::reference Vector<T>::operator[](size_type index)
 }
 
 template <Storable T>
+typename Vector<T>::reference Vector<T>::getElement(size_type index)
+{
+    return (*this)[index];
+}
+
+template <Storable T>
 template <Addable<T> U>
 decltype(auto) Vector<T>::operator+(const Vector<U> &v) const
 {
@@ -243,7 +249,7 @@ decltype(auto) Vector<T>::operator+(const Vector<U> &v) const
 
 template <Storable T>
 template <Addable<T> U>
-decltype(auto) Vector<T>::add(const Vector<U> &v) const
+decltype(auto) Vector<T>::sum(const Vector<U> &v) const
 {
     return *this + v;
 }
@@ -328,7 +334,7 @@ Vector<T> &Vector<T>::operator+=(const Vector<U> &v)
 
 template <Storable T>
 template <AddableAndAssignable<T> U>
-Vector<T> &Vector<T>::addToThis(const Vector<U> &v)
+Vector<T> &Vector<T>::sumToThis(const Vector<U> &v)
 {
     return *this += v;
 }
@@ -494,7 +500,7 @@ decltype(auto) Vector<T>::operator^(const Vector<U> &v) const
 }
 
 template <Storable T>
-template <MultiplicableAndSunstractable<T> U>
+template <CrossProductComputable<T> U>
 decltype(auto) Vector<T>::crossProduct(const Vector<U> &v) const
 {
     assertEqDim(v.size(), __FILE__, __LINE__, __FUNCTION__);
@@ -506,7 +512,7 @@ decltype(auto) Vector<T>::crossProduct(const Vector<U> &v) const
 }
 
 template <Storable T>
-template <MultiplicableAndSunstractable<T> U>
+template <CrossProductComputable<T> U>
 decltype(auto) Vector<T>::operator&(const Vector<U> &v) const
 {
     return crossProduct(v);
@@ -527,7 +533,7 @@ decltype(auto) Vector<T>::operator+(const U &val) const
 
 template <Storable T>
 template <Addable<T> U>
-decltype(auto) Vector<T>::addVal(const U &val) const
+decltype(auto) Vector<T>::sumVal(const U &val) const
 {
     return *this + val;
 }
@@ -605,7 +611,7 @@ Vector<T> &Vector<T>::operator+=(const U &val)
 
 template <Storable T>
 template <AddableAndAssignable<T> U>
-Vector<T> &Vector<T>::addValToThis(const U &val)
+Vector<T> &Vector<T>::sumValAndThis(const U &val)
 {
     return *this += val;
 }
@@ -793,7 +799,7 @@ void Vector<T>::allocate(size_type n)
 }
 
 template <Storable T>
-template <MultiplicableAndSunstractable<T> U>
+template <CrossProductComputable<T> U>
 decltype(auto) Vector<T>::dim3CrossProduct(const Vector<U> &v) const
 {
     decltype(auto) i = this->data[1] * v[2] - this->data[2] * v[1];
@@ -805,7 +811,7 @@ decltype(auto) Vector<T>::dim3CrossProduct(const Vector<U> &v) const
 }
 
 template <Storable T>
-template <MultiplicableAndSunstractable<T> U>
+template <CrossProductComputable<T> U>
 decltype(auto) Vector<T>::dim7CrossProduct(const Vector<U> &v) const
 {
     decltype(auto) e1 = this->data[1] * v[3] - this->data[3] * v[1] +

@@ -83,7 +83,7 @@ concept LengthComputable = Addable<T, T> && Multiplicable<T, T> &&
                            };
 
 template <typename T, typename U>
-concept MultiplicableAndSunstractable = Multiplicable<T, U> &&
+concept CrossProductComputable = Multiplicable<T, U> &&
                                         requires(const T &t, const U &u)
                                         {
                                             Substractable<std::common_type_t<T, U>, std::common_type_t<T, U>>;

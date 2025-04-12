@@ -23,7 +23,7 @@ public:
 #pragma region statics
     static Vector zeroVector(size_type n) requires HasZeroElement<T>;
     static Vector unitVector(size_type n) requires HasUnitElement<T>;
-    static Vector<char> fromString(std::string &str);
+    static Vector<char> fromString(const std::string &str);
     static Vector<char> fromString(std::string &&str);
 #pragma endregion
 
@@ -70,40 +70,56 @@ public:
     template <Convertible<T> U>
     void setElement(const U &value, size_type index);
     reference operator[](size_type index);
+    reference getElement(size_type index);
 #pragma endregion
 
 #pragma region two vector
     template <Addable<T> U>
     decltype(auto) operator+(const Vector<U> &v) const;
+
     template <Addable<T> U>
-    decltype(auto) add(const Vector<U> &v) const;
+    decltype(auto) sum(const Vector<U> &v) const;
+
     template <Substractable<T> U>
     decltype(auto) operator-(const Vector<U> &v) const;
+
     template <Substractable<T> U>
     decltype(auto) substract(const Vector<U> &v) const;
+
     template <Multiplicable<T> U>
     decltype(auto) operator*(const Vector<U> &v) const;
+
     template <Multiplicable<T> U>
     decltype(auto) multiply(const Vector<U> &v) const;
+
     template <Divisible<T> U>
     decltype(auto) operator/(const Vector<U> &v) const;
+
     template <Divisible<T> U>
     decltype(auto) divide(const Vector<U> &v) const;
 
+
     template <AddableAndAssignable<T> U>
     Vector &operator+=(const Vector<U> &v);
+
     template <AddableAndAssignable<T> U>
-    Vector &addToThis(const Vector<U> &v);
+    Vector &sumToThis(const Vector<U> &v);
+
     template <SubstractableAndAssignable<T> U>
     Vector &operator-=(const Vector<U> &v);
+
     template <SubstractableAndAssignable<T> U>
     Vector &substrFromThis(const Vector<U> &v);
+
     template <MultiplicableAndAssignable<T> U>
     Vector &operator*=(const Vector<U> &v);
+
     template <MultiplicableAndAssignable<T> U>
     Vector &multipToThis(const Vector<U> &v);
+
     template <DivisibleAndAssignable<T> U>
     Vector &operator/=(const Vector<U> &v);
+
     template <DivisibleAndAssignable<T> U>
     Vector &divideToThis(const Vector<U> &v);
 
@@ -130,42 +146,53 @@ public:
     decltype(auto) dotProduct(const Vector<U> &v) const;
     template <DotProductComputable<T> U>
     decltype(auto) operator^(const Vector<U> &v) const;
-    template <MultiplicableAndSunstractable<T> U>
+    template <CrossProductComputable<T> U>
     decltype(auto) crossProduct(const Vector<U> &v) const;
-    template <MultiplicableAndSunstractable<T> U>
+    template <CrossProductComputable<T> U>
     decltype(auto) operator&(const Vector<U> &v) const;
 #pragma endregion
 
 #pragma region vector and value
     template <Addable<T> U>
     decltype(auto) operator+(const U &val) const;
+
     template <Addable<T> U>
-    decltype(auto) addVal(const U &val) const;
+    decltype(auto) sumVal(const U &val) const;
+
     template <Multiplicable<T> U>
     decltype(auto) operator*(const U &val) const;
+
     template <Multiplicable<T> U>
     decltype(auto) multipVal(const U &val) const;
+
     template <Substractable<T> U>
     decltype(auto) operator-(const U &val) const;
+
     template <Substractable<T> U>
     decltype(auto) substrVal(const U &val) const;
+
     template <Divisible<T> U>
     decltype(auto) operator/(const U &val) const;
+
     template <Divisible<T> U>
     decltype(auto) divideVal(const U &val) const;
+
 
     template <AddableAndAssignable<T> U>
     Vector &operator+=(const U &val);
     template <AddableAndAssignable<T> U>
-    Vector &addValToThis(const U &val);
+    Vector &sumValAndThis(const U &val);
+
     template <MultiplicableAndAssignable<T> U>
     Vector &operator*=(const U &val);
     template <MultiplicableAndAssignable<T> U>
     Vector &multipValToThis(const U &val);
+
     template <SubstractableAndAssignable<T> U>
     Vector &operator-=(const U &val);
     template <SubstractableAndAssignable<T> U>
     Vector &substrValToThis(const U &val);
+
     template <DivisibleAndAssignable<T> U>
     Vector &operator/=(const U &val);
     template <DivisibleAndAssignable<T> U>
@@ -196,9 +223,9 @@ private:
 
 #pragma region helpers
     void allocate(size_type n);
-    template <MultiplicableAndSunstractable<T> U>
+    template <CrossProductComputable<T> U>
     decltype(auto) dim3CrossProduct(const Vector<U> &v) const;
-    template <MultiplicableAndSunstractable<T> U>
+    template <CrossProductComputable<T> U>
     decltype(auto) dim7CrossProduct(const Vector<U> &v) const;
 #pragma endregion
 
