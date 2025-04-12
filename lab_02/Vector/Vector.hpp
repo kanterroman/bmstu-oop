@@ -25,6 +25,22 @@ Vector<T> Vector<T>::unitVector(size_type n) requires HasUnitElement<T>
 }
 
 template <Storable T>
+Vector<char> Vector<T>::fromString(std::string &str)
+{
+    Vector<char> v(str.size());
+    std::ranges::copy(str, v.begin());
+    return v;
+}
+
+template <Storable T>
+Vector<char> Vector<T>::fromString(std::string &&str)
+{
+    Vector<char> v(str.size());
+    std::ranges::copy(str, v.begin());
+    return v;
+}
+
+template <Storable T>
 template <Convertible<T> U>
 Vector<T>::Vector(const Vector<U> &v)
 {
@@ -144,7 +160,7 @@ typename Vector<T>::const_iterator Vector<T>::cend() const noexcept
 }
 
 template <Storable T>
-bool Vector<T>::isZero() const noexcept requires HasZeroElement<T> && std::regular<T>
+bool Vector<T>::isZero() const noexcept requires HasZeroElement<T> && EqComparable<T>
 {
     return std::ranges::all_of(*this, [](const T &el) {
         return el == T{0};
@@ -152,10 +168,26 @@ bool Vector<T>::isZero() const noexcept requires HasZeroElement<T> && std::regul
 }
 
 template <Storable T>
-bool Vector<T>::isUnit() const noexcept requires HasUnitElement<T> && std::regular<T>
+bool Vector<T>::isZero() const noexcept requires std::is_floating_point_v<T>
+{
+    return std::ranges::all_of(*this, [](const T &el) {
+        return std::abs(el - T{0}) < FLT_EPSILON;
+    });
+}
+
+template <Storable T>
+bool Vector<T>::isUnit() const noexcept requires HasUnitElement<T> && EqComparable<T>
 {
     return std::ranges::all_of(*this, [](const T &el) {
         return el == T{1};
+    });
+}
+
+template <Storable T>
+bool Vector<T>::isUnit() const noexcept requires std::is_floating_point_v<T>
+{
+    return std::ranges::all_of(*this, [](const T &el) {
+        return std::abs(el - T{1}) < FLT_EPSILON;
     });
 }
 

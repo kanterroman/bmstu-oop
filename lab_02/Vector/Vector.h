@@ -5,7 +5,6 @@
 #include "VectorConcepts.h"
 #include "Iterator.h"
 #include "ConstIterator.h"
-#include <ranges>
 
 template <Storable T>
 class Vector : public BaseVector
@@ -24,6 +23,8 @@ public:
 #pragma region statics
     static Vector zeroVector(size_type n) requires HasZeroElement<T>;
     static Vector unitVector(size_type n) requires HasUnitElement<T>;
+    static Vector<char> fromString(std::string &str);
+    static Vector<char> fromString(std::string &&str);
 #pragma endregion
 
 #pragma region constructors/destructors and assignments
@@ -53,8 +54,10 @@ public:
 #pragma endregion
 
 #pragma region checks
-    bool isZero() const noexcept requires HasZeroElement<T> && std::regular<T>;
-    bool isUnit() const noexcept requires HasUnitElement<T> && std::regular<T>;
+    bool isZero() const noexcept requires HasZeroElement<T> && EqComparable<T>;
+    bool isZero() const noexcept requires std::is_floating_point_v<T>;
+    bool isUnit() const noexcept requires HasUnitElement<T> && EqComparable<T>;
+    bool isUnit() const noexcept requires std::is_floating_point_v<T>;;
 #pragma endregion
 
 #pragma region getters
@@ -190,11 +193,14 @@ private:
     void assertSupportsCrossProduct(const char *file, int line, const char *func) const;
     void assertEqDim(size_type otherDim, const char *file, int line, const char *func) const;
 #pragma endregion
+
+#pragma region helpers
     void allocate(size_type n);
     template <MultiplicableAndSunstractable<T> U>
     decltype(auto) dim3CrossProduct(const Vector<U> &v) const;
     template <MultiplicableAndSunstractable<T> U>
     decltype(auto) dim7CrossProduct(const Vector<U> &v) const;
+#pragma endregion
 
     std::shared_ptr<value_type[]> data;
 };

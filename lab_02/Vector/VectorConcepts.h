@@ -11,6 +11,9 @@ template <typename T, typename U>
 concept Convertible = std::convertible_to<U, T>;
 
 template <typename T>
+concept EqComparable = std::equality_comparable<T>;
+
+template <typename T>
 concept HasZeroElement = requires()
 {
     { T{0} } -> std::convertible_to<T>;

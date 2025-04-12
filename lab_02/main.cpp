@@ -1,11 +1,14 @@
 #include "ConstIterator.hpp"
 #include "Iterator.hpp"
 #include "Vector.hpp"
+#include <vector>
 
 #include <iostream>
 
 int main()
 {
+    std::vector<int> v1(10);
+    std::vector<int> v2(v1);
     // Создание
     {
         Vector<int> v1(1);
