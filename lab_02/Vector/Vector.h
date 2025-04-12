@@ -54,10 +54,10 @@ public:
 #pragma endregion
 
 #pragma region checks
-    bool isZero() const noexcept requires HasZeroElement<T> && EqComparable<T>;
-    bool isZero() const noexcept requires std::is_floating_point_v<T>;
-    bool isUnit() const noexcept requires HasUnitElement<T> && EqComparable<T>;
-    bool isUnit() const noexcept requires std::is_floating_point_v<T>;;
+    bool isZero() const requires HasZeroElement<T> && EqComparable<T>;
+    bool isZero() const requires std::is_floating_point_v<T>;
+    bool isUnit() const requires HasUnitElement<T> && EqComparable<T>;
+    bool isUnit() const requires std::is_floating_point_v<T>;;
 #pragma endregion
 
 #pragma region getters

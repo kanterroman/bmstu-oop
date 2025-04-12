@@ -160,7 +160,7 @@ typename Vector<T>::const_iterator Vector<T>::cend() const noexcept
 }
 
 template <Storable T>
-bool Vector<T>::isZero() const noexcept requires HasZeroElement<T> && EqComparable<T>
+bool Vector<T>::isZero() const requires HasZeroElement<T> && EqComparable<T>
 {
     return std::ranges::all_of(*this, [](const T &el) {
         return el == T{0};
@@ -168,7 +168,7 @@ bool Vector<T>::isZero() const noexcept requires HasZeroElement<T> && EqComparab
 }
 
 template <Storable T>
-bool Vector<T>::isZero() const noexcept requires std::is_floating_point_v<T>
+bool Vector<T>::isZero() const requires std::is_floating_point_v<T>
 {
     return std::ranges::all_of(*this, [](const T &el) {
         return std::abs(el - T{0}) < FLT_EPSILON;
@@ -176,7 +176,7 @@ bool Vector<T>::isZero() const noexcept requires std::is_floating_point_v<T>
 }
 
 template <Storable T>
-bool Vector<T>::isUnit() const noexcept requires HasUnitElement<T> && EqComparable<T>
+bool Vector<T>::isUnit() const requires HasUnitElement<T> && EqComparable<T>
 {
     return std::ranges::all_of(*this, [](const T &el) {
         return el == T{1};
@@ -184,7 +184,7 @@ bool Vector<T>::isUnit() const noexcept requires HasUnitElement<T> && EqComparab
 }
 
 template <Storable T>
-bool Vector<T>::isUnit() const noexcept requires std::is_floating_point_v<T>
+bool Vector<T>::isUnit() const requires std::is_floating_point_v<T>
 {
     return std::ranges::all_of(*this, [](const T &el) {
         return std::abs(el - T{1}) < FLT_EPSILON;
