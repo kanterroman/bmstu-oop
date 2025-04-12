@@ -64,7 +64,8 @@ Vector<T>::Vector(Vector &&v) noexcept
 }
 
 template <Storable T>
-Vector<T>::Vector(std::initializer_list<T> lst)
+template <Convertible<T> U>
+Vector<T>::Vector(std::initializer_list<U> lst)
 {
     assertValidSize(lst.size(), __FILE__, __LINE__, __FUNCTION__);
     allocate(lst.size());
@@ -89,6 +90,46 @@ Vector<T>::Vector(size_type n, const_reference v)
 }
 
 template <Storable T>
+template <Convertible<T> U>
+Vector<T>::Vector(const U *carr, size_type n)
+{
+    assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
+
+    allocate(n);
+    size_type i = 0;
+    std::ranges::views::transform([&i, &carr](T &el) { el = carr[i++]; });
+}
+
+template <Storable T>
+template <std::ranges::input_range U>
+Vector<T>::Vector(U &&rng)
+{
+    assertValidSize(std::ranges::size(rng), __FILE__, __LINE__, __FUNCTION__);
+
+    allocate(std::ranges::size(rng));
+    std::ranges::copy(rng, begin());
+}
+
+template <Storable T>
+template <std::input_iterator iter, std::sentinel_for<iter> sent>
+Vector<T>::Vector(iter &&first, sent &&last)
+{
+    assertValidSize(std::distance(first, last), __FILE__, __LINE__, __FUNCTION__);
+
+    allocate(std::distance(first, last));
+    std::ranges::copy(first, last, begin());
+}
+
+template <Storable T>
+template <std::input_iterator iter>
+Vector<T>::Vector(iter &&first, size_type n)
+{
+    assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
+    allocate(n);
+    std::ranges::copy(first, first + n, begin());
+}
+
+template <Storable T>
 Vector<T> &Vector<T>::operator=(const Vector &v)
 {
     allocate(v.size());
@@ -103,6 +144,17 @@ Vector<T> &Vector<T>::operator=(const Vector<U> &v)
 {
     allocate(v.size());
     std::ranges::copy(v, begin());
+
+    return *this;
+}
+
+template <Storable T>
+template <Convertible<T> U>
+Vector<T> & Vector<T>::operator=(std::initializer_list<U> lst)
+{
+    assertValidSize(lst.size(), __FILE__, __LINE__, __FUNCTION__);
+    allocate(lst.size());
+    std::ranges::copy(lst, begin());
 
     return *this;
 }
@@ -125,6 +177,12 @@ Vector<T>::~Vector()
 
 template <Storable T>
 typename Vector<T>::iterator Vector<T>::begin() noexcept
+{
+    return Iterator<T>(this->data, this->size_);
+}
+
+template <Storable T>
+typename Vector<T>::iterator Vector<T>::rbegin() noexcept
 {
     return Iterator<T>(this->data, this->size_);
 }
@@ -691,7 +749,7 @@ decltype(auto) Vector<T>::reverse() const requires Inversible<T>
 template <Storable T>
 Vector<T> &Vector<T>::reversed() requires InversibleAndAssignable<T>
 {
-    *this | std::views::transform([](T &el) {
+    std::ranges::transform(*this, begin(), [](const T &el) {
         return -el;
     });
 
@@ -738,6 +796,7 @@ Vector<T> &Vector<T>::toUnit() requires HasUnitElement<T>
     return *this;
 }
 
+// TODO optimitze
 template <Storable T>
 double Vector<T>::length() const requires LengthComputable<T>
 {

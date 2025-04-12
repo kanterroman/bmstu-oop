@@ -5,6 +5,7 @@
 #include "VectorConcepts.h"
 #include "Iterator.h"
 #include "ConstIterator.h"
+#include <ranges>
 
 template <Storable T>
 class Vector : public BaseVector
@@ -29,28 +30,46 @@ public:
 
 #pragma region constructors/destructors and assignments
     template <Convertible<T> U>
-    Vector(const Vector<U> &v);
-    Vector(const Vector &v);
+    explicit Vector(const Vector<U> &v);
+    explicit Vector(const Vector &v);
     Vector(Vector &&v) noexcept;
-    Vector(std::initializer_list<T> lst);
+    template <Convertible<T> U>
+    Vector(std::initializer_list<U> lst);
     explicit Vector(size_type n);
     Vector(size_type n, const_reference v);
+    template <Convertible<T> U>
+    Vector(const U *carr, size_type n);
+    template <std::ranges::input_range range>
+    explicit Vector(range &&rng);
+    template <std::input_iterator iter, std::sentinel_for<iter> sent>
+    Vector(iter&& first, sent&& last);
+    template <std::input_iterator iter>
+    Vector(iter&& first, size_type n);
+
 
     Vector &operator=(const Vector &v);
     template <Convertible<T> U>
     Vector &operator=(const Vector<U> &v);
+    template <Convertible<T> U>
+    Vector &operator=(std::initializer_list<U> lst);
     Vector &operator=(Vector &&v) noexcept;
+
 
     ~Vector() override;
 #pragma endregion
 
 #pragma region iterators
     iterator begin() noexcept;
+    iterator rbegin() noexcept;
     iterator end() noexcept;
+    iterator rend() noexcept;
     const_iterator begin() const noexcept;
+    const_iterator rbegin() const noexcept;
     const_iterator end() const noexcept;
+    const_iterator rend() const noexcept;
     const_iterator cbegin() const noexcept;
-    const_iterator cend() const noexcept;
+    const_iterator crbegin() const noexcept;
+    const_iterator crend() const noexcept;
 #pragma endregion
 
 #pragma region checks

@@ -30,7 +30,7 @@ public:
 #pragma endregion
 
 #pragma region compares
-    explicit operator bool() const noexcept;
+    operator bool() const noexcept;
     std::strong_ordering operator<=>(const Iterator &iter) const noexcept;
     bool operator==(const Iterator &iter) const noexcept;
 #pragma endregion

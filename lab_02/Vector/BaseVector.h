@@ -1,6 +1,8 @@
 #ifndef BASEVECTOR_H
 #define BASEVECTOR_H
 
+#include <cstddef>
+
 class BaseVector
 {
 public:
@@ -15,7 +17,5 @@ public:
 protected:
     size_type size_ = 0;
 };
-
-inline BaseVector::~BaseVector() = default;
 
 #endif //BASEVECTOR_H

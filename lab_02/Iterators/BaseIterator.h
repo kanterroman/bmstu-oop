@@ -13,6 +13,4 @@ protected:
     size_t size = 0;
 };
 
-inline BaseIterator::~BaseIterator() = default;
-
 #endif //BASEITERATOR_H

@@ -15,6 +15,9 @@ add_executable(lab_02 main.cpp
         Vector/Vector.h
         Vector/Vector.hpp
         Exceptions/VectorExceptions.h
-        Vector/VectorConcepts.h)
+        Vector/VectorConcepts.h
+        Vector/BaseVector.cpp
+        Iterators/BaseIterator.cpp
+        Iterators/ReverseIterator.hpp)
 
 include_directories(Vector Iterators Exceptions)

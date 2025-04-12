@@ -7,20 +7,21 @@
 
 int main()
 {
-    std::vector<int> v1(10);
-    std::vector<int> v2(v1);
     // Создание
     {
         Vector<int> v1(1);
         Vector<double> v2(5, 1);
-        Vector<double> v3 = { 1, 2.0, 33 };
-        Vector<int> v4 = v1;
-        v2 = v1;
-        v4 = v1;
+        Vector<double> v3 = { 1.3, 2.0, 33.3 };
+        int arr[] = { 1 , 2, 3, 4, 5 };
+        Vector<int> a(arr, 5);
+        auto range = std::ranges::subrange(v3.begin(), v3.end());
+        Vector<double> vtest(range.begin(), 2);
+        std::cout << vtest << std::endl;
     }
     // Работа с итератором
     {
-        Vector<double> v = { 1, -1, 0., 10.5, 3 };
+        Vector<double> v = {1};
+        v = { 1, 2, 3, 4 };
         std::cout << v << std::endl;
         auto iter = v.begin();
         iter++;
@@ -51,7 +52,7 @@ int main()
     }
     // Геттеры/сеттеры
     {
-        Vector<double> v1 = { 10.5, 2.1, 1, 3.3, 11 };
+        Vector<double> v1 = { 10.5, 2.1, 1., 3.3, 11. };
         Vector<int> v2 = { 10, 0 };
         std::cout << v1.dimension() << v2.dimension() << std::endl;
         std::cout << v1.getElement(0) << v1[0] << std::endl;
@@ -124,10 +125,10 @@ int main()
     }
     // Действия над вектором
     {
-        Vector<double> v1 = { 1.1, 2.1, 3.1, 4 };
+        Vector<double> v1 = { 1.1, 2.1, 3.1, 4. };
         std::cout << -v1 << std::endl;
         v1.reversed();
-        std::cout << -v1 << std::endl;
+        std::cout << v1 << std::endl;
         v1.reversed();
         auto v2 = v1.normalize();
         v1.normalized();
