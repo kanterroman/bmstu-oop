@@ -2,7 +2,7 @@
 #define CONSTITERATOR_HPP
 
 #include "ConstIterator.h"
-#include "../Exceptions/IterExceptions.h"
+#include "IterExceptions.h"
 
 template <typename T>
 ConstIterator<T>::ConstIterator() noexcept : array()
@@ -26,7 +26,7 @@ ConstIterator<T>::operator bool() const noexcept
 }
 
 template <typename T>
-ConstIterator<T> & ConstIterator<T>::operator=(const ConstIterator &iter) noexcept
+ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator &iter) noexcept
 {
     this->array = iter.array;
     this->index = iter.index;
@@ -48,7 +48,7 @@ bool ConstIterator<T>::operator==(const ConstIterator &iter) const noexcept
 }
 
 template <typename T>
-ConstIterator<T> & ConstIterator<T>::operator++() noexcept
+ConstIterator<T> &ConstIterator<T>::operator++() noexcept
 {
     ++this->index;
     return *this;
@@ -63,7 +63,7 @@ ConstIterator<T> ConstIterator<T>::operator++(int) noexcept
 }
 
 template <typename T>
-ConstIterator<T> & ConstIterator<T>::operator--() noexcept
+ConstIterator<T> &ConstIterator<T>::operator--() noexcept
 {
     --this->index;
     return *this;
@@ -94,14 +94,14 @@ ConstIterator<T> ConstIterator<T>::operator-(ptrdiff_t dec) const noexcept
 }
 
 template <typename T>
-ConstIterator<T> & ConstIterator<T>::operator+=(difference_type offset) noexcept
+ConstIterator<T> &ConstIterator<T>::operator+=(difference_type offset) noexcept
 {
     this->index += offset;
     return *this;
 }
 
 template <typename T>
-ConstIterator<T> & ConstIterator<T>::operator-=(difference_type offset) noexcept
+ConstIterator<T> &ConstIterator<T>::operator-=(difference_type offset) noexcept
 {
     this->index -= offset;
     return *this;
@@ -144,8 +144,8 @@ typename ConstIterator<T>::reference ConstIterator<T>::operator[](size_t index) 
 }
 
 template <typename T>
-ConstIterator<T>::ConstIterator(const std::shared_ptr<value_type[]> &arr,size_t size,
-    size_t index) noexcept : array(arr)
+ConstIterator<T>::ConstIterator(const std::shared_ptr<value_type[]> &arr, size_t size,
+                                size_t index) noexcept : array(arr)
 {
     this->size = size;
     this->index = index;

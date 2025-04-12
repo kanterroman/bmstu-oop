@@ -6,11 +6,13 @@
 class BaseIterator
 {
 public:
-    virtual ~BaseIterator() = default;
+    virtual ~BaseIterator() = 0;
 
 protected:
     size_t index = 0;
     size_t size = 0;
 };
+
+inline BaseIterator::~BaseIterator() = default;
 
 #endif //BASEITERATOR_H

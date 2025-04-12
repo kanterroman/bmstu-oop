@@ -4,7 +4,7 @@
 #include <ranges>
 #include "Vector.h"
 #include <cfloat>
-#include "../Exceptions/VectorExceptions.h"
+#include "VectorExceptions.h"
 #include <numeric>
 #include <iostream>
 
@@ -83,7 +83,7 @@ Vector<T> &Vector<T>::operator=(const Vector &v)
 
 template <Storable T>
 template <Convertible<T> U>
-Vector<T> & Vector<T>::operator=(const Vector<U> &v)
+Vector<T> &Vector<T>::operator=(const Vector<U> &v)
 {
     allocate(v.size());
     std::ranges::copy(v, begin());
@@ -210,6 +210,13 @@ decltype(auto) Vector<T>::operator+(const Vector<U> &v) const
 }
 
 template <Storable T>
+template <Addable<T> U>
+decltype(auto) Vector<T>::add(const Vector<U> &v) const
+{
+    return *this + v;
+}
+
+template <Storable T>
 template <Substractable<T> U>
 decltype(auto) Vector<T>::operator-(const Vector<U> &v) const
 {
@@ -222,6 +229,13 @@ decltype(auto) Vector<T>::operator-(const Vector<U> &v) const
     });
 
     return res;
+}
+
+template <Storable T>
+template <Substractable<T> U>
+decltype(auto) Vector<T>::substract(const Vector<U> &v) const
+{
+    return *this - v;
 }
 
 template <Storable T>
@@ -240,6 +254,13 @@ decltype(auto) Vector<T>::operator*(const Vector<U> &v) const
 }
 
 template <Storable T>
+template <Multiplicable<T> U>
+decltype(auto) Vector<T>::multiply(const Vector<U> &v) const
+{
+    return *this * v;
+}
+
+template <Storable T>
 template <Divisible<T> U>
 decltype(auto) Vector<T>::operator/(const Vector<U> &v) const
 {
@@ -255,6 +276,13 @@ decltype(auto) Vector<T>::operator/(const Vector<U> &v) const
 }
 
 template <Storable T>
+template <Divisible<T> U>
+decltype(auto) Vector<T>::divide(const Vector<U> &v) const
+{
+    return *this / v;
+}
+
+template <Storable T>
 template <AddableAndAssignable<T> U>
 Vector<T> &Vector<T>::operator+=(const Vector<U> &v)
 {
@@ -264,6 +292,13 @@ Vector<T> &Vector<T>::operator+=(const Vector<U> &v)
         return el1 + el2;
     });
     return *this;
+}
+
+template <Storable T>
+template <AddableAndAssignable<T> U>
+Vector<T> &Vector<T>::addToThis(const Vector<U> &v)
+{
+    return *this += v;
 }
 
 template <Storable T>
@@ -279,6 +314,13 @@ Vector<T> &Vector<T>::operator-=(const Vector<U> &v)
 }
 
 template <Storable T>
+template <SubstractableAndAssignable<T> U>
+Vector<T> &Vector<T>::substrFromThis(const Vector<U> &v)
+{
+    return *this -= v;
+}
+
+template <Storable T>
 template <MultiplicableAndAssignable<T> U>
 Vector<T> &Vector<T>::operator*=(const Vector<U> &v)
 {
@@ -291,6 +333,13 @@ Vector<T> &Vector<T>::operator*=(const Vector<U> &v)
 }
 
 template <Storable T>
+template <MultiplicableAndAssignable<T> U>
+Vector<T> &Vector<T>::multipToThis(const Vector<U> &v)
+{
+    return *this *= v;
+}
+
+template <Storable T>
 template <DivisibleAndAssignable<T> U>
 Vector<T> &Vector<T>::operator/=(const Vector<U> &v)
 {
@@ -300,6 +349,13 @@ Vector<T> &Vector<T>::operator/=(const Vector<U> &v)
         return el2 / el1;
     });
     return *this;
+}
+
+template <Storable T>
+template <DivisibleAndAssignable<T> U>
+Vector<T> &Vector<T>::divideToThis(const Vector<U> &v)
+{
+    return *this /= v;
 }
 
 template <Storable T>
@@ -369,7 +425,7 @@ bool Vector<T>::orthogonal(const Vector<U> &v) const requires HasZeroElement<T>
 template <Storable T>
 template <DotProductComputable<T> U>
 bool Vector<T>::orthogonal(const Vector<U> &v) const requires HasZeroElement<T> && std::is_floating_point_v<T> && std::
-    is_floating_point_v<U>
+                                                              is_floating_point_v<U>
 {
     return std::abs(dotProduct(v) - T{0}) < FLT_EPSILON;
 }
@@ -390,7 +446,7 @@ decltype(auto) Vector<T>::dotProduct(const Vector<U> &v) const
     decltype(this->data[0] * v[0]) sum{0};
 
     auto iter = v.begin();
-    std::ranges::for_each(*this, [&sum, &iter](const T& el1) {
+    std::ranges::for_each(*this, [&sum, &iter](const T &el1) {
         sum += el1 * *iter;
         ++iter;
     });
@@ -426,7 +482,7 @@ decltype(auto) Vector<T>::operator&(const Vector<U> &v) const
 
 template <Storable T>
 template <Addable<T> U>
-decltype(auto) Vector<T>::operator+(const U& val) const
+decltype(auto) Vector<T>::operator+(const U &val) const
 {
     Vector<decltype(this->data[0] + val)> res(this->size_);
 
@@ -446,7 +502,7 @@ decltype(auto) Vector<T>::addVal(const U &val) const
 
 template <Storable T>
 template <Substractable<T> U>
-decltype(auto) Vector<T>::operator-(const U& val) const
+decltype(auto) Vector<T>::operator-(const U &val) const
 {
     Vector<decltype(this->data[0] + val)> res(this->size_);
 
@@ -466,7 +522,7 @@ decltype(auto) Vector<T>::substrVal(const U &val) const
 
 template <Storable T>
 template <Multiplicable<T> U>
-decltype(auto) Vector<T>::operator*(const U& val) const
+decltype(auto) Vector<T>::operator*(const U &val) const
 {
     Vector<decltype(this->data[0] + val)> res(this->size_);
 
@@ -486,7 +542,7 @@ decltype(auto) Vector<T>::multipVal(const U &val) const
 
 template <Storable T>
 template <Divisible<T> U>
-decltype(auto) Vector<T>::operator/(const U& val) const
+decltype(auto) Vector<T>::operator/(const U &val) const
 {
     Vector<decltype(this->data[0] + val)> res(this->size_);
 
@@ -506,7 +562,7 @@ decltype(auto) Vector<T>::divideVal(const U &val) const
 
 template <Storable T>
 template <AddableAndAssignable<T> U>
-Vector<T> &Vector<T>::operator+=(const U& val)
+Vector<T> &Vector<T>::operator+=(const U &val)
 {
     *this | std::views::transform([&val](T &el) {
         return el + val;
@@ -517,14 +573,14 @@ Vector<T> &Vector<T>::operator+=(const U& val)
 
 template <Storable T>
 template <AddableAndAssignable<T> U>
-Vector<T> & Vector<T>::addValToThis(const U &val)
+Vector<T> &Vector<T>::addValToThis(const U &val)
 {
     return *this += val;
 }
 
 template <Storable T>
 template <SubstractableAndAssignable<T> U>
-Vector<T> &Vector<T>::operator-=(const U& val)
+Vector<T> &Vector<T>::operator-=(const U &val)
 {
     *this | std::views::transform([&val](T &el) {
         return el - val;
@@ -535,14 +591,14 @@ Vector<T> &Vector<T>::operator-=(const U& val)
 
 template <Storable T>
 template <SubstractableAndAssignable<T> U>
-Vector<T> & Vector<T>::substrValToThis(const U &val)
+Vector<T> &Vector<T>::substrValToThis(const U &val)
 {
     return *this -= val;
 }
 
 template <Storable T>
 template <MultiplicableAndAssignable<T> U>
-Vector<T> &Vector<T>::operator*=(const U& val)
+Vector<T> &Vector<T>::operator*=(const U &val)
 {
     *this | std::views::transform([&val](T &el) {
         return el * val;
@@ -553,14 +609,14 @@ Vector<T> &Vector<T>::operator*=(const U& val)
 
 template <Storable T>
 template <MultiplicableAndAssignable<T> U>
-Vector<T> & Vector<T>::multipValToThis(const U &val)
+Vector<T> &Vector<T>::multipValToThis(const U &val)
 {
     return *this *= val;
 }
 
 template <Storable T>
 template <DivisibleAndAssignable<T> U>
-Vector<T> &Vector<T>::operator/=(const U& val)
+Vector<T> &Vector<T>::operator/=(const U &val)
 {
     *this | std::views::transform([&val](T &el) {
         return el / val;
@@ -571,7 +627,7 @@ Vector<T> &Vector<T>::operator/=(const U& val)
 
 template <Storable T>
 template <DivisibleAndAssignable<T> U>
-Vector<T> & Vector<T>::divideValToThis(const U &val)
+Vector<T> &Vector<T>::divideValToThis(const U &val)
 {
     return *this /= val;
 }
@@ -742,23 +798,22 @@ decltype(auto) Vector<T>::dim7CrossProduct(const Vector<U> &v) const
                         this->data[1] * v[5] - this->data[5] * v[1] +
                         this->data[3] * v[4] - this->data[4] * v[3];
 
-
     Vector ans = {e1, e2, e3, e4, e5, e6, e7};
     return ans;
 }
 
 template <Storable T>
-std::ostream & operator<<(std::ostream &os, const Vector<T> &v) requires Outable<T>
+std::ostream &operator<<(std::ostream &os, const Vector<T> &v) requires Outable<T>
 {
     std::ranges::for_each(v, [&os](const T &el) {
-            os << el << " ";
+        os << el << " ";
     });
 
     return os;
 }
 
 template <Storable T, Addable<T> U>
-decltype(auto) operator+(const U& val, const Vector<T> &v)
+decltype(auto) operator+(const U &val, const Vector<T> &v)
 {
     return v + val;
 }

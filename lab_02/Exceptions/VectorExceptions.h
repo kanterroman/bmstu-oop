@@ -6,36 +6,51 @@
 class VectorBadAllocException : public BaseException
 {
 public:
-    VectorBadAllocException(const char *filename, int line, const char *funcname, const char *info = "Couldn't allocate memory for vector") noexcept :
-    BaseException(filename, line, funcname, info) {}
+    VectorBadAllocException(const char *filename, int line, const char *funcname,
+                            const char *info = "Couldn't allocate memory for vector") noexcept :
+        BaseException(filename, line, funcname, info)
+    {
+    }
 };
 
 class VectorOutOfBondsException : public BaseException
 {
 public:
-    VectorOutOfBondsException(const char *filename, int line, const char *funcname, const char *info = "Index of vector element out of bounds") noexcept :
-    BaseException(filename, line, funcname, info) {}
+    VectorOutOfBondsException(const char *filename, int line, const char *funcname,
+                              const char *info = "Index of vector element out of bounds") noexcept :
+        BaseException(filename, line, funcname, info)
+    {
+    }
 };
 
 class VectorInvalidSizeException : public BaseException
 {
 public:
-    VectorInvalidSizeException(const char *filename, int line, const char *funcname, const char *info = "Vector size must be non-negative") noexcept :
-    BaseException(filename, line, funcname, info) {}
+    VectorInvalidSizeException(const char *filename, int line, const char *funcname,
+                               const char *info = "Vector size must be non-negative") noexcept :
+        BaseException(filename, line, funcname, info)
+    {
+    }
 };
 
 class VectorNotEqDimException : public BaseException
 {
 public:
-    VectorNotEqDimException(const char *filename, int line, const char *funcname, const char *info = "Vectors should be equal dimension") noexcept :
-    BaseException(filename, line, funcname, info) {}
+    VectorNotEqDimException(const char *filename, int line, const char *funcname,
+                            const char *info = "Vectors should be equal dimension") noexcept :
+        BaseException(filename, line, funcname, info)
+    {
+    }
 };
 
 class WrongDimForCrossProductException : public BaseException
 {
 public:
-    WrongDimForCrossProductException(const char *filename, int line, const char *funcname, const char *info = "Given vector doesn't support cross product") noexcept :
-    BaseException(filename, line, funcname, info) {}
+    WrongDimForCrossProductException(const char *filename, int line, const char *funcname,
+                                     const char *info = "Given vector doesn't support cross product") noexcept :
+        BaseException(filename, line, funcname, info)
+    {
+    }
 };
 
 #endif //VECTOREXCEPTIONS_H

@@ -2,7 +2,7 @@
 #define ITERATOR_HPP
 
 #include "Iterator.h"
-#include "../Exceptions/IterExceptions.h"
+#include "IterExceptions.h"
 
 template <typename T>
 Iterator<T>::Iterator() noexcept : array()
@@ -26,7 +26,7 @@ Iterator<T>::operator bool() const noexcept
 }
 
 template <typename T>
-Iterator<T> & Iterator<T>::operator=(const Iterator &iter) noexcept
+Iterator<T> &Iterator<T>::operator=(const Iterator &iter) noexcept
 {
     this->array = iter.array;
     this->index = iter.index;
@@ -48,7 +48,7 @@ bool Iterator<T>::operator==(const Iterator &iter) const noexcept
 }
 
 template <typename T>
-Iterator<T> & Iterator<T>::operator++() noexcept
+Iterator<T> &Iterator<T>::operator++() noexcept
 {
     ++this->index;
     return *this;
@@ -63,7 +63,7 @@ Iterator<T> Iterator<T>::operator++(int) noexcept
 }
 
 template <typename T>
-Iterator<T> & Iterator<T>::operator--() noexcept
+Iterator<T> &Iterator<T>::operator--() noexcept
 {
     --this->index;
     return *this;
@@ -78,14 +78,14 @@ Iterator<T> Iterator<T>::operator--(int) noexcept
 }
 
 template <typename T>
-Iterator<T> & Iterator<T>::operator+=(difference_type offset) noexcept
+Iterator<T> &Iterator<T>::operator+=(difference_type offset) noexcept
 {
     this->index += offset;
     return *this;
 }
 
 template <typename T>
-Iterator<T> & Iterator<T>::operator-=(difference_type offset) noexcept
+Iterator<T> &Iterator<T>::operator-=(difference_type offset) noexcept
 {
     this->index -= offset;
     return *this;
@@ -145,7 +145,7 @@ typename Iterator<T>::reference Iterator<T>::operator[](size_t index) const
 
 template <typename T>
 Iterator<T>::Iterator(const std::shared_ptr<value_type[]> &arr, size_t size,
-    size_t index) noexcept : array(arr)
+                      size_t index) noexcept : array(arr)
 {
     this->size = size;
     this->index = index;

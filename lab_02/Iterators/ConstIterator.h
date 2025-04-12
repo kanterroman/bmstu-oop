@@ -2,7 +2,7 @@
 #define CONSTITERATOR_H
 
 #include "BaseIterator.h"
-#include "../Vector/VectorConcepts.h"
+#include "VectorConcepts.h"
 #include <memory>
 
 template <Storable T>
@@ -18,14 +18,15 @@ public:
     using iterator_category = std::random_access_iterator_tag;
     using value_type = T;
     using difference_type = ptrdiff_t;
-    using pointer = const T*const;
-    using reference = const T&;
+    using pointer = const T *const;
+    using reference = const T &;
 #pragma endregion
 
 #pragma region constructors and assignments
     ConstIterator() noexcept;
-    ConstIterator(const ConstIterator& iter) noexcept;
-    ConstIterator& operator =(const ConstIterator& iter) noexcept;
+    ConstIterator(const ConstIterator &iter) noexcept;
+    ConstIterator &operator =(const ConstIterator &iter) noexcept;
+    ~ConstIterator() override = default;
 #pragma endregion
 
 #pragma region compares
@@ -35,16 +36,16 @@ public:
 #pragma endregion compares
 
 #pragma region math
-    ConstIterator& operator++() noexcept;
+    ConstIterator &operator++() noexcept;
     ConstIterator operator++(int) noexcept;
-    ConstIterator& operator--() noexcept;
+    ConstIterator &operator--() noexcept;
     ConstIterator operator--(int) noexcept;
 
     ConstIterator operator+(ptrdiff_t inc) const noexcept;
     ConstIterator operator-(ptrdiff_t dec) const noexcept;
 
-    ConstIterator& operator+=(difference_type offset) noexcept;
-    ConstIterator& operator-=(difference_type offset) noexcept;
+    ConstIterator &operator+=(difference_type offset) noexcept;
+    ConstIterator &operator-=(difference_type offset) noexcept;
     difference_type operator-(const ConstIterator &iter) const noexcept;
 #pragma endregion math
 
@@ -56,8 +57,8 @@ public:
 
 private:
 #pragma region constructors and assignments
-    ConstIterator(const std::shared_ptr<value_type[]>& arr, size_t size,
-        size_t index = 0) noexcept;
+    ConstIterator(const std::shared_ptr<value_type[]> &arr, size_t size,
+                  size_t index = 0) noexcept;
 #pragma endregion
 
 #pragma region assertions
@@ -70,9 +71,9 @@ private:
 
 #pragma region math
 template <typename T>
-ConstIterator<T> operator+(ptrdiff_t inc, const ConstIterator<T>& iter) noexcept;
+ConstIterator<T> operator+(ptrdiff_t inc, const ConstIterator<T> &iter) noexcept;
 template <typename T>
-ConstIterator<T> operator-(ptrdiff_t dec, const ConstIterator<T>& iter) noexcept;
+ConstIterator<T> operator-(ptrdiff_t dec, const ConstIterator<T> &iter) noexcept;
 #pragma endregion
 
 static_assert(std::random_access_iterator<ConstIterator<int>>);

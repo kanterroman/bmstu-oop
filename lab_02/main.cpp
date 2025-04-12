@@ -1,7 +1,6 @@
-#include "Iterators/Iterator.hpp"
-#include "Iterators/ConstIterator.hpp"
-#include "Vector/BaseVector.h"
-#include "Vector/Vector.hpp"
+#include "ConstIterator.hpp"
+#include "Iterator.hpp"
+#include "Vector.hpp"
 
 #include <iostream>
 

@@ -3,8 +3,9 @@
 
 #include "BaseVector.h"
 #include "VectorConcepts.h"
-#include "../Iterators/Iterator.h"
-#include "../Iterators/ConstIterator.h"
+#include "Iterator.h"
+#include "ConstIterator.h"
+#include <ranges>
 
 template <Storable T>
 class Vector : public BaseVector
@@ -12,8 +13,8 @@ class Vector : public BaseVector
 public:
 #pragma region definitions
     using value_type = T;
-    using reference = T&;
-    using const_reference = const T&;
+    using reference = T &;
+    using const_reference = const T &;
     using iterator = Iterator<T>;
     using const_iterator = ConstIterator<T>;
     using difference_type = ptrdiff_t;
@@ -27,17 +28,17 @@ public:
 
 #pragma region constructors/destructors and assignments
     template <Convertible<T> U>
-    explicit Vector(const Vector<U>& v);
-    Vector(const Vector& v);
-    Vector(Vector&& v) noexcept;
+    Vector(const Vector<U> &v);
+    Vector(const Vector &v);
+    Vector(Vector &&v) noexcept;
     Vector(std::initializer_list<T> lst);
     explicit Vector(size_type n);
     Vector(size_type n, const_reference v);
 
-    Vector& operator=(const Vector& v);
+    Vector &operator=(const Vector &v);
     template <Convertible<T> U>
-    Vector& operator=(const Vector<U>& v);
-    Vector& operator=(Vector&& v) noexcept;
+    Vector &operator=(const Vector<U> &v);
+    Vector &operator=(Vector &&v) noexcept;
 
     ~Vector() override;
 #pragma endregion
@@ -57,7 +58,7 @@ public:
 #pragma endregion
 
 #pragma region getters
-    [[nodiscard]] size_type dimension() const noexcept;
+    size_type dimension() const noexcept;
     const_reference operator[](size_type index) const;
     const_reference getElement(size_type index) const;
 #pragma endregion
@@ -71,93 +72,110 @@ public:
 #pragma region two vector
     template <Addable<T> U>
     decltype(auto) operator+(const Vector<U> &v) const;
+    template <Addable<T> U>
+    decltype(auto) add(const Vector<U> &v) const;
     template <Substractable<T> U>
     decltype(auto) operator-(const Vector<U> &v) const;
+    template <Substractable<T> U>
+    decltype(auto) substract(const Vector<U> &v) const;
     template <Multiplicable<T> U>
     decltype(auto) operator*(const Vector<U> &v) const;
+    template <Multiplicable<T> U>
+    decltype(auto) multiply(const Vector<U> &v) const;
     template <Divisible<T> U>
     decltype(auto) operator/(const Vector<U> &v) const;
+    template <Divisible<T> U>
+    decltype(auto) divide(const Vector<U> &v) const;
 
     template <AddableAndAssignable<T> U>
-    Vector& operator+=(const Vector<U> &v);
+    Vector &operator+=(const Vector<U> &v);
+    template <AddableAndAssignable<T> U>
+    Vector &addToThis(const Vector<U> &v);
     template <SubstractableAndAssignable<T> U>
-    Vector& operator-=(const Vector<U> &v);
+    Vector &operator-=(const Vector<U> &v);
+    template <SubstractableAndAssignable<T> U>
+    Vector &substrFromThis(const Vector<U> &v);
     template <MultiplicableAndAssignable<T> U>
-    Vector& operator*=(const Vector<U> &v);
+    Vector &operator*=(const Vector<U> &v);
+    template <MultiplicableAndAssignable<T> U>
+    Vector &multipToThis(const Vector<U> &v);
     template <DivisibleAndAssignable<T> U>
-    Vector& operator/=(const Vector<U> &v);
+    Vector &operator/=(const Vector<U> &v);
+    template <DivisibleAndAssignable<T> U>
+    Vector &divideToThis(const Vector<U> &v);
 
-    bool operator==(const Vector & v) const requires std::regular<T>;
-    bool operator==(const Vector & v) const requires std::regular<T> && std::is_floating_point_v<T>;
-    bool equals(const Vector & v) const requires std::regular<T>;
+    bool operator==(const Vector &v) const requires std::regular<T>;
+    bool operator==(const Vector &v) const requires std::regular<T> && std::is_floating_point_v<T>;
+    bool equals(const Vector &v) const requires std::regular<T>;
 
     template <ComparableDivision<T> U>
-    bool colinear(const Vector<U>& v) const;
+    bool colinear(const Vector<U> &v) const;
     template <ComparableDivision<T> U>
-    bool operator||(const Vector<U>& v) const;
+    bool operator||(const Vector<U> &v) const;
     template <ComparableDivision<T> U>
-    bool colinear(const Vector<U>& v) const requires std::is_floating_point_v<T> && std::is_floating_point_v<U>;
+    bool colinear(const Vector<U> &v) const requires std::is_floating_point_v<T> && std::is_floating_point_v<U>;
     template <DotProductComputable<T> U>
-    bool orthogonal(const Vector<U>& v) const requires HasZeroElement<T>;
+    bool orthogonal(const Vector<U> &v) const requires HasZeroElement<T>;
     template <DotProductComputable<T> U>
-    bool orthogonal(const Vector<U>& v) const requires HasZeroElement<T> && std::is_floating_point_v<T> && std::is_floating_point_v<U>;
+    bool orthogonal(const Vector<U> &v) const requires
+        HasZeroElement<T> && std::is_floating_point_v<T> && std::is_floating_point_v<U>;
 
     template <AngleComputable<T> U>
-    double angle(const Vector<U>& v) const;
+    double angle(const Vector<U> &v) const;
 
     template <DotProductComputable<T> U>
-    decltype(auto) dotProduct(const Vector<U>& v) const;
+    decltype(auto) dotProduct(const Vector<U> &v) const;
     template <DotProductComputable<T> U>
-    decltype(auto) operator^(const Vector<U>& v) const;
+    decltype(auto) operator^(const Vector<U> &v) const;
     template <MultiplicableAndSunstractable<T> U>
-    decltype(auto) crossProduct(const Vector<U>& v) const;
+    decltype(auto) crossProduct(const Vector<U> &v) const;
     template <MultiplicableAndSunstractable<T> U>
-    decltype(auto) operator&(const Vector<U>& v) const;
+    decltype(auto) operator&(const Vector<U> &v) const;
 #pragma endregion
 
 #pragma region vector and value
     template <Addable<T> U>
-    decltype(auto) operator+(const U& val) const;
+    decltype(auto) operator+(const U &val) const;
     template <Addable<T> U>
-    decltype(auto) addVal(const U& val) const;
+    decltype(auto) addVal(const U &val) const;
     template <Multiplicable<T> U>
-    decltype(auto) operator*(const U& val) const;
+    decltype(auto) operator*(const U &val) const;
     template <Multiplicable<T> U>
-    decltype(auto) multipVal(const U& val) const;
+    decltype(auto) multipVal(const U &val) const;
     template <Substractable<T> U>
-    decltype(auto) operator-(const U& val) const;
+    decltype(auto) operator-(const U &val) const;
     template <Substractable<T> U>
-    decltype(auto) substrVal(const U& val) const;
+    decltype(auto) substrVal(const U &val) const;
     template <Divisible<T> U>
-    decltype(auto) operator/(const U& val) const;
+    decltype(auto) operator/(const U &val) const;
     template <Divisible<T> U>
-    decltype(auto) divideVal(const U& val) const;
+    decltype(auto) divideVal(const U &val) const;
 
     template <AddableAndAssignable<T> U>
-    Vector& operator+=(const U &val);
+    Vector &operator+=(const U &val);
     template <AddableAndAssignable<T> U>
-    Vector& addValToThis(const U &val);
+    Vector &addValToThis(const U &val);
     template <MultiplicableAndAssignable<T> U>
-    Vector& operator*=(const U& val);
+    Vector &operator*=(const U &val);
     template <MultiplicableAndAssignable<T> U>
-    Vector& multipValToThis(const U& val);
+    Vector &multipValToThis(const U &val);
     template <SubstractableAndAssignable<T> U>
-    Vector& operator-=(const U& val);
+    Vector &operator-=(const U &val);
     template <SubstractableAndAssignable<T> U>
-    Vector& substrValToThis(const U& val);
+    Vector &substrValToThis(const U &val);
     template <DivisibleAndAssignable<T> U>
-    Vector& operator/=(const U& val);
+    Vector &operator/=(const U &val);
     template <DivisibleAndAssignable<T> U>
-    Vector& divideValToThis(const U& val);
+    Vector &divideValToThis(const U &val);
 #pragma endregion
 
 #pragma region solo vector
     decltype(auto) operator-() const requires Inversible<T>;
     decltype(auto) reverse() const requires Inversible<T>;
-    Vector& reversed() requires InversibleAndAssignable<T>;
+    Vector &reversed() requires InversibleAndAssignable<T>;
 
     Vector normalize() const requires LengthComputable<T> && DivisibleAndAssignable<T, double>;
-    Vector& normalized() requires LengthComputable<T> && DivisibleAndAssignable<T, double>;
+    Vector &normalized() requires LengthComputable<T> && DivisibleAndAssignable<T, double>;
 
     Vector &toZero() requires HasZeroElement<T>;
     Vector &toUnit() requires HasUnitElement<T>;
@@ -182,13 +200,13 @@ private:
 };
 
 template <Storable T>
-std::ostream& operator<<(std::ostream& os, const Vector<T>& v) requires Outable<T>;
+std::ostream &operator<<(std::ostream &os, const Vector<T> &v) requires Outable<T>;
 
 #pragma region vector and value
 template <Storable T, Addable<T> U>
-decltype(auto) operator+(const U& val, const Vector<T> &v);
+decltype(auto) operator+(const U &val, const Vector<T> &v);
 template <Storable T, Multiplicable<T> U>
-decltype(auto) operator*(const U& val, const Vector<T> &v);
+decltype(auto) operator*(const U &val, const Vector<T> &v);
 #pragma endregion
 
 #endif //VECTOR_H
