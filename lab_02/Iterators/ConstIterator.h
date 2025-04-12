@@ -25,7 +25,7 @@ public:
 #pragma region constructors and assignments
     ConstIterator() noexcept;
     ConstIterator(const ConstIterator &iter) noexcept;
-    ConstIterator &operator =(const ConstIterator &iter) noexcept;
+    ConstIterator &operator=(const ConstIterator &iter) noexcept;
     ~ConstIterator() override = default;
 #pragma endregion
 

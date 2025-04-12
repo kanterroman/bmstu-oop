@@ -25,7 +25,7 @@ public:
 #pragma region constructors and assignments
     Iterator() noexcept;
     Iterator(const Iterator &iter) noexcept;
-    Iterator &operator =(const Iterator &iter) noexcept;
+    Iterator &operator=(const Iterator &iter) noexcept;
     ~Iterator() override = default;
 #pragma endregion
 
