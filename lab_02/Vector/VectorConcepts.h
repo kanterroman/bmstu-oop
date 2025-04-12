@@ -29,7 +29,6 @@ template <typename T, typename U>
 concept Addable = requires(const T &t, const U &u)
 {
     { t + u };
-    { u + t };
 };
 
 template <typename T, typename U>
@@ -42,7 +41,6 @@ template <typename T, typename U>
 concept Multiplicable = requires(const T &t, const U &u)
 {
     { t * u };
-    { u * t };
 };
 
 template <typename T, typename U>
