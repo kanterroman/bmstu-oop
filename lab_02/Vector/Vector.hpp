@@ -39,16 +39,6 @@ Vector<char> Vector<T>::fromString(const std::string &str)
 }
 
 template <Storable T>
-Vector<char> Vector<T>::fromString(std::string &&str)
-{
-    assertValidSize(str.size(), __FILE__, __LINE__, __FUNCTION__);
-
-    Vector<char> v(str.size());
-    std::ranges::copy(str, v.begin());
-    return v;
-}
-
-template <Storable T>
 template <Convertible<T> U>
 Vector<T>::Vector(const Vector<U> &v)
 {

@@ -27,7 +27,6 @@ public:
     static Vector zeroVector(size_type n) requires HasZeroElement<T>;
     static Vector unitVector(size_type n) requires HasUnitElement<T>;
     static Vector<char> fromString(const std::string &str);
-    static Vector<char> fromString(std::string &&str);
 #pragma endregion
 
 #pragma region constructors/destructors and assignments
