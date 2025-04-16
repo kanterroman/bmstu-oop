@@ -44,7 +44,7 @@ std::strong_ordering ConstIterator<T>::operator<=>(const ConstIterator &iter) co
 template <typename T>
 bool ConstIterator<T>::operator==(const ConstIterator &iter) const noexcept
 {
-    return this->index == iter.index;
+    return this->array.lock().get() == iter.array.lock().get() && this->index == iter.index;
 }
 
 template <typename T>
