@@ -577,8 +577,8 @@ decltype(auto) Vector<T>::dotProduct(const Vector<U> &v) const
     decltype(this->data[0] * v[0]) sum{0};
 
     auto iter = v.begin();
-    std::ranges::for_each(*this, [&sum, &iter](const T &el1) {
-        sum += el1 * *iter;
+    std::ranges::for_each(*this, [&sum, &iter](const T &el) {
+        sum += el * *iter;
         ++iter;
     });
 
