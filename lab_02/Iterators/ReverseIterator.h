@@ -55,7 +55,7 @@ public:
 #pragma endregion
 
 private:
-    ReverseIterator(Iterator<T> &&iterator);
+    explicit ReverseIterator(const Iterator<T> &iterator);
     Iterator<T> iter;
 };
 

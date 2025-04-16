@@ -144,7 +144,7 @@ const typename ReverseIterator<T>::reference ReverseIterator<T>::operator[](size
 }
 
 template <typename T>
-ReverseIterator<T>::ReverseIterator(Iterator<T> &&iterator)
+ReverseIterator<T>::ReverseIterator(const Iterator<T> &iterator)
 {
     this->iter = iterator;
 }

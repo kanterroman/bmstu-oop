@@ -51,7 +51,7 @@ public:
 #pragma endregion
 
 private:
-    ConstReverseIterator(ConstIterator<T> &&iterator) noexcept;
+    explicit ConstReverseIterator(const ConstIterator<T> &iterator) noexcept;
     ConstIterator<T> iter;
 };
 

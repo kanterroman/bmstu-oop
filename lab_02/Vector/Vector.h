@@ -47,7 +47,7 @@ public:
     template <std::input_iterator iter, std::sentinel_for<iter> sent>
     Vector(const iter& first, const sent& last);
     template <std::input_iterator iter>
-    Vector(const iter& first, ptrdiff_t n);
+    Vector(const iter& first, difference_type n);
 
 
     Vector &operator=(const Vector &v);

@@ -125,7 +125,7 @@ typename ConstReverseIterator<T>::reference ConstReverseIterator<T>::operator[](
 }
 
 template <typename T>
-ConstReverseIterator<T>::ConstReverseIterator(ConstIterator<T> &&iterator) noexcept
+ConstReverseIterator<T>::ConstReverseIterator(const ConstIterator<T> &iterator) noexcept
 {
     this->iter = iterator;
 }

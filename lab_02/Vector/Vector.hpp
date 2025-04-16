@@ -131,7 +131,7 @@ Vector<T>::Vector(const iter &first, const sent &last)
 
 template <Storable T>
 template <std::input_iterator iter>
-Vector<T>::Vector(const iter &first, ptrdiff_t n)
+Vector<T>::Vector(const iter &first, difference_type n)
 {
     assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
 

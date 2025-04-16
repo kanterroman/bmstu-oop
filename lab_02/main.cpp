@@ -37,6 +37,8 @@ int main()
     }
     // Работа с итератором
     {
+        Vector<std::vector<int>> vv(5);
+        vv.begin()->size();
         Vector<double> v({1});
         v = { 1, 2, 3, 4 };
         // auto itb = v.begin();
