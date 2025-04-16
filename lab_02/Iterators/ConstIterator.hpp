@@ -7,8 +7,8 @@
 template <typename T>
 ConstIterator<T>::ConstIterator() noexcept : array()
 {
-    this->size();
-    this->index();
+    this->size = 0;
+    this->index = 0;
 }
 
 template <typename T>
@@ -119,8 +119,7 @@ typename ConstIterator<T>::reference ConstIterator<T>::operator*() const
     assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
-    std::shared_ptr<T[]> a(this->array);
-    return a[this->index];
+    return array.lock()[this->index];
 }
 
 template <typename T>
@@ -129,8 +128,7 @@ typename ConstIterator<T>::pointer ConstIterator<T>::operator->() const
     assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
-    std::shared_ptr<T[]> a(this->array);
-    return a.get() + this->index;
+    return array.lock().get() + this->index;
 }
 
 template <typename T>
@@ -139,8 +137,7 @@ typename ConstIterator<T>::reference ConstIterator<T>::operator[](size_t index) 
     assertInBounds(index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
-    std::shared_ptr<T[]> a(this->array);
-    return a[index];
+    return array.lock()[index];
 }
 
 template <typename T>

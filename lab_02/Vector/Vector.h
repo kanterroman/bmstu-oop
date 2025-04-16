@@ -17,6 +17,8 @@ public:
     using const_reference = const T &;
     using iterator = Iterator<T>;
     using const_iterator = ConstIterator<T>;
+    using reverse_iterator = ReverseIterator<T>;
+    using const_reverse_iterator = ConstReverseIterator<T>;
     using difference_type = ptrdiff_t;
     using size_type = size_t;
 #pragma endregion
@@ -32,19 +34,20 @@ public:
     template <Convertible<T> U>
     explicit Vector(const Vector<U> &v);
     explicit Vector(const Vector &v);
-    Vector(Vector &&v) noexcept;
     template <Convertible<T> U>
-    Vector(std::initializer_list<U> lst);
+    explicit Vector(std::initializer_list<U> lst);
     explicit Vector(size_type n);
+    Vector(Vector &&v) noexcept;
     Vector(size_type n, const_reference v);
     template <Convertible<T> U>
     Vector(const U *carr, size_type n);
+
     template <std::ranges::input_range range>
     explicit Vector(range &&rng);
     template <std::input_iterator iter, std::sentinel_for<iter> sent>
     Vector(iter&& first, sent&& last);
     template <std::input_iterator iter>
-    Vector(iter&& first, size_type n);
+    Vector(iter&& first, size_t n);
 
 
     Vector &operator=(const Vector &v);
@@ -60,16 +63,19 @@ public:
 
 #pragma region iterators
     iterator begin() noexcept;
-    iterator rbegin() noexcept;
     iterator end() noexcept;
-    iterator rend() noexcept;
+    reverse_iterator rbegin() noexcept;
+    reverse_iterator rend() noexcept;
+
     const_iterator begin() const noexcept;
-    const_iterator rbegin() const noexcept;
     const_iterator end() const noexcept;
-    const_iterator rend() const noexcept;
+    const_reverse_iterator rbegin() const noexcept;
+    const_reverse_iterator rend() const noexcept;
+
     const_iterator cbegin() const noexcept;
-    const_iterator crbegin() const noexcept;
-    const_iterator crend() const noexcept;
+    const_iterator cend() const noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    const_reverse_iterator crend() const noexcept;
 #pragma endregion
 
 #pragma region checks
@@ -235,9 +241,11 @@ public:
 private:
 #pragma region assertions
     void assertInBounds(size_type index, const char *file, int line, const char *func) const;
-    void assertValidSize(size_type size, const char *file, int line, const char *func) const;
+    static void assertValidSize(size_type size, const char *file, int line, const char *func);
     void assertSupportsCrossProduct(const char *file, int line, const char *func) const;
     void assertEqDim(size_type otherDim, const char *file, int line, const char *func) const;
+    template <typename U>
+    static void assertNonNullArray(const U* array, const char *file, int line, const char *func);
 #pragma endregion
 
 #pragma region helpers

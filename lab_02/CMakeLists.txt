@@ -18,6 +18,9 @@ add_executable(lab_02 main.cpp
         Vector/VectorConcepts.h
         Vector/BaseVector.cpp
         Iterators/BaseIterator.cpp
-        Iterators/ReverseIterator.hpp)
+        Iterators/ReverseIterator.h
+        Iterators/ReverseIterator.hpp
+        Iterators/ConstReverseIterator.h
+        Iterators/ConstReverseIterator.hpp)
 
 include_directories(Vector Iterators Exceptions)

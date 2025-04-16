@@ -9,10 +9,14 @@ template <Storable T>
 class Vector;
 
 template <typename T>
+class ConstReverseIterator;
+
+template <typename T>
 class ConstIterator : public BaseIterator
 {
 public:
     friend class Vector<T>;
+    friend class ConstReverseIterator<T>;
 
 #pragma region definitions
     using iterator_category = std::random_access_iterator_tag;

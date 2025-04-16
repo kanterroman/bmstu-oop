@@ -28,25 +28,25 @@ concept HasUnitElement = requires()
 template <typename T, typename U>
 concept Addable = requires(const T &t, const U &u)
 {
-    { t + u };
+    { t + u } -> std::convertible_to<std::common_type_t<T, U>>;
 };
 
 template <typename T, typename U>
 concept Substractable = requires(const T &t, const U &u)
 {
-    { t - u };
+    { t - u } -> std::convertible_to<std::common_type_t<T, U>>;
 };
 
 template <typename T, typename U>
 concept Multiplicable = requires(const T &t, const U &u)
 {
-    { t * u };
+    { t * u } -> std::convertible_to<std::common_type_t<T, U>>;
 };
 
 template <typename T, typename U>
 concept Divisible = requires(const T &t, const U &u)
 {
-    { t / u };
+    { t / u } -> std::convertible_to<std::common_type_t<T, U>>;
 };
 
 template <typename T, typename U>
@@ -88,16 +88,17 @@ concept CrossProductComputable = Multiplicable<T, U> &&
                                         };
 
 template <typename T>
-concept InversibleAndAssignable = requires(T &t)
+concept Inversible = requires(T &t)
+{
+    { -t } -> std::convertible_to<T>;
+};
+
+template <typename T>
+concept InversibleAndAssignable = Inversible<T> && requires(T &t)
 {
     std::is_assignable_v<T, decltype(-t)>;
 };
 
-template <typename T>
-concept Inversible = requires(T &t)
-{
-    { -t };
-};
 
 template <typename T, typename U>
 concept ComparableDivision = Divisible<T, U> &&

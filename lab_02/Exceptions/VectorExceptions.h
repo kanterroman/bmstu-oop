@@ -53,4 +53,14 @@ public:
     }
 };
 
+class NullArrayException : public BaseException
+{
+public:
+    NullArrayException(const char *filename, int line, const char *funcname,
+                                     const char *info = "Given array is nullptr") noexcept :
+        BaseException(filename, line, funcname, info)
+    {
+    }
+};
+
 #endif //VECTOREXCEPTIONS_H

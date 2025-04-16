@@ -7,8 +7,8 @@
 template <typename T>
 Iterator<T>::Iterator() noexcept : array()
 {
-    this->size();
-    this->index();
+    this->size = 0;
+    this->index = 0;
 }
 
 template <typename T>
@@ -114,33 +114,57 @@ Iterator<T> Iterator<T>::operator-(ptrdiff_t dec) const noexcept
 }
 
 template <typename T>
-typename Iterator<T>::reference Iterator<T>::operator*() const
+const typename Iterator<T>::reference Iterator<T>::operator*() const
 {
     assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
-    std::shared_ptr<T[]> a(this->array);
-    return a[this->index];
+    return this->array.lock()[this->index];
 }
 
 template <typename T>
-typename Iterator<T>::pointer Iterator<T>::operator->() const
+const typename Iterator<T>::pointer Iterator<T>::operator->() const
 {
     assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
-    std::shared_ptr<T[]> a(this->array);
-    return a.get() + this->index;
+    return array.lock().get() + this->index;
 }
 
 template <typename T>
-typename Iterator<T>::reference Iterator<T>::operator[](size_t index) const
+const typename Iterator<T>::reference Iterator<T>::operator[](size_t index) const
 {
     assertInBounds(index, __FILE__, __LINE__, __FUNCTION__);
     assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
 
-    std::shared_ptr<T[]> a(this->array);
-    return a[index];
+    return array.lock()[index];
+}
+
+template <typename T>
+typename Iterator<T>::reference Iterator<T>::operator*()
+{
+    assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
+    assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
+
+    return array.lock()[this->index];
+}
+
+template <typename T>
+typename Iterator<T>::pointer Iterator<T>::operator->()
+{
+    assertInBounds(this->index, __FILE__, __LINE__, __FUNCTION__);
+    assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
+
+    return array.lock().get() + this->index;
+}
+
+template <typename T>
+typename Iterator<T>::reference Iterator<T>::operator[](size_t index)
+{
+    assertInBounds(index, __FILE__, __LINE__, __FUNCTION__);
+    assertNotExpired(__FILE__, __LINE__, __FUNCTION__);
+
+    return array.lock()[index];
 }
 
 template <typename T>

@@ -9,9 +9,13 @@ template <Storable T>
 class Vector;
 
 template <typename T>
+class ReverseIterator;
+
+template <typename T>
 class Iterator : public BaseIterator
 {
 public:
+    friend class ReverseIterator<T>;
     friend class Vector<T>;
 
 #pragma region definitions
@@ -50,9 +54,12 @@ public:
 #pragma endregion
 
 #pragma region data access
-    reference operator*() const;
-    pointer operator->() const;
-    reference operator[](size_t index) const;
+    const reference operator*() const;
+    const pointer operator->() const;
+    const reference operator[](size_t index) const;
+    reference operator*();
+    pointer operator->();
+    reference operator[](size_t index);
 #pragma endregion
 
 private:

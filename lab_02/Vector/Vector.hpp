@@ -11,6 +11,8 @@
 template <Storable T>
 Vector<T> Vector<T>::zeroVector(size_type n) requires HasZeroElement<T>
 {
+    assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
+
     Vector zero(n);
     std::ranges::fill(zero, T{0});
     return zero;
@@ -19,6 +21,8 @@ Vector<T> Vector<T>::zeroVector(size_type n) requires HasZeroElement<T>
 template <Storable T>
 Vector<T> Vector<T>::unitVector(size_type n) requires HasUnitElement<T>
 {
+    assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
+
     Vector unit(n);
     std::ranges::fill(unit, T{1});
     return unit;
@@ -27,6 +31,8 @@ Vector<T> Vector<T>::unitVector(size_type n) requires HasUnitElement<T>
 template <Storable T>
 Vector<char> Vector<T>::fromString(const std::string &str)
 {
+    assertValidSize(str.size(), __FILE__, __LINE__, __FUNCTION__);
+
     Vector<char> v(str.size());
     std::ranges::copy(str, v.begin());
     return v;
@@ -35,6 +41,8 @@ Vector<char> Vector<T>::fromString(const std::string &str)
 template <Storable T>
 Vector<char> Vector<T>::fromString(std::string &&str)
 {
+    assertValidSize(str.size(), __FILE__, __LINE__, __FUNCTION__);
+
     Vector<char> v(str.size());
     std::ranges::copy(str, v.begin());
     return v;
@@ -68,6 +76,7 @@ template <Convertible<T> U>
 Vector<T>::Vector(std::initializer_list<U> lst)
 {
     assertValidSize(lst.size(), __FILE__, __LINE__, __FUNCTION__);
+
     allocate(lst.size());
     std::ranges::copy(lst, begin());
 }
@@ -93,11 +102,11 @@ template <Storable T>
 template <Convertible<T> U>
 Vector<T>::Vector(const U *carr, size_type n)
 {
+    assertNonNullArray(carr, __FILE__, __LINE__, __FUNCTION__);
     assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
 
     allocate(n);
-    size_type i = 0;
-    std::ranges::views::transform([&i, &carr](T &el) { el = carr[i++]; });
+    std::ranges::for_each(*this, [&carr](T &el) { el = *carr++; });
 }
 
 template <Storable T>
@@ -122,9 +131,10 @@ Vector<T>::Vector(iter &&first, sent &&last)
 
 template <Storable T>
 template <std::input_iterator iter>
-Vector<T>::Vector(iter &&first, size_type n)
+Vector<T>::Vector(iter &&first, size_t n)
 {
     assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
+
     allocate(n);
     std::ranges::copy(first, first + n, begin());
 }
@@ -153,6 +163,7 @@ template <Convertible<T> U>
 Vector<T> & Vector<T>::operator=(std::initializer_list<U> lst)
 {
     assertValidSize(lst.size(), __FILE__, __LINE__, __FUNCTION__);
+
     allocate(lst.size());
     std::ranges::copy(lst, begin());
 
@@ -182,15 +193,21 @@ typename Vector<T>::iterator Vector<T>::begin() noexcept
 }
 
 template <Storable T>
-typename Vector<T>::iterator Vector<T>::rbegin() noexcept
+typename Vector<T>::reverse_iterator Vector<T>::rbegin() noexcept
 {
-    return Iterator<T>(this->data, this->size_);
+    return ReverseIterator<T>{Iterator<T>(this->data, this->size_, this->size_)};
 }
 
 template <Storable T>
 typename Vector<T>::iterator Vector<T>::end() noexcept
 {
     return Iterator<T>(this->data, this->size_, this->size_);
+}
+
+template <Storable T>
+typename Vector<T>::reverse_iterator Vector<T>::rend() noexcept
+{
+    return ReverseIterator<T>{Iterator<T>(this->data, this->size_)};
 }
 
 template <Storable T>
@@ -206,6 +223,18 @@ typename Vector<T>::const_iterator Vector<T>::end() const noexcept
 }
 
 template <Storable T>
+typename Vector<T>::const_reverse_iterator Vector<T>::rbegin() const noexcept
+{
+    return ConstReverseIterator<T>{ConstIterator<T>(this->data, this->size_, this->size_)};
+}
+
+template <Storable T>
+typename Vector<T>::const_reverse_iterator Vector<T>::rend() const noexcept
+{
+    return ConstReverseIterator<T>{ConstIterator<T>(this->data, this->size_)};
+}
+
+template <Storable T>
 typename Vector<T>::const_iterator Vector<T>::cbegin() const noexcept
 {
     return begin();
@@ -215,6 +244,18 @@ template <Storable T>
 typename Vector<T>::const_iterator Vector<T>::cend() const noexcept
 {
     return end();
+}
+
+template <Storable T>
+typename Vector<T>::const_reverse_iterator Vector<T>::crbegin() const noexcept
+{
+    return rbegin();
+}
+
+template <Storable T>
+typename Vector<T>::const_reverse_iterator Vector<T>::crend() const noexcept
+{
+    return rend();
 }
 
 template <Storable T>
@@ -457,6 +498,8 @@ Vector<T> &Vector<T>::divideToThis(const Vector<U> &v)
 template <Storable T>
 bool Vector<T>::operator==(const Vector &v) const requires std::regular<T>
 {
+    assertEqDim(v.size(), __FILE__, __LINE__, __FUNCTION__);
+
     auto iter = v.begin();
     return std::ranges::all_of(*this, [&iter](const T &elem) {
         return elem == *iter++;
@@ -466,6 +509,8 @@ bool Vector<T>::operator==(const Vector &v) const requires std::regular<T>
 template <Storable T>
 bool Vector<T>::operator==(const Vector &v) const requires std::regular<T> && std::is_floating_point_v<T>
 {
+    assertEqDim(v.size(), __FILE__, __LINE__, __FUNCTION__);
+
     auto iter = v.begin();
     return std::ranges::all_of(*this, [&iter](const T &elem) {
         return std::abs(elem - *iter++) < FLT_EPSILON;
@@ -660,7 +705,7 @@ template <Storable T>
 template <AddableAndAssignable<T> U>
 Vector<T> &Vector<T>::operator+=(const U &val)
 {
-    *this | std::views::transform([&val](T &el) {
+    std::ranges::transform(*this, begin(), [&val](T &el) {
         return el + val;
     });
 
@@ -678,7 +723,7 @@ template <Storable T>
 template <SubstractableAndAssignable<T> U>
 Vector<T> &Vector<T>::operator-=(const U &val)
 {
-    *this | std::views::transform([&val](T &el) {
+    std::ranges::transform(*this, begin(), [&val](T &el) {
         return el - val;
     });
 
@@ -696,7 +741,7 @@ template <Storable T>
 template <MultiplicableAndAssignable<T> U>
 Vector<T> &Vector<T>::operator*=(const U &val)
 {
-    *this | std::views::transform([&val](T &el) {
+    std::ranges::transform(*this, begin(), [&val](T &el) {
         return el * val;
     });
 
@@ -714,7 +759,7 @@ template <Storable T>
 template <DivisibleAndAssignable<T> U>
 Vector<T> &Vector<T>::operator/=(const U &val)
 {
-    *this | std::views::transform([&val](T &el) {
+    std::ranges::transform(*this, begin(), [&val](T &el) {
         return el / val;
     });
 
@@ -796,16 +841,15 @@ Vector<T> &Vector<T>::toUnit() requires HasUnitElement<T>
     return *this;
 }
 
-// TODO optimitze
 template <Storable T>
 double Vector<T>::length() const requires LengthComputable<T>
 {
-    Vector temp(*this);
+    T elemSum = T{0};
 
-    std::ranges::transform(*this, temp, temp.begin(), [](const T &other, T &el) {
-        return el * other;
+    std::ranges::for_each(*this, [&elemSum](const T &el) {
+        elemSum += el * el;
     });
-    auto sum = std::sqrt(static_cast<double>(std::accumulate(temp.begin(), temp.end(), T{0})));
+    double sum = std::sqrt(static_cast<double>(elemSum));
 
     return sum;
 }
@@ -818,7 +862,7 @@ void Vector<T>::assertInBounds(size_type index, const char *file, int line, cons
 }
 
 template <Storable T>
-void Vector<T>::assertValidSize(size_type size, const char *file, int line, const char *func) const
+void Vector<T>::assertValidSize(size_type size, const char *file, int line, const char *func)
 {
     if (size == 0)
         throw VectorInvalidSizeException(file, line, func);
@@ -836,6 +880,14 @@ void Vector<T>::assertEqDim(size_type otherDim, const char *file, int line, cons
 {
     if (this->size_ != otherDim)
         throw VectorNotEqDimException(file, line, func);
+}
+
+template <Storable T>
+template <typename U>
+void Vector<T>::assertNonNullArray(const U *array, const char *file, int line, const char *func)
+{
+    if (!array)
+        throw NullArrayException(file, line, func);
 }
 
 template <Storable T>
@@ -865,7 +917,7 @@ decltype(auto) Vector<T>::dim3CrossProduct(const Vector<U> &v) const
     decltype(auto) j = this->data[2] * v[0] - this->data[0] * v[2];
     decltype(auto) k = this->data[0] * v[1] - this->data[1] * v[0];
 
-    Vector ans = {i, j, k};
+    Vector ans({i, j, k});
     return ans;
 }
 
@@ -895,7 +947,7 @@ decltype(auto) Vector<T>::dim7CrossProduct(const Vector<U> &v) const
                         this->data[1] * v[5] - this->data[5] * v[1] +
                         this->data[3] * v[4] - this->data[4] * v[3];
 
-    Vector ans = {e1, e2, e3, e4, e5, e6, e7};
+    Vector ans({e1, e2, e3, e4, e5, e6, e7});
     return ans;
 }
 
