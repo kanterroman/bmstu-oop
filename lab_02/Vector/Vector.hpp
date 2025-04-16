@@ -100,8 +100,8 @@ Vector<T>::Vector(const U *carr, size_type n)
 }
 
 template <Storable T>
-template <std::ranges::input_range U>
-Vector<T>::Vector(const U &rng)
+template <std::ranges::input_range range>
+Vector<T>::Vector(const range &rng) requires std::convertible_to<std::ranges::range_value_t<range>, T>
 {
     assertValidSize(std::ranges::size(rng), __FILE__, __LINE__, __FUNCTION__);
 
@@ -111,7 +111,7 @@ Vector<T>::Vector(const U &rng)
 
 template <Storable T>
 template <std::input_iterator iter, std::sentinel_for<iter> sent>
-Vector<T>::Vector(const iter &first, const sent &last)
+Vector<T>::Vector(const iter &first, const sent &last) requires std::convertible_to<std::iter_value_t<iter>, T>
 {
     assertValidSize(std::distance(first, last), __FILE__, __LINE__, __FUNCTION__);
 
@@ -121,7 +121,7 @@ Vector<T>::Vector(const iter &first, const sent &last)
 
 template <Storable T>
 template <std::input_iterator iter>
-Vector<T>::Vector(const iter &first, difference_type n)
+Vector<T>::Vector(const iter &first, difference_type n) requires std::convertible_to<std::iter_value_t<iter>, T>
 {
     assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
 

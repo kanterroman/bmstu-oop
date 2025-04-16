@@ -41,7 +41,7 @@ int main()
         vv.begin()->size();
         Vector<double> v({1});
         v = { 1, 2, 3, 4 };
-        // auto itb = v.begin();
+        auto itb = v.begin();
         // auto ite = v.end();
         // auto rng = std::ranges::subrange(v.begin(), v.end());
         Vector<double> v1(std::move(v));

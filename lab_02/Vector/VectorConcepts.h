@@ -127,4 +127,15 @@ concept Outable = requires(std::ostream &os, const T &t)
     { os << t } -> std::same_as<std::ostream &>;
 };
 
+template <std::input_iterator I, typename T>
+concept ConvertibleIterType = requires(I &iter)
+{
+    { *iter } -> std::convertible_to<T&>;
+};
+template <std::ranges::input_range Rn, typename T>
+concept ConvertibleRangeType = requires(std::ranges::range_value_t<Rn>& elem)
+{
+    { std::ranges::range_value_t<Rn> } -> std::convertible_to<T&>;
+};
+
 #endif //VECTORCONCEPTS_H

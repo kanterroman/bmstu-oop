@@ -42,11 +42,11 @@ public:
     Vector(const U *carr, size_type n);
 
     template <std::ranges::input_range range>
-    explicit Vector(const range &rng);
+    explicit Vector(const range &rng) requires std::convertible_to<std::ranges::range_value_t<range>, T>;
     template <std::input_iterator iter, std::sentinel_for<iter> sent>
-    Vector(const iter& first, const sent& last);
+    Vector(const iter& first, const sent& last) requires std::convertible_to<std::iter_value_t<iter>, T>;
     template <std::input_iterator iter>
-    Vector(const iter& first, difference_type n);
+    Vector(const iter& first, difference_type n) requires std::convertible_to<std::iter_value_t<iter>, T>;
 
 
     Vector &operator=(const Vector &v);
