@@ -39,8 +39,12 @@ int main()
     {
         Vector<double> v({1});
         v = { 1, 2, 3, 4 };
-        v += 2;
-        std::cout << "AA " << v << std::endl;
+        // auto itb = v.begin();
+        // auto ite = v.end();
+        // auto rng = std::ranges::subrange(v.begin(), v.end());
+        Vector<double> v1(std::move(v));
+        // v += 2;
+        std::cout << "AA " << v1 << std::endl;
         // const Iterator<double> it{v.begin()};
         // *it = 3;
         // std::cout << "TEST" << std::endl;

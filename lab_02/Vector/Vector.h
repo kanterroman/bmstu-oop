@@ -43,11 +43,11 @@ public:
     Vector(const U *carr, size_type n);
 
     template <std::ranges::input_range range>
-    explicit Vector(range &&rng);
+    explicit Vector(const range &rng);
     template <std::input_iterator iter, std::sentinel_for<iter> sent>
-    Vector(iter&& first, sent&& last);
+    Vector(const iter& first, const sent& last);
     template <std::input_iterator iter>
-    Vector(iter&& first, size_t n);
+    Vector(const iter& first, ptrdiff_t n);
 
 
     Vector &operator=(const Vector &v);

@@ -111,7 +111,7 @@ Vector<T>::Vector(const U *carr, size_type n)
 
 template <Storable T>
 template <std::ranges::input_range U>
-Vector<T>::Vector(U &&rng)
+Vector<T>::Vector(const U &rng)
 {
     assertValidSize(std::ranges::size(rng), __FILE__, __LINE__, __FUNCTION__);
 
@@ -121,7 +121,7 @@ Vector<T>::Vector(U &&rng)
 
 template <Storable T>
 template <std::input_iterator iter, std::sentinel_for<iter> sent>
-Vector<T>::Vector(iter &&first, sent &&last)
+Vector<T>::Vector(const iter &first, const sent &last)
 {
     assertValidSize(std::distance(first, last), __FILE__, __LINE__, __FUNCTION__);
 
@@ -131,7 +131,7 @@ Vector<T>::Vector(iter &&first, sent &&last)
 
 template <Storable T>
 template <std::input_iterator iter>
-Vector<T>::Vector(iter &&first, size_t n)
+Vector<T>::Vector(const iter &first, ptrdiff_t n)
 {
     assertValidSize(n, __FILE__, __LINE__, __FUNCTION__);
 
