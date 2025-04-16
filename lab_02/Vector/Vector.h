@@ -34,7 +34,7 @@ public:
     explicit Vector(const Vector<U> &v);
     explicit Vector(const Vector &v);
     template <Convertible<T> U>
-    explicit Vector(std::initializer_list<U> lst);
+    Vector(std::initializer_list<U> lst);
     explicit Vector(size_type n);
     Vector(Vector &&v) noexcept;
     Vector(size_type n, const_reference v);
