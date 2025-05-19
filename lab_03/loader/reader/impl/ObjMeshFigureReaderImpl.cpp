@@ -1,0 +1,63 @@
+//
+// Created by Roman Kanterov on 19.05.2025.
+//
+
+#include "ObjMeshFigureReaderImpl.hpp"
+
+namespace loader {
+namespace reader {
+namespace impl {
+bool ObjMeshFigureReaderImpl::checkHeader(std::istream &stream)
+{
+    std::string header;
+    stream >> header;
+    if (header == "fig")
+        return true;
+    return false;
+}
+
+void ObjMeshFigureReaderImpl::parseVertex(std::istream &stream)
+{
+    core::Point pt{};
+    stream >> pt.x;
+    stream >> pt.y;
+    stream >> pt.z;
+    points.push_back(pt);
+}
+
+void ObjMeshFigureReaderImpl::parseEdge(std::istream &stream)
+{
+    int first, second;
+    stream >> first;
+    stream >> second;
+    if (first >= points.size() || second >= points.size())
+        throw std::bad_cast();
+    buf->addEdge(points[first], points[second]);
+}
+
+std::shared_ptr<core::creators::buffers::MeshFigureBuffer> ObjMeshFigureReaderImpl::read(std::istream &stream)
+{
+    buf = std::make_shared<core::creators::buffers::MeshFigureBuffer>();
+    streampos = stream.tellg();
+    if (!checkHeader(stream))
+    {
+        stream.seekg(streampos);
+        return nullptr;
+    }
+
+    while (!stream.eof())
+    {
+        std::string lex;
+        if (lex == "v")
+            parseVertex(stream);
+        else if (lex == "l")
+            parseEdge(stream);
+        else
+            throw std::bad_cast();
+    }
+
+    return buf;
+}
+} // impl
+} // reader
+} // loader
