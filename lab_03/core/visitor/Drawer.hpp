@@ -15,9 +15,6 @@ namespace core {
 namespace visitor {
 
 class Drawer {
-private:
-    std::shared_ptr<objects::PlainCameraImpl> cam;
-    std::shared_ptr<graphics::Painter> p;
 public:
     Drawer(const std::shared_ptr<objects::PlainCameraImpl> &cam, const std::shared_ptr<graphics::Painter> &p)
         : cam(cam),
@@ -29,6 +26,8 @@ public:
     void draw(std::shared_ptr<objects::ListMeshFigureImpl> fig, std::shared_ptr<graphics::GraphicFactory> graphic);
 private:
     Point projectOnCam(Point pt);
+    std::shared_ptr<objects::PlainCameraImpl> cam;
+    std::shared_ptr<graphics::Painter> p;
 };
 
 } // visitor

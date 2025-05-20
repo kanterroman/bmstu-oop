@@ -2,27 +2,28 @@
 // Created by Roman Kanterov on 19.05.2025.
 //
 
-#ifndef TXTPLAINCAMERAREADERIMPL_HPP
-#define TXTPLAINCAMERAREADERIMPL_HPP
-#include "PlainCameraReaderImpl.hpp"
+#ifndef OBJPLAINCAMERAREADERIMPL_HPP
+#define OBJPLAINCAMERAREADERIMPL_HPP
+#include "CameraReaderImpl.hpp"
+#include <istream>
 
 namespace loader {
 namespace reader {
 namespace impl {
 
-class TxtPlainCameraReaderImpl : PlainCameraReaderImpl {
+class ObjCameraReaderImpl : public CameraReaderImpl {
+public:
+    std::shared_ptr<core::creators::buffers::CameraBuffer> read(std::istream &stream) override;
 private:
     std::shared_ptr<core::creators::buffers::CameraBuffer> buf{};
     bool checkHeader(std::istream &stream);
     void parsePoint(std::istream &stream);
     void parseNormal(std::istream &stream);
     std::istream::pos_type streampos;
-public:
-    std::shared_ptr<core::creators::buffers::CameraBuffer> read(std::istream &stream) override;
 };
 
 } // impl
 } // reader
 } // loader
 
-#endif //TXTPLAINCAMERAREADERIMPL_HPP
+#endif //OBJPLAINCAMERAREADERIMPL_HPP

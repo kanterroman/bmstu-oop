@@ -4,6 +4,8 @@
 #include "TransformVisitor.hpp"
 #include "DrawVisitor.hpp"
 
+#include <Camera.hpp>
+
 namespace core {
 namespace objects {
 class PlainCameraImpl;
@@ -11,14 +13,14 @@ class PlainCameraImpl;
 class PlainCamera : public Camera {
     friend class visitor::TransformVisitor;
     friend class visitor::DrawVisitor;
-private:
-    std::shared_ptr<PlainCameraImpl> impl;
 public:
     explicit PlainCamera(const std::shared_ptr<PlainCameraImpl> &impl)
         : impl(impl)
     {}
 
     void accept(std::shared_ptr<visitor::SceneObjectVisitor> vis) override;
+private:
+    std::shared_ptr<PlainCameraImpl> impl;
 };
 
 } // objects

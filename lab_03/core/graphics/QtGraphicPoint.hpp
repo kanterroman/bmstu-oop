@@ -13,13 +13,13 @@ namespace core {
 namespace graphics {
 
 class QtGraphicPoint : public GraphicPoint {
-private:
-    std::shared_ptr<QPointF> pt;
 public:
     QtGraphicPoint(double x, double y);
     QtGraphicPoint(Point p);
     double getX() override;
     double gety() override;
+private:
+    std::shared_ptr<QPointF> pt;
 };
 
 } // graphics

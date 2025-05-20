@@ -23,13 +23,13 @@ void Transformer::transform(const std::shared_ptr<objects::BaseListMeshFigureImp
 void Transformer::transform(std::shared_ptr<objects::BasePlainCameraImpl> fig)
 {
     auto visPoint = fig->getVisPoint();
-    visPoint += offset;
+    visPoint += data.offset;
     double ax = fig->get_ax();
     double ay = fig->get_ay();
     double az = fig->get_az();
-    ax += this->ax;
-    ax += this->ay;
-    ax += this->az;
+    ax += this->data.ax;
+    ax += this->data.ay;
+    ax += this->data.az;
     fig->set_vis_point(visPoint);
     fig->set_ax(ax);
     fig->set_ax(ay);
@@ -52,24 +52,24 @@ void Transformer::move(std::vector<Point> &points)
 {
     for (auto &point : points)
     {
-        point += offset;
+        point += data.offset;
     }
 }
 
 void Transformer::rotate(std::vector<Point> &points)
 {
     Point barycenter = find_barycenter(points);
-    Point offs = offset;
-    offset = barycenter;
+    Point offs = data.offset;
+    data.offset = barycenter;
     move(points);
 
-    std::vector<std::vector<double>> m = {{std::cos(ay)*std::cos(az), std::cos(ay)*-std::sin(az), std::sin(ay)},
-                                         {std::sin(ax)*std::sin(ay)*std::cos(az) + std::cos(ax)*std::sin(ay),
-                                         -std::sin(ax)*std::sin(ay)*std::sin(az)+std::cos(ax)*std::cos(az),
-                                         -std::sin(ax)*std::cos(ay)},
-                                         {std::sin(ax) * std::sin(az) - std::cos(ax)*std::sin(ay)*std::cos(az),
-                                         std::sin(ax)*std::cos(az) + std::cos(ax)*std::sin(ay)*std::sin(az),
-                                         std::cos(ax)*std::cos(ay)}};
+    std::vector<std::vector<double>> m = {{std::cos(data.ay)*std::cos(data.az), std::cos(data.ay)*-std::sin(data.az), std::sin(data.ay)},
+                                         {std::sin(data.ax)*std::sin(data.ay)*std::cos(data.az) + std::cos(data.ax)*std::sin(data.ay),
+                                         -std::sin(data.ax)*std::sin(data.ay)*std::sin(data.az)+std::cos(data.ax)*std::cos(data.az),
+                                         -std::sin(data.ax)*std::cos(data.ay)},
+                                         {std::sin(data.ax) * std::sin(data.az) - std::cos(data.ax)*std::sin(data.ay)*std::cos(data.az),
+                                         std::sin(data.ax)*std::cos(data.az) + std::cos(data.ax)*std::sin(data.ay)*std::sin(data.az),
+                                         std::cos(data.ax)*std::cos(data.ay)}};
     for (auto& point : points)
     {
         std::vector<double> pt = { point.x, point.y, point.z };
@@ -80,26 +80,26 @@ void Transformer::rotate(std::vector<Point> &points)
         point.z = pt[2];
     }
 
-    offset = -offset;
+    data.offset = -data.offset;
     move(points);
-    offset = offs;
+    data.offset = offs;
 }
 
 void Transformer::scale(std::vector<Point> &points)
 {
     Point barycenter = find_barycenter(points);
-    Point offs = offset;
-    offset = barycenter;
+    Point offs = data.offset;
+    data.offset = barycenter;
     move(points);
 
     for (auto &point : points)
     {
-        point *= multip;
+        point *= data.multip;
     }
 
-    offset = -offset;
+    data.offset = -data.offset;
     move(points);
-    offset = offs;
+    data.offset = offs;
 }
 
 void Transformer::transformNodes(std::vector<Point> &points)

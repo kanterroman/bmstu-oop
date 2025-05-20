@@ -10,8 +10,6 @@
 
 namespace core::objects {
 
-class SceneObjectVisitor;
-
 class SceneObject {
 protected:
     using Iterator = std::vector<SceneObject>::iterator;

@@ -7,18 +7,24 @@
 #include "Transformer.hpp"
 
 #include <SceneObjectVisitor.hpp>
+#include <SceneObjectVisitor.hpp>
+#include <utility>
 
 namespace core {
 namespace visitor {
 
-class TransformVisitor : SceneObjectVisitor {
-private:
-    std::shared_ptr<Transformer> transformer;
+class TransformVisitor : public SceneObjectVisitor {
 public:
-    explicit TransformVisitor(std::shared_ptr<Transformer> transformer);
-    void visit(std::shared_ptr<objects::PlainCamera> cam) override;
-    void visit(std::shared_ptr<objects::MatrixMeshFigure> fig) override;
-    void visit(std::shared_ptr<objects::ListMeshFigure> fig) override;
+    explicit TransformVisitor(std::shared_ptr<Transformer> transformer)
+        : transformer(std::move(transformer))
+    {
+    }
+
+    void visit(objects::PlainCamera& cam) override;
+    void visit(objects::MatrixMeshFigure& fig) override;
+    void visit(objects::ListMeshFigure& fig) override;
+private:
+    std::shared_ptr<Transformer> transformer{};
 };
 
 } // visitor

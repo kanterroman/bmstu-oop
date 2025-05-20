@@ -12,14 +12,14 @@ namespace core {
 namespace graphics {
 
 class QtGraphicFactory : public GraphicFactory {
-protected:
-    std::shared_ptr<Graphics> createGraphics() override;
 public:
     explicit QtGraphicFactory(std::shared_ptr<QGraphicsScene> scene);
     std::shared_ptr<Canvas> createCanvas(int w, int h) override;
     std::shared_ptr<Painter> createPainter(std::shared_ptr<Canvas> c) override;
     std::shared_ptr<GraphicPoint> createGraphicPoint(double x, double y) override;
     std::shared_ptr<GraphicPoint> createGraphicPoint(Point p) override;
+protected:
+    std::shared_ptr<Graphics> createGraphics() override;
 };
 
 } // graphics

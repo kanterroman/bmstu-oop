@@ -16,11 +16,11 @@ namespace buffers {
 using Edge = std::pair<Point, Point>;
 
 class MeshFigureBuffer {
-private:
-    std::vector<Edge> edges;
 public:
     void addEdge(const Point &first, const Point &second);
     std::vector<Edge> readEdges();
+private:
+    std::vector<Edge> edges;
 };
 
 } // buffers

@@ -24,7 +24,7 @@ void SceneManager::set_scene(const std::shared_ptr<core::Scene> &scene)
     this->scene = scene;
 }
 
-std::shared_ptr<core::objects::SceneObject> SceneManager::get_focused() const
+std::shared_ptr<core::objects::SceneObject> SceneManager::getFocused() const
 {
     return focused;
 }

@@ -9,7 +9,10 @@ namespace api {
 namespace commands {
 
 class BaseCommand {
-
+public:
+    virtual void execute() = 0;
+    virtual void setManagers() = 0;
+    virtual ~BaseCommand();
 };
 
 } // commands

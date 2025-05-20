@@ -5,42 +5,42 @@
 #include "SceneComposite.hpp"
 
 namespace core {
-SceneComposite::SceneComposite(std::initializer_list<SceneObject> list)
+objects::SceneComposite::SceneComposite(std::initializer_list<SceneObject> list)
 {
     for (auto &elem : list)
-        objects.push_back(elem);
+        objs.push_back(elem);
 }
 
-SceneComposite::SceneComposite(const StorageType &objs) : objects(objs) {}
+objects::SceneComposite::SceneComposite(const StorageType &objs) : objs(objs) {}
 
-void SceneComposite::add(SceneObject &obj)
+void objects::SceneComposite::add(SceneObject &obj)
 {
-    objects.push_back(obj);
+    objs.push_back(obj);
 }
 
-void SceneComposite::remove(Iterator &iter)
+void objects::SceneComposite::remove(Iterator &iter)
 {
-    objects.erase(iter);
+    objs.erase(iter);
 }
 
-SceneObject::Iterator SceneComposite::begin()
+objects::SceneObject::Iterator objects::SceneComposite::begin()
 {
-    return objects.begin();
+    return objs.begin();
 }
 
-SceneObject::Iterator SceneComposite::end()
+objects::SceneObject::Iterator objects::SceneComposite::end()
 {
-    return objects.end();
+    return objs.end();
 }
 
-bool SceneComposite::isComposite()
+bool objects::SceneComposite::isComposite()
 {
     return true;
 }
 
-void SceneComposite::accept(std::shared_ptr<SceneObjectVisitor> vis)
+void objects::SceneComposite::accept(std::shared_ptr<visitor::SceneObjectVisitor> vis)
 {
-    for (auto &object : objects)
+    for (auto &object : objs)
         object.accept(vis);
 }
 } // core

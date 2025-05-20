@@ -14,14 +14,14 @@ namespace creators {
 namespace builders {
 
 class PlainCameraBuilder {
-private:
-    std::shared_ptr<buffers::CameraBuffer> buf{};
-    std::shared_ptr<objects::PlainCameraImpl> cam{};
 public:
     void setBuf(const std::shared_ptr<buffers::CameraBuffer> &buf);
     void buildVisPoint() const;
     void buildNormal();
     std::shared_ptr<objects::SceneObject> build();
+private:
+    std::shared_ptr<buffers::CameraBuffer> buf{};
+    std::shared_ptr<objects::PlainCameraImpl> cam{};
 };
 
 } // builders

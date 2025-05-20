@@ -5,24 +5,24 @@
 #ifndef PLAINCAMERAREADER_HPP
 #define PLAINCAMERAREADER_HPP
 #include "CameraReader.hpp"
-#include "impl/PlainCameraReaderImpl.hpp"
+#include "impl/CameraReaderImpl.hpp"
 
 namespace loader {
 namespace reader {
 
 class PlainCameraReader : public CameraReader {
-private:
-    std::shared_ptr<std::istream> stream;
-    std::shared_ptr<impl::PlainCameraReaderImpl> impl;
 public:
     PlainCameraReader(const std::shared_ptr<std::istream> &stream,
-        const std::shared_ptr<impl::PlainCameraReaderImpl> &impl)
+        const std::shared_ptr<impl::CameraReaderImpl> &impl)
         : stream(stream),
           impl(impl)
     {
     }
 
     std::shared_ptr<core::creators::buffers::CameraBuffer> read() override;
+private:
+    std::shared_ptr<std::istream> stream;
+    std::shared_ptr<impl::CameraReaderImpl> impl;
 };
 
 } // reader

@@ -13,15 +13,15 @@ namespace api {
 namespace managers {
 
 class SceneManager {
-private:
-    std::shared_ptr<core::Scene> scene;
-    std::shared_ptr<core::objects::SceneObject> focused;
 public:
     SceneManager();
     std::shared_ptr<core::Scene> get_scene() const;
     void set_scene(const std::shared_ptr<core::Scene> &scene);
-    std::shared_ptr<core::objects::SceneObject> get_focused() const;
+    std::shared_ptr<core::objects::SceneObject> getFocused() const;
     void set_focused(const std::shared_ptr<core::objects::SceneObject> &focused);
+private:
+    std::shared_ptr<core::Scene> scene;
+    std::shared_ptr<core::objects::SceneObject> focused;
 };
 
 } // managers

@@ -8,6 +8,7 @@
 #include "Figure.hpp"
 #include "ListMeshFigure.hpp"
 #include "MatrixMeshFigure.hpp"
+#include "MatrixMeshFigure.hpp"
 #include "PlainCamera.hpp"
 
 namespace core {
@@ -15,9 +16,9 @@ namespace visitor {
 
 class SceneObjectVisitor {
 public:
-    virtual void visit(std::shared_ptr<objects::PlainCamera> cam) = 0;
-    virtual void visit(std::shared_ptr<objects::MatrixMeshFigure> fig) = 0;
-    virtual void visit(std::shared_ptr<objects::ListMeshFigure> fig) = 0;
+    virtual void visit(objects::PlainCamera& cam) = 0;
+    virtual void visit(objects::MatrixMeshFigure& fig) = 0;
+    virtual void visit(objects::ListMeshFigure& fig) = 0;
     virtual ~SceneObjectVisitor();
 };
 

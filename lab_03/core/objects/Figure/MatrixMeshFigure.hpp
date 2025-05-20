@@ -15,14 +15,14 @@ namespace core::objects {
 class MatrixMeshFigure : public Figure {
     friend class visitor::TransformVisitor;
     friend class visitor::DrawVisitor;
-private:
-    std::shared_ptr<BaseMatrixMeshFigureImpl> impl;
 public:
     explicit MatrixMeshFigure(const std::shared_ptr<BaseMatrixMeshFigureImpl> &impl)
         : impl(impl)
     {}
 
     void accept(std::shared_ptr<visitor::SceneObjectVisitor> vis) override;
+private:
+    std::shared_ptr<BaseMatrixMeshFigureImpl> impl;
 };
 
 } // objects

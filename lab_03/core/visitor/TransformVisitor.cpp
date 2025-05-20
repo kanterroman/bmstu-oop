@@ -6,24 +6,19 @@
 
 namespace core {
 namespace visitor {
-TransformVisitor::TransformVisitor(std::shared_ptr<Transformer> transformer)
+void TransformVisitor::visit(objects::PlainCamera& cam)
 {
-    this->transformer = transformer;
+    transformer->transform(cam.impl);
 }
 
-void TransformVisitor::visit(std::shared_ptr<objects::PlainCamera> cam)
+void TransformVisitor::visit(objects::MatrixMeshFigure& fig)
 {
-    transformer->transform(cam->impl);
+    transformer->transform(fig.impl);
 }
 
-void TransformVisitor::visit(std::shared_ptr<objects::MatrixMeshFigure> fig)
+void TransformVisitor::visit(objects::ListMeshFigure& fig)
 {
-    transformer->transform(fig->impl);
-}
-
-void TransformVisitor::visit(std::shared_ptr<objects::ListMeshFigure> fig)
-{
-    transformer->transform(fig->impl);
+    transformer->transform(fig.impl);
 }
 
 } // visitor

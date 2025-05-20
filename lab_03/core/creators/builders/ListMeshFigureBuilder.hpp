@@ -14,14 +14,14 @@ namespace creators {
 namespace builders {
 
 class ListMeshFigureBuilder {
-private:
-    std::shared_ptr<buffers::MeshFigureBuffer> buf{};
-    std::shared_ptr<objects::ListMeshFigureImpl> fig{};
 public:
     void setBuf(const std::shared_ptr<buffers::MeshFigureBuffer> &buf);
     void buildPoints();
     void buildLinks();
     std::shared_ptr<objects::SceneObject> build();
+private:
+    std::shared_ptr<buffers::MeshFigureBuffer> buf{};
+    std::shared_ptr<objects::ListMeshFigureImpl> fig{};
 };
 
 } // builders

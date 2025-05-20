@@ -7,10 +7,10 @@ namespace core {
 namespace creators {
 
 class PlainCameraDirector : public CameraCreator {
-private:
-    builders::PlainCameraBuilder builder{};
 public:
     std::shared_ptr<objects::SceneObject> create(std::any buffer) override;
+private:
+    builders::PlainCameraBuilder builder{};
 };
 
 } // creators

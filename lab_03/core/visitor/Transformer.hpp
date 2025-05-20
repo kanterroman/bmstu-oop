@@ -7,6 +7,7 @@
 #include "ListMeshFigureImpl.hpp"
 #include "MatrixMeshFigureImpl.hpp"
 #include "PlainCameraImpl.hpp"
+#include "TransformData.hpp"
 
 #include <Point.hpp>
 #include <memory>
@@ -15,17 +16,8 @@ namespace core {
 namespace visitor {
 
 class Transformer {
-private:
-    double ax, ay, az;
-    Point offset;
-    double multip;
 public:
-    Transformer(double ax, double ay, double az, const Point &offset, double multip)
-        : ax(ax),
-          ay(ay),
-          az(az),
-          offset(offset),
-          multip(multip)
+    explicit Transformer(TransformData data) : data(data)
     {
     }
     void transform(const std::shared_ptr<objects::BaseMatrixMeshFigureImpl>& fig);
@@ -37,6 +29,8 @@ private:
     void rotate(std::vector<Point> &points);
     void scale(std::vector<Point> &points);
     void transformNodes(std::vector<Point> &points);
+
+    TransformData data;
 };
 
 } // visitor

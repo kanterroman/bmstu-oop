@@ -16,9 +16,6 @@ class Graphics;
 class GraphicPoint;
 
 class GraphicFactory {
-protected:
-    std::shared_ptr<Graphics> gr{nullptr};
-    virtual std::shared_ptr<Graphics> createGraphics() = 0;
 public:
     virtual std::shared_ptr<Canvas> createCanvas(int, int) = 0;
     virtual std::shared_ptr<Graphics> getGraphics();
@@ -26,6 +23,9 @@ public:
     virtual std::shared_ptr<GraphicPoint> createGraphicPoint(double, double) = 0;
     virtual std::shared_ptr<GraphicPoint> createGraphicPoint(Point) = 0;
     virtual ~GraphicFactory() = 0;
+protected:
+    std::shared_ptr<Graphics> gr{nullptr};
+    virtual std::shared_ptr<Graphics> createGraphics() = 0;
 };
 
 } // graphics

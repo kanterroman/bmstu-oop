@@ -13,14 +13,14 @@ namespace creators {
 namespace buffers {
 
 class CameraBuffer {
-private:
-    Point visPoint{};
-    Vector<double> n{3};
 public:
     void addPoint(const Point &pt);
     void addNormal(const Vector<double> &n);
     Point readPoint() const;
     Vector<double> readNormal();
+private:
+    Point visPoint{};
+    Vector<double> n{3};
 };
 
 } // buffers

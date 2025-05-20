@@ -73,10 +73,10 @@ add_executable(${APP_NAME}
         core/objects/Figure/BaseMatrixMeshFigureImpl.hpp
         core/objects/Figure/BaseListMeshFigureImpl.cpp
         core/objects/Figure/BaseListMeshFigureImpl.hpp
-        core/objects/Vector/Vector/Vector.h
-        core/objects/Vector/Vector/Vector.hpp
-        core/objects/Vector/Vector/BaseVector.cpp
-        core/objects/Vector/Iterators/BaseIterator.cpp
+        util/Vector/Vector/Vector.h
+        util/Vector/Vector/Vector.hpp
+        util/Vector/Vector/BaseVector.cpp
+        util/Vector/Iterators/BaseIterator.cpp
         core/creators/buffers/CameraBuffer.cpp
         core/creators/buffers/CameraBuffer.hpp
         core/creators/buffers/MeshFigureBuffer.cpp
@@ -115,8 +115,8 @@ add_executable(${APP_NAME}
         loader/reader/CameraReader.hpp
         loader/reader/PlainCameraReader.cpp
         loader/reader/PlainCameraReader.hpp
-        loader/reader/impl/PlainCameraReaderImpl.cpp
-        loader/reader/impl/PlainCameraReaderImpl.hpp
+        loader/reader/impl/CameraReaderImpl.cpp
+        loader/reader/impl/CameraReaderImpl.hpp
         loader/reader/MeshFigureReader.cpp
         loader/reader/MeshFigureReader.hpp
         loader/reader/BaseMeshFigureReader.hpp
@@ -126,11 +126,47 @@ add_executable(${APP_NAME}
         loader/reader/impl/ObjMeshFigureReaderImpl.hpp
         loader/reader/impl/TxtMeshFigureReaderImpl.cpp
         loader/reader/impl/TxtMeshFigureReaderImpl.hpp
-        loader/reader/impl/ObjPlainCameraReaderImpl.cpp
-        loader/reader/impl/ObjPlainCameraReaderImpl.hpp
-        loader/reader/impl/TxtPlainCameraReaderImpl.cpp
-        loader/reader/impl/TxtPlainCameraReaderImpl.hpp
+        loader/reader/impl/ObjCameraReaderImpl.cpp
+        loader/reader/impl/ObjCameraReaderImpl.hpp
+        loader/reader/impl/TxtCameraReaderImpl.cpp
+        loader/reader/impl/TxtCameraReaderImpl.hpp
         loader/StreamSceneLoader.cpp
+        loader/reader/creator/CameraReaderCreator.cpp
+        loader/reader/creator/CameraReaderCreator.hpp
+        loader/reader/creator/PlainCameraReaderCreator.cpp
+        loader/reader/creator/PlainCameraReaderCreator.hpp
+        loader/reader/creator/BaseMeshFigureReaderCreator.cpp
+        loader/reader/creator/BaseMeshFigureReaderCreator.hpp
+        loader/reader/creator/MeshFigureReaderCreator.cpp
+        loader/reader/creator/MeshFigureReaderCreator.hpp
+        loader/reader/impl/creator/CameraReaderImplCreator.cpp
+        loader/reader/impl/creator/CameraReaderImplCreator.hpp
+        loader/reader/impl/creator/ObjCameraReaderImplCreator.cpp
+        loader/reader/impl/creator/ObjCameraReaderImplCreator.hpp
+        loader/reader/impl/creator/TxtCameraReaderImplCreator.cpp
+        loader/reader/impl/creator/TxtCameraReaderImplCreator.hpp
+        loader/reader/impl/creator/MeshFigureReaderImplCreator.cpp
+        loader/reader/impl/creator/MeshFigureReaderImplCreator.hpp
+        loader/reader/impl/creator/ObjMeshFigureReaderImplCreator.cpp
+        loader/reader/impl/creator/ObjMeshFigureReaderImplCreator.hpp
+        loader/reader/impl/creator/TxtMeshFigureReaderImplCreator.cpp
+        loader/reader/impl/creator/TxtMeshFigureReaderImplCreator.hpp
+        loader/reader/impl/creator/CameraReaderImplCreatorSolution.cpp
+        loader/reader/impl/creator/CameraReaderImplCreatorSolution.hpp
+        loader/reader/impl/creator/MeshFigureReaderImplCreatorSolution.cpp
+        loader/reader/impl/creator/MeshFigureReaderImplCreatorSolution.hpp
+        loader/reader/creator/BaseMeshFigureReaderCreatorSolution.cpp
+        loader/reader/creator/BaseMeshFigureReaderCreatorSolution.hpp
+        loader/reader/creator/CameraReaderCreatorSolution.cpp
+        loader/reader/creator/CameraReaderCreatorSolution.hpp
+        api/commands/TransformCommand.cpp
+        api/commands/TransformCommand.hpp
+        api/commands/TransformCommand.hpp
+        api/managers/TransformManager.cpp
+        api/managers/TransformManager.hpp
+        core/visitor/TransformData.hpp
+        api/managers/SelectionManager.cpp
+        api/managers/SelectionManager.hpp
 )
 
 include_directories(

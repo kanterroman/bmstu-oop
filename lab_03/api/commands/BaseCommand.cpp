@@ -6,5 +6,6 @@
 
 namespace api {
 namespace commands {
+BaseCommand::~BaseCommand() = default;
 } // commands
 } // api

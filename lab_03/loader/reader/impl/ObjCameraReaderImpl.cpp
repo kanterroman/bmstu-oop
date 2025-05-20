@@ -2,12 +2,12 @@
 // Created by Roman Kanterov on 19.05.2025.
 //
 
-#include "TxtPlainCameraReaderImpl.hpp"
+#include "ObjCameraReaderImpl.hpp"
 
 namespace loader {
 namespace reader {
 namespace impl {
-bool TxtPlainCameraReaderImpl::checkHeader(std::istream &stream)
+bool ObjCameraReaderImpl::checkHeader(std::istream &stream)
 {
     std::string header;
     stream >> header;
@@ -16,7 +16,7 @@ bool TxtPlainCameraReaderImpl::checkHeader(std::istream &stream)
     return false;
 }
 
-void TxtPlainCameraReaderImpl::parsePoint(std::istream &stream)
+void ObjCameraReaderImpl::parsePoint(std::istream &stream)
 {
     core::Point pt{};
     stream >> pt.x;
@@ -25,7 +25,7 @@ void TxtPlainCameraReaderImpl::parsePoint(std::istream &stream)
     buf->addPoint(pt);
 }
 
-void TxtPlainCameraReaderImpl::parseNormal(std::istream &stream)
+void ObjCameraReaderImpl::parseNormal(std::istream &stream)
 {
     Vector<double> v{3};
     stream >> v[0];
@@ -34,7 +34,7 @@ void TxtPlainCameraReaderImpl::parseNormal(std::istream &stream)
     buf->addNormal(v);
 }
 
-std::shared_ptr<core::creators::buffers::CameraBuffer> TxtPlainCameraReaderImpl::read(std::istream &stream)
+std::shared_ptr<core::creators::buffers::CameraBuffer> ObjCameraReaderImpl::read(std::istream &stream)
 {
     buf = std::make_shared<core::creators::buffers::CameraBuffer>();
     streampos = stream.tellg();
@@ -47,9 +47,9 @@ std::shared_ptr<core::creators::buffers::CameraBuffer> TxtPlainCameraReaderImpl:
     std::string lex;
     while (stream >> lex)
     {
-        if (lex == "normal")
+        if (lex == "vn")
             parseNormal(stream);
-        else if (lex == "vertex")
+        else if (lex == "v")
             parsePoint(stream);
         else
             throw std::bad_cast();

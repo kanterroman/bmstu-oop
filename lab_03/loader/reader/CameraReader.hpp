@@ -6,6 +6,8 @@
 #define CAMERAREADER_HPP
 #include "buffers/CameraBuffer.hpp"
 
+#include <memory>
+
 namespace loader {
 namespace reader {
 

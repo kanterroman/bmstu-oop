@@ -12,10 +12,10 @@ namespace core {
 namespace creators {
 
 class MatrixMeshFigureDirector : public MeshFigureCreator {
-private:
-    builders::MatrixMeshFigureBuilder builder{};
 public:
     std::shared_ptr<objects::SceneObject> create(std::any buffer) override;
+private:
+    builders::MatrixMeshFigureBuilder builder{};
 };
 
 } // creators

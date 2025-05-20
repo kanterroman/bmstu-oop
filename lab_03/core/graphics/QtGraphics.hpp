@@ -10,8 +10,6 @@
 namespace core::graphics
 {
 class QtGraphics : public Graphics {
-private:
-    std::shared_ptr<QGraphicsScene> scene;
 public:
     explicit QtGraphics(const std::shared_ptr<QGraphicsScene> &scene)
         : scene(scene)
@@ -19,6 +17,8 @@ public:
     }
 
     void displayCanvas(std::shared_ptr<Canvas> canvas) override;
+private:
+    std::shared_ptr<QGraphicsScene> scene;
 };
 }
 

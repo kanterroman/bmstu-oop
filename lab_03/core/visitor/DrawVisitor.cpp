@@ -6,19 +6,19 @@
 
 namespace core {
 namespace visitor {
-void DrawVisitor::visit(std::shared_ptr<objects::PlainCamera> cam)
+void DrawVisitor::visit(objects::PlainCamera& cam)
 {
 
 }
 
-void DrawVisitor::visit(std::shared_ptr<objects::MatrixMeshFigure> fig)
+void DrawVisitor::visit(objects::MatrixMeshFigure& fig)
 {
-    drawer->draw(fig->impl);
+    drawer->draw(fig.impl);
 }
 
-void DrawVisitor::visit(std::shared_ptr<objects::ListMeshFigure> fig)
+void DrawVisitor::visit(objects::ListMeshFigure &fig)
 {
-    drawer->draw(fig->impl);
+    drawer->draw(fig.impl);
 }
 } // visitor
 } // core

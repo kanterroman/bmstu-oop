@@ -10,11 +10,11 @@
 
 namespace loader::reader::impl
 {
-class PlainCameraReaderImpl {
+class CameraReaderImpl {
 
 public:
     virtual std::shared_ptr<core::creators::buffers::CameraBuffer> read(std::istream &stream) = 0;
-    virtual ~PlainCameraReaderImpl() = default;
+    virtual ~CameraReaderImpl() = default;
 };
 }
 

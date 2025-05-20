@@ -12,9 +12,6 @@ namespace loader {
 namespace reader {
 
 class MeshFigureReader : public BaseMeshFigureReader {
-private:
-    std::shared_ptr<std::istream> stream;
-    std::shared_ptr<impl::MeshFigureReaderImpl> impl;
 public:
     MeshFigureReader(const std::shared_ptr<std::istream> &stream,
         const std::shared_ptr<impl::MeshFigureReaderImpl> &impl)
@@ -24,6 +21,9 @@ public:
     }
 
     std::shared_ptr<core::creators::buffers::MeshFigureBuffer> read() override;
+private:
+    std::shared_ptr<std::istream> stream;
+    std::shared_ptr<impl::MeshFigureReaderImpl> impl;
 };
 
 } // reader

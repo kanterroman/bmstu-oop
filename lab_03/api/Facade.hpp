@@ -14,7 +14,7 @@ namespace api
 class Facade {
 private:
     std::shared_ptr<core::graphics::GraphicFactory> factory;
-    std::shared_ptr<>
+    std::shared_ptr<>;
 };
 }
 

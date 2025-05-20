@@ -8,11 +8,10 @@ namespace core::objects {
 class SceneComposite : public SceneObject {
 public:
     using StorageType = std::vector<SceneObject>;
-    StorageType objects;
-public:
+
     SceneComposite() = default;
     SceneComposite(std::initializer_list<SceneObject> list);
-    SceneComposite(const StorageType &objs);
+    explicit SceneComposite(const StorageType &objs);
 
     void add(SceneObject &obj) override;
     void remove(Iterator &iter) override;
@@ -20,6 +19,8 @@ public:
     Iterator end() override;
     bool isComposite() override;
     void accept(std::shared_ptr<visitor::SceneObjectVisitor>) override;
+private:
+    StorageType objs;
 };
 
 } // core

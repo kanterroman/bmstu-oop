@@ -13,9 +13,6 @@
 namespace core::objects
 {
 class MatrixMeshFigureImpl : public BaseMatrixMeshFigureImpl {
-private:
-    PointsStorageType nodes;
-    LinksStorageType edges;
 public:
     MatrixMeshFigureImpl(PointsStorageType &nodes, LinksStorageType &edges)
         : nodes(nodes),
@@ -27,6 +24,9 @@ public:
     void setNodes(const PointsStorageType &nodes) override;
     LinksStorageType getEdges() const override;
     void setEdges(const LinksStorageType &edges) override;
+private:
+    PointsStorageType nodes;
+    LinksStorageType edges;
 };
 }
 

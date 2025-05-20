@@ -13,9 +13,6 @@ namespace core {
 namespace objects {
 
 class PlainCameraImpl : public BasePlainCameraImpl {
-private:
-    Point visPoint;
-    Vector<double> n;
 public:
     PlainCameraImpl(const Point &vis_point, const Vector<double> &n)
         : visPoint(vis_point),
@@ -27,6 +24,9 @@ public:
     void set_vis_point(const Point &vis_point) override;
     Vector<double> getN() const;
     void set_n(const Vector<double> &n);
+private:
+    Point visPoint;
+    Vector<double> n;
 };
 
 } // objects
