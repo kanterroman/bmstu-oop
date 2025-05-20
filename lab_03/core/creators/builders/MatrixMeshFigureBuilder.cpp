@@ -18,9 +18,9 @@ void MatrixMeshFigureBuilder::buildPoints()
     objects::MatrixMeshFigureImpl::PointsStorageType nodes;
     for (auto &edge : data)
     {
-        if (std::find(nodes.begin(), nodes.end(), edge.first) != nodes.end())
+        if (std::ranges::find(nodes, edge.first) != nodes.end())
             nodes.push_back(edge.first);
-        if (std::find(nodes.begin(), nodes.end(), edge.second) != nodes.end())
+        if (std::ranges::find(nodes, edge.second) != nodes.end())
             nodes.push_back(edge.second);
     }
     fig->setNodes(nodes);

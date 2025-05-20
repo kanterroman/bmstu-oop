@@ -6,6 +6,7 @@
 #define BASEMESHFIGURECREATORSOLUTION_HPP
 #include "BaseMeshFigureReaderCreator.hpp"
 #include "MeshFigureReaderCreator.hpp"
+#include <unordered_map>
 
 namespace loader {
 namespace reader {

@@ -4,14 +4,21 @@
 
 #ifndef SELECTIONMANAGER_HPP
 #define SELECTIONMANAGER_HPP
+#include "SceneManager.hpp"
+
 #include <SceneComposite.hpp>
+#include <utility>
 
 namespace api {
 namespace managers {
 
 class SelectionManager {
 public:
-    void select();
+    SelectionManager();
+
+    void select(core::objects::SceneObject::idType id, const std::shared_ptr<SceneManager>& sceneManager);
+    void unselect(core::objects::SceneObject::idType id);
+    std::shared_ptr<core::objects::SceneComposite> getSelected();
 private:
     std::shared_ptr<core::objects::SceneComposite> focused;
 };

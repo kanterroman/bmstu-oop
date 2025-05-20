@@ -11,7 +11,7 @@ Point PlainCameraImpl::getVisPoint() const
     return visPoint;
 }
 
-void PlainCameraImpl::set_vis_point(const Point &vis_point)
+void PlainCameraImpl::setVisPoint(const Point &vis_point)
 {
     visPoint = vis_point;
 }

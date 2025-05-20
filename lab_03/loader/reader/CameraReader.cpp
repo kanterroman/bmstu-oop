@@ -6,9 +6,6 @@
 
 namespace loader {
 namespace reader {
-void CameraReader::add(std::shared_ptr<CameraReader> reader)
-{
-    readers.push_back(reader);
-}
+CameraReader::~CameraReader() = default;
 } // reader
 } // loader

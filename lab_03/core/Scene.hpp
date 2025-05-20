@@ -12,15 +12,15 @@
 namespace core {
 
 class Scene {
-    using dataType = std::vector<objects::SceneObject>;
-    using Iterator = std::vector<objects::SceneObject>::iterator;
+    using dataType = std::vector<std::shared_ptr<objects::SceneObject>>;
+    using Iterator = std::vector<std::shared_ptr<objects::SceneObject>>::iterator;
 public:
     Iterator begin();
     Iterator end();
     void remove(Iterator &iter);
-    void add(objects::SceneObject &obj);
+    void add(std::shared_ptr<objects::SceneObject> obj);
 private:
-    dataType objects;
+    dataType objs;
 };
 
 } // core

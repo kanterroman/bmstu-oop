@@ -3,6 +3,7 @@
 //
 
 #include "MatrixMeshFigure.hpp"
+#include "SceneObjectVisitor.hpp"
 
 namespace core {
 namespace objects {

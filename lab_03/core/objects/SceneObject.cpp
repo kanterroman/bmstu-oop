@@ -3,42 +3,52 @@
 //
 
 #include "SceneObject.hpp"
+
+#include "exceptions/NotImplementedException.hpp"
+
 #include <exception>
 
-namespace core {
 
-class not_implemented_exception;
-
-void SceneObject::add(SceneObject &object)
+namespace core
 {
-    throw not_implemented_exception();
+namespace objects {
+size_t SceneObject::count = 0;
+
+void objects::SceneObject::add(std::shared_ptr<SceneObject> &object)
+{
+    throw exceptions::NotImplementedException(__FILE__, __LINE__, __FUNCTION__);
 }
 
-void SceneObject::remove(Iterator &iter)
+void objects::SceneObject::remove(Iterator &iter)
 {
-    throw not_implemented_exception();
+    throw exceptions::NotImplementedException(__FILE__, __LINE__, __FUNCTION__);
 }
 
-SceneObject::Iterator SceneObject::begin()
+objects::SceneObject::Iterator objects::SceneObject::begin()
 {
-    throw not_implemented_exception();
+    throw exceptions::NotImplementedException(__FILE__, __LINE__, __FUNCTION__);
 }
 
-SceneObject::Iterator SceneObject::end()
+objects::SceneObject::Iterator objects::SceneObject::end()
 {
-    throw not_implemented_exception();
+    throw exceptions::NotImplementedException(__FILE__, __LINE__, __FUNCTION__);
 }
 
-bool SceneObject::isComposite()
-{
-    return false;
-}
-
-bool SceneObject::isCamera()
+bool objects::SceneObject::isComposite() const
 {
     return false;
 }
 
-SceneObject::~SceneObject() = default;
+bool objects::SceneObject::isCamera() const
+{
+    return false;
+}
 
-} // core
+objects::SceneObject::~SceneObject() = default;
+
+SceneObject::idType objects::SceneObject::id() const
+{
+    return _id;
+}
+}
+}// core

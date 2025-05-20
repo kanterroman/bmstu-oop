@@ -5,7 +5,13 @@
 #ifndef PLAINCAMERAIMPL_HPP
 #define PLAINCAMERAIMPL_HPP
 #include "BasePlainCameraImpl.hpp"
-#include "Vector/Vector/Vector.h"
+#include "ConstIterator.hpp"
+#include "Iterator.hpp"
+#include "Vector.hpp"
+#include "ReverseIterator.h"
+#include "ConstReverseIterator.h"
+#include "ConstReverseIterator.hpp"
+#include "ReverseIterator.hpp"
 
 #include <Point.hpp>
 
@@ -21,7 +27,7 @@ public:
     }
 
     Point getVisPoint() const override;
-    void set_vis_point(const Point &vis_point) override;
+    void setVisPoint(const Point &vis_point) override;
     Vector<double> getN() const;
     void set_n(const Vector<double> &n);
 private:

@@ -17,7 +17,7 @@ void StreamSceneBuilder::loadCameras(std::shared_ptr<core::Scene> scene)
     auto solution = std::make_shared<core::creators::SceneObjectCreatorSolution>();
     auto creator = solution->createCreator<core::creators::PlainCameraDirector>();
     auto obj = creator->create(buf);
-    scene->add(*obj);
+    scene->add(obj);
 }
 
 void StreamSceneBuilder::loadFigures(std::shared_ptr<core::Scene> scene)
@@ -28,7 +28,7 @@ void StreamSceneBuilder::loadFigures(std::shared_ptr<core::Scene> scene)
     auto solution = std::make_shared<core::creators::SceneObjectCreatorSolution>();
     auto creator = solution->createCreator<core::creators::MatrixMeshFigureDirector>();
     auto obj = creator->create(buf);
-    scene->add(*obj);
+    scene->add(obj);
 }
 
 void StreamSceneBuilder::setStream(std::shared_ptr<std::istream> stream)

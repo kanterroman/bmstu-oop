@@ -14,7 +14,7 @@ void PlainCameraBuilder::setBuf(const std::shared_ptr<buffers::CameraBuffer> &bu
 
 void PlainCameraBuilder::buildVisPoint() const
 {
-    cam->set_vis_point(buf->readPoint());
+    cam->setVisPoint(buf->readPoint());
 }
 
 void PlainCameraBuilder::buildNormal()

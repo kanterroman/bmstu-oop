@@ -60,6 +60,11 @@ struct Point {
         this->z *= mul;
         return *this;
     }
+
+    bool operator==(const Point & p) const
+    {
+        return (this->x == p.x && this->y == p.y && this->z == p.z);
+    }
 };
 
 } // core

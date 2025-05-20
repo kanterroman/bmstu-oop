@@ -5,6 +5,8 @@
 #ifndef TRANSFORMMANAGER_HPP
 #define TRANSFORMMANAGER_HPP
 #include "SceneManager.hpp"
+#include "SelectionManager.hpp"
+#include "TransformData.hpp"
 
 #include <Point.hpp>
 #include <memory>
@@ -15,13 +17,7 @@ namespace managers {
 
 class TransformManager {
 public:
-    explicit TransformManager(std::shared_ptr<SceneManager> manager)
-        : manager(std::move(manager))
-    {
-    }
-    void transform(TransformData data);
-private:
-    std::shared_ptr<SceneManager> manager;
+    void transform(TransformData data, const std::shared_ptr<SelectionManager> &manager);
 };
 
 } // managers

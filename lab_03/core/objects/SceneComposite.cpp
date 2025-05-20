@@ -5,15 +5,7 @@
 #include "SceneComposite.hpp"
 
 namespace core {
-objects::SceneComposite::SceneComposite(std::initializer_list<SceneObject> list)
-{
-    for (auto &elem : list)
-        objs.push_back(elem);
-}
-
-objects::SceneComposite::SceneComposite(const StorageType &objs) : objs(objs) {}
-
-void objects::SceneComposite::add(SceneObject &obj)
+void objects::SceneComposite::add(std::shared_ptr<SceneObject> &obj)
 {
     objs.push_back(obj);
 }
@@ -33,7 +25,7 @@ objects::SceneObject::Iterator objects::SceneComposite::end()
     return objs.end();
 }
 
-bool objects::SceneComposite::isComposite()
+bool objects::SceneComposite::isComposite() const
 {
     return true;
 }
@@ -41,6 +33,6 @@ bool objects::SceneComposite::isComposite()
 void objects::SceneComposite::accept(std::shared_ptr<visitor::SceneObjectVisitor> vis)
 {
     for (auto &object : objs)
-        object.accept(vis);
+        object->accept(vis);
 }
 } // core

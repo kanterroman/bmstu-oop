@@ -9,18 +9,24 @@
 #include "graphics/Painter.hpp"
 
 #include <SceneObjectVisitor.hpp>
-#include <SceneObjectVisitor.hpp>
 
 namespace core {
 namespace visitor {
 
 class DrawVisitor : public SceneObjectVisitor {
 public:
+    DrawVisitor(const std::shared_ptr<objects::PlainCamera> &cam,
+        const std::shared_ptr<graphics::GraphicFactory> &factory,
+        const std::shared_ptr<graphics::Canvas> &canvas);
+
     void visit(objects::PlainCamera& cam) override;
     void visit(objects::MatrixMeshFigure& fig) override;
     void visit(objects::ListMeshFigure &fig) override;
+
+    ~DrawVisitor() override;
 private:
     std::shared_ptr<graphics::Painter> p;
+    std::shared_ptr<graphics::Canvas> canvas;
     std::shared_ptr<objects::PlainCamera> cam;
     std::shared_ptr<graphics::GraphicFactory> factory;
     std::shared_ptr<Drawer> drawer;

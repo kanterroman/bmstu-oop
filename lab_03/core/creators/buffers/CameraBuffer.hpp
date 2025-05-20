@@ -4,7 +4,13 @@
 
 #ifndef PLAINCAMERABUFFER_HPP
 #define PLAINCAMERABUFFER_HPP
-#include "Vector/Vector/Vector.h"
+#include "ConstIterator.hpp"
+#include "Iterator.hpp"
+#include "Vector.hpp"
+#include "ReverseIterator.h"
+#include "ConstReverseIterator.h"
+#include "ConstReverseIterator.hpp"
+#include "ReverseIterator.hpp"
 
 #include <Point.hpp>
 

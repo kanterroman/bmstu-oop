@@ -5,23 +5,34 @@
 #ifndef SCENEOBJECT_HPP
 #define SCENEOBJECT_HPP
 
-#include "SceneObjectVisitor.hpp"
 #include <vector>
+
+namespace core::visitor
+{
+class SceneObjectVisitor;
+}
 
 namespace core::objects {
 
 class SceneObject {
-protected:
-    using Iterator = std::vector<SceneObject>::iterator;
 public:
-    virtual void add(SceneObject &object);
+    using idType = size_t;
+protected:
+    using Iterator = std::vector<std::shared_ptr<SceneObject>>::iterator;
+public:
+    virtual void add(std::shared_ptr<SceneObject> &object);
     virtual void remove(Iterator &iter);
     virtual Iterator begin();
     virtual Iterator end();
-    virtual bool isComposite();
-    virtual bool isCamera();
+    virtual bool isComposite() const;
+    virtual bool isCamera() const;
     virtual void accept(std::shared_ptr<visitor::SceneObjectVisitor> vis) = 0;
-    virtual ~SceneObject() = 0;
+    virtual ~SceneObject();
+    virtual idType id() const;
+protected:
+    idType _id{++count};
+private:
+    static idType count;
 };
 
 } // core

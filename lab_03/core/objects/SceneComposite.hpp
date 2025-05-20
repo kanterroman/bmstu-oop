@@ -7,17 +7,14 @@ namespace core::objects {
 
 class SceneComposite : public SceneObject {
 public:
-    using StorageType = std::vector<SceneObject>;
+    using StorageType = std::vector<std::shared_ptr<SceneObject>>;
 
     SceneComposite() = default;
-    SceneComposite(std::initializer_list<SceneObject> list);
-    explicit SceneComposite(const StorageType &objs);
-
-    void add(SceneObject &obj) override;
+    void add(std::shared_ptr<SceneObject> &obj) override;
     void remove(Iterator &iter) override;
     Iterator begin() override;
     Iterator end() override;
-    bool isComposite() override;
+    bool isComposite() const override;
     void accept(std::shared_ptr<visitor::SceneObjectVisitor>) override;
 private:
     StorageType objs;

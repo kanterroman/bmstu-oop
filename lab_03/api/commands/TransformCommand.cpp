@@ -6,5 +6,9 @@
 
 namespace api {
 namespace commands {
+void TransformCommand::execute()
+{
+    transformManager->transform(data, selectionManager);
+}
 } // commands
 } // api

@@ -14,7 +14,7 @@ namespace reader {
 class CameraReader {
 public:
     virtual std::shared_ptr<core::creators::buffers::CameraBuffer> read() = 0;
-    virtual ~CameraReader() = default;
+    virtual ~CameraReader();
 };
 
 } // reader

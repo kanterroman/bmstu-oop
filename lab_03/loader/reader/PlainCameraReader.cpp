@@ -8,7 +8,7 @@ namespace loader {
 namespace reader {
 std::shared_ptr<core::creators::buffers::CameraBuffer> PlainCameraReader::read()
 {
-    return impl->read(*stream);
+    return impl->read(stream);
 }
 } // reader
 } // loader

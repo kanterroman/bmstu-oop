@@ -5,10 +5,14 @@
 #ifndef MATRIXMESHFIGURE_HPP
 #define MATRIXMESHFIGURE_HPP
 #include "Figure.hpp"
-#include "TransformVisitor.hpp"
 #include "MatrixMeshFigureImpl.hpp"
-#include "DrawVisitor.hpp"
 
+
+namespace core::visitor
+{
+class DrawVisitor;
+class TransformVisitor;
+}
 
 namespace core::objects {
 

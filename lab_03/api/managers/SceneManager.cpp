@@ -11,7 +11,6 @@ namespace managers {
 SceneManager::SceneManager()
 {
     scene = std::make_shared<core::Scene>();
-    focused = std::make_shared<core::objects::SceneObject>(core::objects::SceneComposite());
 }
 
 std::shared_ptr<core::Scene> SceneManager::get_scene() const
@@ -22,16 +21,6 @@ std::shared_ptr<core::Scene> SceneManager::get_scene() const
 void SceneManager::set_scene(const std::shared_ptr<core::Scene> &scene)
 {
     this->scene = scene;
-}
-
-std::shared_ptr<core::objects::SceneObject> SceneManager::getFocused() const
-{
-    return focused;
-}
-
-void SceneManager::set_focused(const std::shared_ptr<core::objects::SceneObject> &focused)
-{
-    this->focused = focused;
 }
 } // managers
 } // api

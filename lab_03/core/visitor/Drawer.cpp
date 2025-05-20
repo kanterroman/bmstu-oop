@@ -3,10 +3,17 @@
 //
 
 #include "Drawer.hpp"
+#include "ConstIterator.hpp"
+#include "Iterator.hpp"
+#include "Vector.hpp"
+#include "ReverseIterator.h"
+#include "ConstReverseIterator.h"
+#include "ConstReverseIterator.hpp"
+#include "ReverseIterator.hpp"
 
 namespace core {
 namespace visitor {
-void Drawer::draw(std::shared_ptr<objects::MatrixMeshFigureImpl> fig, std::shared_ptr<graphics::GraphicFactory> graphic)
+void Drawer::draw(std::shared_ptr<objects::BaseMatrixMeshFigureImpl> fig, std::shared_ptr<graphics::GraphicFactory> graphic)
 {
     auto nodes = fig->getNodes();
     for (auto &node : nodes)
@@ -24,7 +31,7 @@ void Drawer::draw(std::shared_ptr<objects::MatrixMeshFigureImpl> fig, std::share
     }
 }
 
-void Drawer::draw(std::shared_ptr<objects::ListMeshFigureImpl> fig, std::shared_ptr<graphics::GraphicFactory> graphic)
+void Drawer::draw(std::shared_ptr<objects::BaseListMeshFigureImpl> fig, std::shared_ptr<graphics::GraphicFactory> graphic)
 {
     auto nodes = fig->getNodes();
     for (auto &node : nodes)

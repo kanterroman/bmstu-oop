@@ -4,14 +4,17 @@
 
 #ifndef TRANSFORMVISITOR_HPP
 #define TRANSFORMVISITOR_HPP
-#include "Transformer.hpp"
+
 
 #include <SceneObjectVisitor.hpp>
-#include <SceneObjectVisitor.hpp>
+#include "Transformer.hpp"
 #include <utility>
+
+
 
 namespace core {
 namespace visitor {
+
 
 class TransformVisitor : public SceneObjectVisitor {
 public:

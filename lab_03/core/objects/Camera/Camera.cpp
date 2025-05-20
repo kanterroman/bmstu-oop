@@ -1,6 +1,6 @@
 #include "Camera.hpp"
 
-bool core::objects::Camera::isCamera()
+bool core::objects::Camera::isCamera() const
 {
     return true;
 }

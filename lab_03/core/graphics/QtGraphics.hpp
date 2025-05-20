@@ -16,6 +16,7 @@ public:
     {
     }
 
+    std::pair<int, int> getSize() override;
     void displayCanvas(std::shared_ptr<Canvas> canvas) override;
 private:
     std::shared_ptr<QGraphicsScene> scene;

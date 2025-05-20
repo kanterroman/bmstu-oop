@@ -5,28 +5,23 @@
 #include "Scene.hpp"
 
 namespace core {
-std::shared_ptr<objects::SceneObject> Scene::getFocusedObjects()
-{
-    // return focusedObjects;
-}
-
 Scene::Iterator Scene::begin()
 {
-    return objects.begin();
+    return objs.begin();
 }
 
 Scene::Iterator Scene::end()
 {
-    return objects.end();
+    return objs.end();
 }
 
 void Scene::remove(Iterator &iter)
 {
-    objects.erase(iter);
+    objs.erase(iter);
 }
 
-void Scene::add(objects::SceneObject &obj)
+void Scene::add(std::shared_ptr<objects::SceneObject> obj)
 {
-    objects.push_back(obj);
+    objs.push_back(obj);
 }
 } // core

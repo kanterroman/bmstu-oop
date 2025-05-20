@@ -3,17 +3,20 @@
 //
 
 #include "Transformer.hpp"
+#include "BaseMatrixMeshFigureImpl.hpp"
+#include "BasePlainCameraImpl.hpp"
+#include "BaseListMeshFigureImpl.hpp"
 
 namespace core {
 namespace visitor {
-void Transformer::transform(const std::shared_ptr<objects::BaseMatrixMeshFigureImpl>& fig)
+void Transformer::transform(std::shared_ptr<objects::BaseMatrixMeshFigureImpl>& fig)
 {
     auto nodes = fig->getNodes();
     transformNodes(nodes);
     fig->setNodes(nodes);
 }
 
-void Transformer::transform(const std::shared_ptr<objects::BaseListMeshFigureImpl>& fig)
+void Transformer::transform(std::shared_ptr<objects::BaseListMeshFigureImpl>& fig)
 {
     auto nodes = fig->getNodes();
     transformNodes(nodes);
@@ -24,16 +27,12 @@ void Transformer::transform(std::shared_ptr<objects::BasePlainCameraImpl> fig)
 {
     auto visPoint = fig->getVisPoint();
     visPoint += data.offset;
-    double ax = fig->get_ax();
-    double ay = fig->get_ay();
-    double az = fig->get_az();
-    ax += this->data.ax;
-    ax += this->data.ay;
-    ax += this->data.az;
-    fig->set_vis_point(visPoint);
-    fig->set_ax(ax);
-    fig->set_ax(ay);
-    fig->set_ax(az);
+    auto n = fig->getN();
+    Point nPt = { n[0], n[1], n[2] };
+    std::vector<Point> pts{visPoint, nPt};
+    rotate(pts);
+    fig->setVisPoint(pts[0]);
+    fig->set_n(Vector<double>({ pts[1].x, pts[1].y, pts[1].z }));
 }
 
 Point Transformer::find_barycenter(std::vector<Point> &points)

@@ -18,7 +18,7 @@ public:
     virtual void load(std::shared_ptr<core::Scene>) = 0;
     virtual void setFigReader(std::shared_ptr<reader::BaseMeshFigureReader>) = 0;
     virtual void setCamReader(std::shared_ptr<reader::CameraReader>) = 0;
-    virtual ~BaseSceneLoader() = 0;
+    virtual ~BaseSceneLoader();
 };
 
 } // loader

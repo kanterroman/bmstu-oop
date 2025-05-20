@@ -21,7 +21,7 @@ public:
     std::shared_ptr<objects::SceneObject> build();
 private:
     std::shared_ptr<buffers::CameraBuffer> buf{};
-    std::shared_ptr<objects::PlainCameraImpl> cam{};
+    std::shared_ptr<objects::BasePlainCameraImpl> cam{};
 };
 
 } // builders

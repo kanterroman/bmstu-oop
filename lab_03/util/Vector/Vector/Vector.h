@@ -41,8 +41,8 @@ public:
     template <Convertible<T> U>
     Vector(const U *carr, size_type n);
 
-    template <std::ranges::input_range range>
-    explicit Vector(const range &rng) requires std::convertible_to<std::ranges::range_value_t<range>, T>;
+    template <::std::__1::ranges::input_range range>
+    explicit Vector(const range &rng) requires std::convertible_to<::std::__1::ranges::range_value_t<range>, T>;
     template <std::input_iterator iter, std::sentinel_for<iter> sent>
     Vector(const iter& first, const sent& last) requires std::convertible_to<std::iter_value_t<iter>, T>;
     template <std::input_iterator iter>

@@ -7,9 +7,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_COMPILER clang++)
 
-set(APP_NAME "app.exe")
-
-find_package(GTest REQUIRED)
+set(APP_NAME "app1.exe")
 
 find_package(Qt6 COMPONENTS
         Core
@@ -100,8 +98,6 @@ add_executable(${APP_NAME}
         core/creators/SceneObjectCreatorSolution.hpp
         util/concepts.hpp
         loader/BaseSceneLoader.hpp
-        api/Facade.cpp
-        api/Facade.hpp
         api/commands/BaseCommand.cpp
         api/commands/BaseCommand.hpp
         api/managers/SceneManager.cpp
@@ -167,6 +163,46 @@ add_executable(${APP_NAME}
         core/visitor/TransformData.hpp
         api/managers/SelectionManager.cpp
         api/managers/SelectionManager.hpp
+        api/managers/LoadingManager.cpp
+        api/managers/LoadingManager.hpp
+        loader/creator/SceneLoaderCreator.cpp
+        loader/creator/SceneLoaderCreator.hpp
+        loader/creator/StreamSceneLoaderCreator.cpp
+        loader/creator/StreamSceneLoaderCreator.hpp
+        loader/creator/SceneLoaderCreatorSolution.cpp
+        loader/creator/SceneLoaderCreatorSolution.hpp
+        api/managers/DrawManager.cpp
+        api/managers/DrawManager.hpp
+        api/managers/ActiveCameraManager.cpp
+        api/managers/ActiveCameraManager.hpp
+        api/managers/RemoveObjectManager.cpp
+        api/managers/RemoveObjectManager.hpp
+        api/commands/TransformCommand.cpp
+        api/commands/TransformCommand.hpp
+        api/commands/LoadCommand.cpp
+        api/commands/LoadCommand.hpp
+        api/commands/SelectCommand.cpp
+        api/commands/SelectCommand.hpp
+        api/commands/UnselectCommand.cpp
+        api/commands/UnselectCommand.hpp
+        api/commands/RemoveObjectCommand.cpp
+        api/commands/RemoveObjectCommand.hpp
+        api/commands/ChangeCameraCommand.cpp
+        api/commands/ChangeCameraCommand.hpp
+        api/facade/Facade.cpp
+        api/facade/Facade.hpp
+        ui/mainwindow.cpp
+        main.cpp
+        util/BaseException.hpp
+        core/exceptions/NotImplementedException.cpp
+        core/exceptions/NotImplementedException.hpp
+        api/commands/DrawCommand.cpp
+        api/commands/DrawCommand.hpp
+        api/managers/TransformActiveCameraManager.cpp
+        api/managers/TransformActiveCameraManager.hpp
+        api/commands/TransformActiveCameraCommand.cpp
+        api/commands/TransformActiveCameraCommand.hpp
+        loader/BaseSceneLoader.cpp
 )
 
 include_directories(
@@ -177,15 +213,14 @@ include_directories(
         core/objects/Figure
         core/visitor
         core/graphics
+        util/Vector/Vector
+        util/Vector/Iterators
+        util/Vector/Exceptions
+        ui
 )
 
 target_link_libraries(${APP_NAME}
         Qt::Core
         Qt::Gui
         Qt::Widgets
-        GTest::GTest
 )
-
-target_include_directories(${APP_NAME} PUBLIC ${GTEST_INCLUDE_DIR})
-target_compile_options(${APP_NAME} PUBLIC -fprofile-instr-generate -fcoverage-mapping)
-target_link_options(${APP_NAME} PUBLIC -fprofile-instr-generate -fcoverage-mapping)

@@ -3,6 +3,7 @@
 //
 
 #include "ListMeshFigureBuilder.hpp"
+#include "BaseListMeshFigureImpl.hpp"
 
 namespace core {
 namespace creators {
@@ -15,7 +16,7 @@ void ListMeshFigureBuilder::setBuf(const std::shared_ptr<buffers::MeshFigureBuff
 void ListMeshFigureBuilder::buildPoints()
 {
     auto data = buf->readEdges();
-    objects::ListMeshFigureImpl::PointsStorageType nodes;
+    objects::BaseListMeshFigureImpl::PointsStorageType nodes;
     for (auto &edge : data)
     {
         if (std::find(nodes.begin(), nodes.end(), edge.first) != nodes.end())
@@ -29,7 +30,7 @@ void ListMeshFigureBuilder::buildPoints()
 void ListMeshFigureBuilder::buildLinks()
 {
     auto data = buf->readEdges();
-    objects::ListMeshFigureImpl::LinksStorageType edges{};
+    objects::BaseListMeshFigureImpl::LinksStorageType edges{};
     auto nodes = fig->getNodes();
     for (auto &edge : data)
     {

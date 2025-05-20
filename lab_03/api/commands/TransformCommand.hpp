@@ -10,22 +10,13 @@ namespace api {
 namespace commands {
 
 class TransformCommand : public BaseCommand {
-private:
-    double dx, dy, dz;
-    double ax, ay, az;
-    double multip;
 public:
-    TransformCommand(double dx, double dy, double dz, double ax, double ay, double az, double multip)
-        : dx(dx),
-          dy(dy),
-          dz(dz),
-          ax(ax),
-          ay(ay),
-          az(az),
-          multip(multip)
-    {
-    }
+    explicit TransformCommand(const TransformData &data)
+        : data(data)
+    {}
     void execute() override;
+private:
+    TransformData data{};
 };
 
 } // commands

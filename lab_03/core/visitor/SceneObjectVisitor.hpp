@@ -4,10 +4,8 @@
 
 #ifndef SCENEOBJECTVISITOR_HPP
 #define SCENEOBJECTVISITOR_HPP
-#include "Camera.hpp"
-#include "Figure.hpp"
+
 #include "ListMeshFigure.hpp"
-#include "MatrixMeshFigure.hpp"
 #include "MatrixMeshFigure.hpp"
 #include "PlainCamera.hpp"
 

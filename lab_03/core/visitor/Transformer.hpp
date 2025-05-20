@@ -4,13 +4,17 @@
 
 #ifndef TRANSFORMER_HPP
 #define TRANSFORMER_HPP
-#include "ListMeshFigureImpl.hpp"
-#include "MatrixMeshFigureImpl.hpp"
-#include "PlainCameraImpl.hpp"
 #include "TransformData.hpp"
 
 #include <Point.hpp>
 #include <memory>
+
+namespace core::objects
+{
+class BasePlainCameraImpl;
+class BaseListMeshFigureImpl;
+class BaseMatrixMeshFigureImpl;
+}
 
 namespace core {
 namespace visitor {
@@ -20,8 +24,8 @@ public:
     explicit Transformer(TransformData data) : data(data)
     {
     }
-    void transform(const std::shared_ptr<objects::BaseMatrixMeshFigureImpl>& fig);
-    void transform(const std::shared_ptr<objects::BaseListMeshFigureImpl>& fig);
+    void transform(std::shared_ptr<objects::BaseMatrixMeshFigureImpl>& fig);
+    void transform(std::shared_ptr<objects::BaseListMeshFigureImpl>& fig);
     void transform(std::shared_ptr<objects::BasePlainCameraImpl> fig);
 private:
     Point find_barycenter(std::vector<Point> &points);

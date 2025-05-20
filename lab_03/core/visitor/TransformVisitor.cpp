@@ -3,6 +3,7 @@
 //
 
 #include "TransformVisitor.hpp"
+#include "Transformer.hpp"
 
 namespace core {
 namespace visitor {

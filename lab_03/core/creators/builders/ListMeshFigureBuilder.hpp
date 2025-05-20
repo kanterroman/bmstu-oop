@@ -21,7 +21,7 @@ public:
     std::shared_ptr<objects::SceneObject> build();
 private:
     std::shared_ptr<buffers::MeshFigureBuffer> buf{};
-    std::shared_ptr<objects::ListMeshFigureImpl> fig{};
+    std::shared_ptr<objects::BaseListMeshFigureImpl> fig{};
 };
 
 } // builders
