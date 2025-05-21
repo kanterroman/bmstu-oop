@@ -12,18 +12,9 @@ void PlainCameraBuilder::setBuf(const std::shared_ptr<buffers::CameraBuffer> &bu
     this->buf = buf;
 }
 
-void PlainCameraBuilder::buildVisPoint() const
-{
-    cam->setVisPoint(buf->readPoint());
-}
-
-void PlainCameraBuilder::buildNormal()
-{
-    cam->set_n(buf->readNormal());
-}
-
 std::shared_ptr<objects::SceneObject> PlainCameraBuilder::build()
 {
+    cam = std::static_pointer_cast<objects::BasePlainCameraImpl>(std::make_shared<objects::PlainCameraImpl>(buf->readPoint(), buf->readNormal()));
     return std::make_shared<objects::PlainCamera>(cam);
 }
 } // builders

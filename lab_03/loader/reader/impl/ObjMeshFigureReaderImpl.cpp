@@ -30,6 +30,8 @@ void ObjMeshFigureReaderImpl::parseEdge(std::istream &stream)
     int first, second;
     stream >> first;
     stream >> second;
+    --first;
+    --second;
     if (first >= points.size() || second >= points.size())
         throw std::bad_cast();
     buf->addEdge(points[first], points[second]);
@@ -45,15 +47,13 @@ std::shared_ptr<core::creators::buffers::MeshFigureBuffer> ObjMeshFigureReaderIm
         return nullptr;
     }
 
-    while (!stream.eof())
+    std::string lex;
+    while (stream >> lex)
     {
-        std::string lex;
         if (lex == "v")
             parseVertex(stream);
         else if (lex == "l")
             parseEdge(stream);
-        else
-            throw std::bad_cast();
     }
 
     return buf;

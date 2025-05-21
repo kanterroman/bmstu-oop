@@ -4,9 +4,17 @@
 
 #include "ActiveCameraManager.hpp"
 #include "PlainCamera.hpp"
+#include "PlainCameraImpl.hpp"
 
 namespace api {
 namespace managers {
+ActiveCameraManager::ActiveCameraManager()
+{
+    core::Point visPoint = { 0, 0, 0 };
+    Vector<double> n = { 0.0, 0.0, -0.5 };
+    activeCamera = std::make_shared<core::objects::PlainCamera>(std::make_shared<core::objects::PlainCameraImpl>(visPoint, n));
+}
+
 std::shared_ptr<core::objects::PlainCamera> ActiveCameraManager::get_active_camera() const
 {
     return activeCamera;

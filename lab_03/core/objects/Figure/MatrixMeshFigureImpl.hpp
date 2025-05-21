@@ -14,6 +14,7 @@ namespace core::objects
 {
 class MatrixMeshFigureImpl : public BaseMatrixMeshFigureImpl {
 public:
+    MatrixMeshFigureImpl() = default;
     MatrixMeshFigureImpl(PointsStorageType &nodes, LinksStorageType &edges)
         : nodes(nodes),
           edges(edges)

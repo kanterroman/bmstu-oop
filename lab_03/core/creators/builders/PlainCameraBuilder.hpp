@@ -6,6 +6,7 @@
 #define PLAINCAMERABUILDER_HPP
 #include "PlainCamera.hpp"
 #include "buffers/CameraBuffer.hpp"
+#include "PlainCameraImpl.hpp"
 
 #include <memory>
 
@@ -16,8 +17,6 @@ namespace builders {
 class PlainCameraBuilder {
 public:
     void setBuf(const std::shared_ptr<buffers::CameraBuffer> &buf);
-    void buildVisPoint() const;
-    void buildNormal();
     std::shared_ptr<objects::SceneObject> build();
 private:
     std::shared_ptr<buffers::CameraBuffer> buf{};

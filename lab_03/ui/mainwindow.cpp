@@ -20,8 +20,10 @@
 #include "../api/commands/ChangeCameraCommand.hpp"
 #include "../api/commands/DrawCommand.hpp"
 #include "../api/commands/LoadCommand.hpp"
+#include "../api/commands/SelectCommand.hpp"
 #include "../api/commands/TransformActiveCameraCommand.hpp"
 #include "../api/commands/TransformCommand.hpp"
+#include "../api/commands/UnselectCommand.hpp"
 // #include "requests/ClearScene.hpp"
 // #include "requests/DrawScene.hpp"
 // #include "requests/LoadCamera.hpp"
@@ -43,7 +45,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     ui->graphicsView->setScene(scene.get());
     facade = std::make_shared<api::facade::Facade>(scene);
-    initDefaultCamera();
+    // initDefaultCamera();
 }
 
 
@@ -131,6 +133,11 @@ void MainWindow::on_loadFigureButton_clicked()
     auto command = std::make_shared<api::commands::LoadCommand>(filepath);
 
     facade->execute(command);
+    auto id = core::objects::SceneObject::count - 1;
+    auto name = std::format("Figure {} ({})", std::to_string(id),
+                                std::filesystem::path(filepath).filename().c_str());
+    addComboItem(id, name.c_str());
+    addListItem(id, name.c_str());
     updateCanvas();
 }
 
@@ -144,6 +151,11 @@ void MainWindow::on_loadCameraButton_clicked()
     auto command = std::make_shared<api::commands::LoadCommand>(filepath);
 
     facade->execute(command);
+    auto id = core::objects::SceneObject::count - 1;
+    auto name = std::format("Figure {} ({})", std::to_string(id),
+                                std::filesystem::path(filepath).filename().c_str());
+    addComboItem(id, name.c_str());
+    addListItem(id, name.c_str());
     updateCanvas();
 
     if (ui->removeCameraButton->isEnabled() == false)
@@ -159,7 +171,13 @@ void MainWindow::on_loadSceneButton_clicked()
 
     auto command = std::make_shared<api::commands::LoadCommand>(filepath);
 
+
     facade->execute(command);
+    auto id = core::objects::SceneObject::count - 1;
+    auto name = std::format("Figure {} ({})", std::to_string(id),
+                                std::filesystem::path(filepath).filename().c_str());
+    addComboItem(id, name.c_str());
+    addListItem(id, name.c_str());
     updateCanvas();
 }
 
@@ -221,10 +239,12 @@ void MainWindow::on_removeCameraButton_clicked()
 
 void MainWindow::initDefaultCamera()
 {
-    constexpr char DEFAULT_CAMERA_FILE[] = "data/default_camera.obj";
+    constexpr char DEFAULT_CAMERA_FILE[] = "../data/default_camera.obj";
 
-    auto command = std::make_shared<api::commands::LoadCommand>(DEFAULT_CAMERA_FILE);
-    facade->execute(command);
+    // auto command = std::make_shared<api::commands::LoadCommand>(DEFAULT_CAMERA_FILE);
+    // facade->execute(command);
+    // auto command1 = std::make_shared<api::commands::ChangeCameraCommand>(0);
+    // facade->execute(command1);
 
     ui->comboBox->setCurrentIndex(0);
 }
@@ -278,12 +298,18 @@ void MainWindow::addListItem(const size_t id, const QString& text)
     //     updateCanvas();
     // });
 
-    // connect(checkBox, &QCheckBox::stateChanged, [this, id](int state)
-    // {
-    //     if (state == Qt::Checked)
-    //         sendRequest(SelectEntity(id));
-    //     else
-    //         sendRequest(UnselectEntity(id));
+    connect(checkBox, &QCheckBox::stateChanged, [this, id](int state) {
+        if (state == Qt::Checked)
+        {
+            auto command = std::make_shared<api::commands::SelectCommand>(id);
+            facade->execute(command);
+        }
+        else
+        {
+            auto command = std::make_shared<api::commands::UnselectCommand>(id);
+            facade->execute(command);
+        }
+    });
     // });
 }
 
@@ -328,7 +354,7 @@ std::string MainWindow::inputFile()
         nullptr,
         "Выберите файл",
         "/Users/mkholkin/BMSTU/2k/2s/OOP/lab_03/",
-        "(*.txt *.csv)"
+        "(*.txt *.obj)"
     ).toLatin1();
 
     return filepath.toStdString();

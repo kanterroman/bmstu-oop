@@ -18,5 +18,3 @@ void TransformManager::transform(TransformData data, const std::shared_ptr<Selec
 }
 } // managers
 } // api
-
-// TODO transformdata class

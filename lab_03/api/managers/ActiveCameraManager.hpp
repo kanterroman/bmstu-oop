@@ -19,6 +19,7 @@ namespace managers {
 
 class ActiveCameraManager {
 public:
+    ActiveCameraManager();
     std::shared_ptr<core::objects::PlainCamera> get_active_camera() const;
     void resetActiveCamera(core::objects::SceneObject::idType id, const std::shared_ptr<SceneManager>& sceneManager);
 private:

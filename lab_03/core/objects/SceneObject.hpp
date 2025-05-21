@@ -29,10 +29,9 @@ public:
     virtual void accept(std::shared_ptr<visitor::SceneObjectVisitor> vis) = 0;
     virtual ~SceneObject();
     virtual idType id() const;
-protected:
-    idType _id{++count};
-private:
     static idType count;
+protected:
+    idType _id{count++};
 };
 
 } // core

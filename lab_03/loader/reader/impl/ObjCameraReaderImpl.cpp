@@ -27,7 +27,7 @@ void ObjCameraReaderImpl::parsePoint(std::istream &stream)
 
 void ObjCameraReaderImpl::parseNormal(std::istream &stream)
 {
-    Vector<double> v{3};
+    Vector<double> v{0, 0, 0};
     stream >> v[0];
     stream >> v[1];
     stream >> v[2];

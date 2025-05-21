@@ -57,9 +57,11 @@ void Transformer::move(std::vector<Point> &points)
 
 void Transformer::rotate(std::vector<Point> &points)
 {
+    if (data.ax == data.ay == data.az == 0)
+        return;
     Point barycenter = find_barycenter(points);
     Point offs = data.offset;
-    data.offset = barycenter;
+    data.offset = -barycenter;
     move(points);
 
     std::vector<std::vector<double>> m = {{std::cos(data.ay)*std::cos(data.az), std::cos(data.ay)*-std::sin(data.az), std::sin(data.ay)},
@@ -86,9 +88,11 @@ void Transformer::rotate(std::vector<Point> &points)
 
 void Transformer::scale(std::vector<Point> &points)
 {
+    if (data.multip == 0)
+        return;
     Point barycenter = find_barycenter(points);
     Point offs = data.offset;
-    data.offset = barycenter;
+    data.offset = -barycenter;
     move(points);
 
     for (auto &point : points)

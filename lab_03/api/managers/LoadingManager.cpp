@@ -23,6 +23,8 @@ void LoadingManager::loadToScene(std::filesystem::path &filepath, std::shared_pt
 std::shared_ptr<std::ifstream> LoadingManager::openFile(std::filesystem::path &filepath)
 {
     auto is = std::make_shared<std::ifstream>(filepath);
+    if (!is->is_open())
+        throw std::bad_cast();
     return is;
 }
 } // managers
