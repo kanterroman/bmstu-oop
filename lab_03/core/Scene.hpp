@@ -13,11 +13,16 @@ namespace core {
 
 class Scene {
     using dataType = std::vector<std::shared_ptr<objects::SceneObject>>;
-    using Iterator = std::vector<std::shared_ptr<objects::SceneObject>>::iterator;
 public:
-    Iterator begin();
-    Iterator end();
-    void remove(Iterator &iter);
+    using value_type = std::shared_ptr<objects::SceneObject>;
+    using reference = std::shared_ptr<objects::SceneObject>&;
+    using const_reference = const std::shared_ptr<objects::SceneObject>&;
+    using iterator = std::vector<value_type>::iterator;
+    using const_iterator = std::vector<value_type>::const_iterator;
+    using size_type = size_t;
+    iterator begin();
+    iterator end();
+    void remove(iterator &iter);
     void add(std::shared_ptr<objects::SceneObject> obj);
 private:
     dataType objs;

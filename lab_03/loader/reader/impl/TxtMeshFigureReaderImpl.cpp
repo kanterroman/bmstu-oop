@@ -13,7 +13,7 @@ bool TxtMeshFigureReaderImpl::checkHeader(std::istream &stream)
 {
     std::string header;
     stream >> header;
-    if (header == "fig")
+    if (header == HEADER_NAME)
         return true;
     return false;
 }
@@ -50,9 +50,9 @@ std::shared_ptr<core::creators::buffers::MeshFigureBuffer> TxtMeshFigureReaderIm
     while (!stream.eof())
     {
         std::string lex;
-        if (lex == "point")
+        if (lex == NODE_NAME)
             parseVertex(stream);
-        else if (lex == "edge")
+        else if (lex == EDGE_NAME)
             parseEdge(stream);
         else
             throw exceptions::BadFileException(__FILE__, __LINE__, __FUNCTION__);

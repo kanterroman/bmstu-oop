@@ -21,6 +21,9 @@ private:
     std::istream::pos_type streampos;
     void parseVertex(std::istream &stream);
     void parseEdge(std::istream &stream);
+    static constexpr std::string HEADER_NAME = "fig";
+    static constexpr std::string NODE_NAME = "point";
+    static constexpr std::string EDGE_NAME = "edge";
 };
 
 } // impl

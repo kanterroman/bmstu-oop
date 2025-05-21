@@ -38,13 +38,25 @@
            <widget class="QWidget" name="widget_3" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QDoubleSpinBox" name="x_box"/>
+              <widget class="QDoubleSpinBox" name="x_box">
+               <property name="minimum">
+                <double>-99.000000000000000</double>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="y_box"/>
+              <widget class="QDoubleSpinBox" name="y_box">
+               <property name="minimum">
+                <double>-99.000000000000000</double>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QDoubleSpinBox" name="z_box"/>
+              <widget class="QDoubleSpinBox" name="z_box">
+               <property name="minimum">
+                <double>-99.000000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>

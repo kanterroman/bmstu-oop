@@ -19,17 +19,17 @@ void objects::SceneObject::add(std::shared_ptr<SceneObject> &object)
     throw exceptions::NotImplementedException(__FILE__, __LINE__, __FUNCTION__);
 }
 
-void objects::SceneObject::remove(Iterator &iter)
+void objects::SceneObject::remove(iterator &iter)
 {
     throw exceptions::NotImplementedException(__FILE__, __LINE__, __FUNCTION__);
 }
 
-objects::SceneObject::Iterator objects::SceneObject::begin()
+objects::SceneObject::iterator objects::SceneObject::begin()
 {
     throw exceptions::NotImplementedException(__FILE__, __LINE__, __FUNCTION__);
 }
 
-objects::SceneObject::Iterator objects::SceneObject::end()
+objects::SceneObject::iterator objects::SceneObject::end()
 {
     throw exceptions::NotImplementedException(__FILE__, __LINE__, __FUNCTION__);
 }

@@ -13,7 +13,7 @@ bool ObjCameraReaderImpl::checkHeader(std::istream &stream)
 {
     std::string header;
     stream >> header;
-    if (header == "cam")
+    if (header == HEADER_NAME)
         return true;
     return false;
 }
@@ -49,9 +49,9 @@ std::shared_ptr<core::creators::buffers::CameraBuffer> ObjCameraReaderImpl::read
     std::string lex;
     while (stream >> lex)
     {
-        if (lex == "vn")
+        if (lex == NORMAL_NAME)
             parseNormal(stream);
-        else if (lex == "v")
+        else if (lex == VERTEX_NAME)
             parsePoint(stream);
         else
             throw exceptions::BadFileException(__FILE__, __LINE__, __FUNCTION__);

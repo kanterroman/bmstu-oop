@@ -11,7 +11,7 @@ namespace commands {
 
 class ChangeCameraCommand : public BaseCommand {
 public:
-    explicit ChangeCameraCommand(core::objects::SceneObject::idType id)
+    explicit ChangeCameraCommand(core::objects::SceneObject::idType id);
 
     void execute() override;
 

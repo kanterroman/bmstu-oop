@@ -10,17 +10,17 @@ void objects::SceneComposite::add(std::shared_ptr<SceneObject> &obj)
     objs.push_back(obj);
 }
 
-void objects::SceneComposite::remove(Iterator &iter)
+void objects::SceneComposite::remove(iterator &iter)
 {
     objs.erase(iter);
 }
 
-objects::SceneObject::Iterator objects::SceneComposite::begin()
+objects::SceneObject::iterator objects::SceneComposite::begin()
 {
     return objs.begin();
 }
 
-objects::SceneObject::Iterator objects::SceneComposite::end()
+objects::SceneObject::iterator objects::SceneComposite::end()
 {
     return objs.end();
 }

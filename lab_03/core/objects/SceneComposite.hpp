@@ -11,9 +11,9 @@ public:
 
     SceneComposite() = default;
     void add(std::shared_ptr<SceneObject> &obj) override;
-    void remove(Iterator &iter) override;
-    Iterator begin() override;
-    Iterator end() override;
+    void remove(iterator &iter) override;
+    iterator begin() override;
+    iterator end() override;
     bool isComposite() const override;
     void accept(std::shared_ptr<visitor::SceneObjectVisitor>) override;
 private:

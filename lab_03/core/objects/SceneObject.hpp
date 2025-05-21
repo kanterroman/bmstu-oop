@@ -17,14 +17,19 @@ namespace core::objects {
 class SceneObject {
 public:
     using idType = int;
-protected:
-    using Iterator = std::vector<std::shared_ptr<SceneObject>>::iterator;
-public:
+
+    using value_type = std::shared_ptr<SceneObject>;
+    using reference = std::shared_ptr<SceneObject>&;
+    using const_reference = const std::shared_ptr<SceneObject>&;
+    using iterator = std::vector<value_type>::iterator;
+    using const_iterator = std::vector<value_type>::const_iterator;
+
+
     static idType currentId() { return count; }
     virtual void add(std::shared_ptr<SceneObject> &object);
-    virtual void remove(Iterator &iter);
-    virtual Iterator begin();
-    virtual Iterator end();
+    virtual void remove(iterator &iter);
+    virtual iterator begin();
+    virtual iterator end();
     virtual bool isComposite() const;
     virtual bool isCamera() const;
     virtual void accept(std::shared_ptr<visitor::SceneObjectVisitor> vis) = 0;

@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget* parent)
     QItemSelectionModel *selectionModel = ui->listView->selectionModel();
     QObject::connect(selectionModel, &QItemSelectionModel::selectionChanged,
                          [&](const QItemSelection &selected, const QItemSelection &deselected) {
-            // Обрабатываем ВЫДЕЛЕННЫЕ элементы
             for (const QModelIndex &index : selected.indexes()) {
                 QString text = index.data(Qt::DisplayRole).toString();
                 int id = index.data(Qt::UserRole).toInt();
@@ -32,7 +31,6 @@ MainWindow::MainWindow(QWidget* parent)
                 facade->execute(command);
             }
 
-            // Обрабатываем СНЯТЫЕ элементы
             for (const QModelIndex &index : deselected.indexes()) {
                 QString text = index.data(Qt::DisplayRole).toString();
                 int id = index.data(Qt::UserRole).toInt();
@@ -41,43 +39,23 @@ MainWindow::MainWindow(QWidget* parent)
             }
     });
 
-        // connect(ui->listView, &QListView::clicked, [this](const QModelIndex &index) {
-        // QItemSelectionModel *selModel = ui->listView->selectionModel();
-
-        // if (selModel->isSelected(index)) {
-            // Если элемент уже выделен - снимаем выделение
-            // selModel->select(index, QItemSelectionModel::Deselect);
-            // int id = index.data(Qt::UserRole).toInt();
-            // auto command = std::make_shared<api::commands::UnselectCommand>(id);
-            // facade->execute(command);
-        // } else {
-            // Если не выделен - выделяем
-            // selModel->select(index, QItemSelectionModel::Select);
-            // int id = index.data(Qt::UserRole).toInt();
-            // auto command = std::make_shared<api::commands::SelectCommand>(id);
-            // facade->execute(command);
-        // }
-    // });
-
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
         [this](int index) {
-    // index - новый выбранный индекс
+
     if (index >= 0) {
-        int id = ui->comboBox->itemData(index).toInt(); // Пользовательские данные
+        int id = ui->comboBox->itemData(index).toInt();
 
         auto command = std::make_shared<api::commands::ChangeCameraCommand>(id);
         try
         {
             facade->execute(command);
+            updateCanvas();
         } catch (api::exceptions::NotACameraException &e)
         {
-            // Блокируем сигналы чтобы не вызвать рекурсию
             ui->comboBox->blockSignals(true);
 
-            // Удаляем проблемный элемент
             ui->comboBox->removeItem(index);
 
-            // Возвращаем выбор на предыдущий допустимый
             if (ui->comboBox->count() > 0) {
                 ui->comboBox->setCurrentIndex(qMax(0, index-1));
             }
@@ -122,14 +100,14 @@ void MainWindow::on_load_btn_clicked()
 
     std::filesystem::path p(filepath);
     auto str = QString("%1 %2").arg(p.filename().string()).arg(id);
-    item->setData(str, Qt::DisplayRole);  // Отображаемый текст
-    item->setData(id, Qt::UserRole);  // Хранимое значение (size_t)
+    item->setData(str, Qt::DisplayRole);
+    item->setData(id, Qt::UserRole);
     model.appendRow(item);
 
     auto itemc = new QStandardItem();
 
-    itemc->setData(str, Qt::DisplayRole);  // Отображаемый текст
-    itemc->setData(id, Qt::UserRole);  // Хранимое значение (size_t)
+    itemc->setData(str, Qt::DisplayRole);
+    itemc->setData(id, Qt::UserRole);
     comboModel.appendRow(itemc);
     updateCanvas();
 }
@@ -214,6 +192,14 @@ void MainWindow::initCam()
     model.appendRow(item);
     auto camCommand = std::make_shared<api::commands::ChangeCameraCommand>(id);
     facade->execute(camCommand);
+
+    auto itemc = new QStandardItem();
+
+    itemc->setData(str, Qt::DisplayRole);  // Отображаемый текст
+    itemc->setData(id, Qt::UserRole);  // Хранимое значение (size_t)
+    comboModel.appendRow(itemc);
+    auto c1command = std::make_shared<api::commands::ChangeCameraCommand>(id);
+    facade->execute(c1command);
     updateCanvas();
 }
 

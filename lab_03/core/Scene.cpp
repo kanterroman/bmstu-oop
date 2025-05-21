@@ -5,17 +5,17 @@
 #include "Scene.hpp"
 
 namespace core {
-Scene::Iterator Scene::begin()
+Scene::iterator Scene::begin()
 {
     return objs.begin();
 }
 
-Scene::Iterator Scene::end()
+Scene::iterator Scene::end()
 {
     return objs.end();
 }
 
-void Scene::remove(Iterator &iter)
+void Scene::remove(iterator &iter)
 {
     objs.erase(iter);
 }

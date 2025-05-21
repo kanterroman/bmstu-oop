@@ -12,7 +12,7 @@ bool ObjMeshFigureReaderImpl::checkHeader(std::istream &stream)
 {
     std::string header;
     stream >> header;
-    if (header == "fig")
+    if (header == HEADER_NAME)
         return true;
     return false;
 }
@@ -51,9 +51,9 @@ std::shared_ptr<core::creators::buffers::MeshFigureBuffer> ObjMeshFigureReaderIm
     std::string lex;
     while (stream >> lex)
     {
-        if (lex == "v")
+        if (lex == NODE_NAME)
             parseVertex(stream);
-        else if (lex == "l")
+        else if (lex == EDGE_NAME)
             parseEdge(stream);
         else
             throw exceptions::BadFileException(__FILE__, __LINE__, __FUNCTION__);

@@ -20,6 +20,9 @@ private:
     void parsePoint(std::istream &stream);
     void parseNormal(std::istream &stream);
     std::istream::pos_type streampos;
+    static constexpr std::string HEADER_NAME = "cam";
+    static constexpr std::string NORMAL_NAME = "normal";
+    static constexpr std::string VERTEX_NAME = "vertex";
 };
 
 } // impl
