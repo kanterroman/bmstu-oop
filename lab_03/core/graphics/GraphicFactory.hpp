@@ -22,7 +22,7 @@ public:
     virtual std::shared_ptr<Painter> createPainter(std::shared_ptr<Canvas>) = 0;
     virtual std::shared_ptr<GraphicPoint> createGraphicPoint(double, double) = 0;
     virtual std::shared_ptr<GraphicPoint> createGraphicPoint(Point) = 0;
-    virtual ~GraphicFactory() = 0;
+    virtual ~GraphicFactory();
 protected:
     std::shared_ptr<Graphics> gr{nullptr};
     virtual std::shared_ptr<Graphics> createGraphics() = 0;

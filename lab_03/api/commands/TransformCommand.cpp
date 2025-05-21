@@ -6,9 +6,14 @@
 
 namespace api {
 namespace commands {
+TransformCommand::TransformCommand(const TransformData &data) : data(data)
+{
+    call = &managers::TransformManager::transform;
+}
+
 void TransformCommand::execute()
 {
-    transformManager->transform(data, selectionManager);
+    (*transformManager.*call)(data, selectionManager);
 }
 } // commands
 } // api

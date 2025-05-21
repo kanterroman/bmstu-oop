@@ -3,6 +3,9 @@
 //
 
 #include "LoadingManager.hpp"
+
+#include "../../loader/exceptions/CantOpenFileException.hpp"
+
 #include <fstream>
 
 namespace api {
@@ -24,7 +27,7 @@ std::shared_ptr<std::ifstream> LoadingManager::openFile(std::filesystem::path &f
 {
     auto is = std::make_shared<std::ifstream>(filepath);
     if (!is->is_open())
-        throw std::bad_cast();
+        throw loader::exceptions::CantOpenFileException(__FILE__, __LINE__, __FUNCTION__);
     return is;
 }
 } // managers

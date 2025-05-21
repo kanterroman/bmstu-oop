@@ -6,9 +6,14 @@
 
 namespace api {
 namespace commands {
+RemoveObjectCommand::RemoveObjectCommand(core::objects::SceneObject::idType id): id(id)
+{
+    call = &managers::RemoveObjectManager::removeObject;
+}
+
 void RemoveObjectCommand::execute()
 {
-    removeObjectManager->removeObject(id, sceneManager, selectionManager);
+    (*removeObjectManager.*call)(id, sceneManager, selectionManager);
 }
 } // commands
 } // api

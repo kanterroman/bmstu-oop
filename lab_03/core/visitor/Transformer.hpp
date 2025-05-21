@@ -5,6 +5,13 @@
 #ifndef TRANSFORMER_HPP
 #define TRANSFORMER_HPP
 #include "TransformData.hpp"
+#include "ConstIterator.hpp"
+#include "Iterator.hpp"
+#include "Vector.hpp"
+#include "ReverseIterator.h"
+#include "ConstReverseIterator.h"
+#include "ConstReverseIterator.hpp"
+#include "ReverseIterator.hpp"
 
 #include <Point.hpp>
 #include <memory>
@@ -31,6 +38,7 @@ private:
     Point find_barycenter(std::vector<Point> &points);
     void move(std::vector<Point> &points);
     void rotate(std::vector<Point> &points);
+    void rotate(Vector<double> &v);
     void scale(std::vector<Point> &points);
     void transformNodes(std::vector<Point> &points);
 

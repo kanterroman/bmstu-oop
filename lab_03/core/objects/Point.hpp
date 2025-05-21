@@ -38,12 +38,13 @@ struct Point {
         this->z /= div;
         return *this;
     }
-    Point &operator-()
+    Point operator-() const
     {
-        this->x *= -1;
-        this->y *= -1;
-        this->z *= -1;
-        return *this;
+        Point pt(*this);
+        pt.x *= -1;
+        pt.y *= -1;
+        pt.z *= -1;
+        return pt;
     }
     Point operator*(double mul) const
     {

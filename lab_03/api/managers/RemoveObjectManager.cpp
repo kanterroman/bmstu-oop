@@ -15,7 +15,7 @@ void RemoveObjectManager::removeObject(core::objects::SceneObject::idType id,
         if ((*i)->id() == id)
         {
             scene->remove(i);
-            break;
+            return;
         }
 
 }

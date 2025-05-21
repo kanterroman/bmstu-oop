@@ -6,9 +6,14 @@
 
 namespace api {
 namespace commands {
+LoadCommand::LoadCommand(std::filesystem::path path) : path(std::move(path))
+{
+    call = &managers::LoadingManager::loadToScene;
+}
+
 void LoadCommand::execute()
 {
-    loadingManager->loadToScene(path, sceneManager);
+    (*loadingManager.*call)(path, sceneManager);
 }
 } // commands
 } // api

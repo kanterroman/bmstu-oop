@@ -6,9 +6,14 @@
 
 namespace api {
 namespace commands {
+TransformActiveCameraCommand::TransformActiveCameraCommand(const TransformData &data) : data(data)
+{
+    call = &managers::TransformActiveCameraManager::transformCamera;
+}
+
 void TransformActiveCameraCommand::execute()
 {
-    transformCamManager->transformCamera(data, activeCameraManager);
+    (*transformCamManager.*call)(data, activeCameraManager);
 }
 } // commands
 } // api

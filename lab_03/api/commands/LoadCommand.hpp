@@ -13,14 +13,13 @@ namespace commands {
 
 class LoadCommand : public BaseCommand {
 public:
-    explicit LoadCommand(std::filesystem::path path)
-        : path(std::move(path))
-    {
-    }
+    explicit LoadCommand(std::filesystem::path path);
 
     void execute() override;
 
 private:
+    using Action = void(managers::LoadingManager::*)(std::filesystem::path&, std::shared_ptr<managers::SceneManager>);
+    Action call;
     std::filesystem::path path;
 };
 

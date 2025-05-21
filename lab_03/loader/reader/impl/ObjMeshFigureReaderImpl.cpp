@@ -3,6 +3,7 @@
 //
 
 #include "ObjMeshFigureReaderImpl.hpp"
+#include "../../exceptions/BadFileException.hpp"
 
 namespace loader {
 namespace reader {
@@ -54,6 +55,8 @@ std::shared_ptr<core::creators::buffers::MeshFigureBuffer> ObjMeshFigureReaderIm
             parseVertex(stream);
         else if (lex == "l")
             parseEdge(stream);
+        else
+            throw exceptions::BadFileException(__FILE__, __LINE__, __FUNCTION__);
     }
 
     return buf;

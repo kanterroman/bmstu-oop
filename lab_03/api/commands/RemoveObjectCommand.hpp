@@ -11,14 +11,13 @@ namespace commands {
 
 class RemoveObjectCommand : public BaseCommand {
 public:
-    explicit RemoveObjectCommand(core::objects::SceneObject::idType id)
-        : id(id)
-    {
-    }
+    explicit RemoveObjectCommand(core::objects::SceneObject::idType id);
 
     void execute() override;
 
 private:
+    using Action = void(managers::RemoveObjectManager::*)(core::objects::SceneObject::idType, const std::shared_ptr<managers::SceneManager>&, const std::shared_ptr<managers::SelectionManager>&);
+    Action call;
     core::objects::SceneObject::idType id;
 };
 

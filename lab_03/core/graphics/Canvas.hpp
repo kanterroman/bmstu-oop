@@ -15,7 +15,7 @@ public:
     virtual int getHeight() = 0;
     virtual void resize(int, int) = 0;
     virtual std::any get() = 0;
-    virtual ~Canvas() = 0;
+    virtual ~Canvas();
 };
 
 } // graphics

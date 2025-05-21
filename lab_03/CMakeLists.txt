@@ -191,7 +191,6 @@ add_executable(${APP_NAME}
         api/commands/ChangeCameraCommand.hpp
         api/facade/Facade.cpp
         api/facade/Facade.hpp
-        ui/mainwindow.cpp
         main.cpp
         util/BaseException.hpp
         core/exceptions/NotImplementedException.cpp
@@ -203,6 +202,13 @@ add_executable(${APP_NAME}
         api/commands/TransformActiveCameraCommand.cpp
         api/commands/TransformActiveCameraCommand.hpp
         loader/BaseSceneLoader.cpp
+        ui/mainwindow.h
+        ui/mainwindow.cpp
+        api/exceptions/NotACameraException.cpp
+        api/exceptions/NotACameraException.hpp
+        loader/exceptions/BadFileException.cpp
+        loader/exceptions/BadFileException.hpp
+        loader/exceptions/CantOpenFileException.hpp
 )
 
 include_directories(

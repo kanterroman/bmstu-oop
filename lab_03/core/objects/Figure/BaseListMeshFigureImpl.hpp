@@ -16,7 +16,7 @@ public:
     virtual LinksStorageType getEdges() const = 0;
     virtual void setEdges(const LinksStorageType &edges) = 0;
 
-    virtual ~BaseListMeshFigureImpl() = 0;
+    virtual ~BaseListMeshFigureImpl();
 };
 
 } // objects

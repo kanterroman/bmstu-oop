@@ -15,6 +15,7 @@ namespace objects {
 
 class ListMeshFigureImpl : public BaseListMeshFigureImpl {
 public:
+    ListMeshFigureImpl() = default;
     ListMeshFigureImpl(PointsStorageType &nodes, LinksStorageType &edges)
         : nodes(nodes),
           edges(edges)

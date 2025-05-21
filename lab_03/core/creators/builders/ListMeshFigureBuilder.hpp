@@ -5,6 +5,7 @@
 #ifndef LISTMESHFIGUREBUILDER_HPP
 #define LISTMESHFIGUREBUILDER_HPP
 #include "ListMeshFigure.hpp"
+#include "ListMeshFigureImpl.hpp"
 #include "buffers/MeshFigureBuffer.hpp"
 
 #include <memory>
@@ -21,7 +22,7 @@ public:
     std::shared_ptr<objects::SceneObject> build();
 private:
     std::shared_ptr<buffers::MeshFigureBuffer> buf{};
-    std::shared_ptr<objects::BaseListMeshFigureImpl> fig{};
+    std::shared_ptr<objects::BaseListMeshFigureImpl> fig = std::make_shared<objects::ListMeshFigureImpl>();
 };
 
 } // builders

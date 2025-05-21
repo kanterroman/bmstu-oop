@@ -27,6 +27,7 @@ public:
     void draw(std::shared_ptr<objects::BaseListMeshFigureImpl> fig, std::shared_ptr<graphics::GraphicFactory> graphic);
 private:
     Point projectOnCam(Point pt);
+    bool checkVisibility(Point pt);
     std::shared_ptr<objects::BasePlainCameraImpl> cam;
     std::shared_ptr<graphics::Painter> p;
 };

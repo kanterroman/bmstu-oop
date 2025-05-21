@@ -4,7 +4,11 @@
 
 #include "DrawCommand.hpp"
 
+api::commands::DrawCommand::DrawCommand()
+{
+    call = &managers::DrawManager::draw;
+}
 void api::commands::DrawCommand::execute()
 {
-    drawManager->draw(sceneManager, activeCameraManager);
+    (*drawManager.*call)(sceneManager, activeCameraManager);
 }

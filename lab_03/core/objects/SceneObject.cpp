@@ -12,7 +12,7 @@
 namespace core
 {
 namespace objects {
-size_t SceneObject::count = 0;
+int SceneObject::count = 0;
 
 void objects::SceneObject::add(std::shared_ptr<SceneObject> &object)
 {

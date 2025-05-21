@@ -4,6 +4,8 @@
 
 #include "TxtCameraReaderImpl.hpp"
 
+#include "../../exceptions/BadFileException.hpp"
+
 namespace loader {
 namespace reader {
 namespace impl {
@@ -52,7 +54,8 @@ std::shared_ptr<core::creators::buffers::CameraBuffer> TxtCameraReaderImpl::read
         else if (lex == "vertex")
             parsePoint(stream);
         else
-            throw std::bad_cast();
+            throw exceptions::BadFileException(__FILE__, __LINE__, __FUNCTION__);
+
     }
 
     return buf;

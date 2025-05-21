@@ -11,13 +11,12 @@ namespace commands {
 
 class TransformActiveCameraCommand : public BaseCommand {
 public:
-    explicit TransformActiveCameraCommand(const TransformData &data)
-        : data(data)
-    {
-    }
+    explicit TransformActiveCameraCommand(const TransformData &data);
 
     void execute() override;
 private:
+    using Action = void(managers::TransformActiveCameraManager::*)(TransformData, std::shared_ptr<managers::ActiveCameraManager>);
+    Action call;
     TransformData data;
 };
 

@@ -8,7 +8,7 @@ namespace core::objects
 {
 class Figure : public SceneObject {
 public:
-    ~Figure() override = 0;
+    ~Figure() override;
 };
 }
 

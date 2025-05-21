@@ -6,9 +6,14 @@
 
 namespace api {
 namespace commands {
+ChangeCameraCommand::ChangeCameraCommand(core::objects::SceneObject::idType id): id(id)
+{
+    call = &managers::ActiveCameraManager::resetActiveCamera;
+}
+
 void ChangeCameraCommand::execute()
 {
-    activeCameraManager->resetActiveCamera(id, sceneManager);
+    (*activeCameraManager.*call)(id, sceneManager);
 }
 } // commands
 } // api

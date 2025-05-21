@@ -11,7 +11,7 @@ namespace graphics {
 class Painter {
 public:
     virtual void drawLine(std::shared_ptr<GraphicPoint>, std::shared_ptr<GraphicPoint>) = 0;
-    virtual ~Painter() = 0;
+    virtual ~Painter();
 };
 
 } // graphics

@@ -11,11 +11,11 @@ namespace commands {
 
 class TransformCommand : public BaseCommand {
 public:
-    explicit TransformCommand(const TransformData &data)
-        : data(data)
-    {}
+    explicit TransformCommand(const TransformData &data);
     void execute() override;
 private:
+    using Action = void(managers::TransformManager::*)(TransformData, const std::shared_ptr<managers::SelectionManager>&);
+    Action call;
     TransformData data{};
 };
 

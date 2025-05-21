@@ -5,14 +5,15 @@
 #include "ActiveCameraManager.hpp"
 #include "PlainCamera.hpp"
 #include "PlainCameraImpl.hpp"
+#include "../exceptions/NotACameraException.hpp"
 
 namespace api {
 namespace managers {
 ActiveCameraManager::ActiveCameraManager()
 {
-    core::Point visPoint = { 0, 0, 0 };
-    Vector<double> n = { 0.0, 0.0, -0.5 };
-    activeCamera = std::make_shared<core::objects::PlainCamera>(std::make_shared<core::objects::PlainCameraImpl>(visPoint, n));
+    // core::Point visPoint = { 0, 0, 0 };
+    // Vector<double> n = { 0.0, 0.0, 0.5 };
+    // activeCamera = std::make_shared<core::objects::PlainCamera>(std::make_shared<core::objects::PlainCameraImpl>(visPoint, n));
 }
 
 std::shared_ptr<core::objects::PlainCamera> ActiveCameraManager::get_active_camera() const
@@ -23,6 +24,8 @@ std::shared_ptr<core::objects::PlainCamera> ActiveCameraManager::get_active_came
 void ActiveCameraManager::resetActiveCamera(core::objects::SceneObject::idType id, const std::shared_ptr<SceneManager>& sceneManager)
 {
     auto cam = ::std::__1::ranges::find_if(*(sceneManager->get_scene()), [id](auto obj){ return obj->id() == id; });
+    if (!(*cam)->isCamera())
+        throw exceptions::NotACameraException(__FILE__, __LINE__, __FUNCTION__);
     activeCamera.reset();
     activeCamera = std::static_pointer_cast<core::objects::PlainCamera>(*cam);
 }

@@ -15,7 +15,7 @@ public:
     virtual void setNodes(const PointsStorageType &nodes) = 0;
     virtual LinksStorageType getEdges() const = 0;
     virtual void setEdges(const LinksStorageType &edges) = 0;
-    virtual ~BaseMatrixMeshFigureImpl() = 0;
+    virtual ~BaseMatrixMeshFigureImpl();
 };
 }
 

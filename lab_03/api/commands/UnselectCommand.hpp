@@ -13,14 +13,13 @@ namespace commands {
 
 class UnselectCommand : public BaseCommand {
 public:
-    explicit UnselectCommand(core::objects::SceneObject::idType id)
-        : id(id)
-    {
-    }
+    explicit UnselectCommand(core::objects::SceneObject::idType id);
 
     void execute() override;
 
 private:
+    using Action = void(managers::SelectionManager::*)(core::objects::SceneObject::idType);
+    Action call;
     core::objects::SceneObject::idType id;
 };
 

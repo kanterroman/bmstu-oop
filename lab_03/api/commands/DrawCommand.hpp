@@ -11,7 +11,11 @@ namespace api::commands
 {
 class DrawCommand : public BaseCommand {
 public:
+    DrawCommand();
     void execute() override;
+private:
+    using Action = void(managers::DrawManager::*)(const std::shared_ptr<managers::SceneManager>&, const std::shared_ptr<managers::ActiveCameraManager>&);
+    Action call;
 };
 }
 
