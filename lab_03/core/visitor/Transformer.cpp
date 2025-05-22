@@ -111,80 +111,59 @@ void Transformer::rotate(Vector<double> &v)
     // Матрица поворота вокруг X
     double mx[3][3] = {
         {1, 0,       0},
-        {0, cos(data.ax), -sin(data.ax)},
-        {0, sin(data.ax), cos(data.ax)}
+        {0, cos(data.ax), sin(data.ax)},
+        {0, -sin(data.ax), cos(data.ax)}
     };
 
     // Матрица поворота вокруг Y
     double my[3][3] = {
-        {cos(data.ay),  0, sin(data.ay)},
+        {cos(data.ay),  0, -sin(data.ay)},
         {0,        1, 0},
-        {-sin(data.ay), 0, cos(data.ay)}
+        {sin(data.ay), 0, cos(data.ay)}
     };
 
     // Матрица поворота вокруг Z
     double mz[3][3] = {
-        {cos(data.az), -sin(data.az), 0},
-        {sin(data.az), cos(data.az),  0},
+        {cos(data.az), sin(data.az), 0},
+        {-sin(data.az), cos(data.az),  0},
         {0,       0,        1}
     };
 
     // Применяем повороты в порядке Z -> Y -> X
     Vector<double> result{v};
 
+    double x = result[0];
+    double y = result[1];
+    double z = result[2];
     // Поворот вокруг Z
     result = Vector<double>({
-        result[0] * mz[0][0] + result[1] * mz[0][1] + result[2] * mz[0][2],
-        result[0] * mz[1][0] + result[1] * mz[1][1] + result[2] * mz[1][2],
-        result[0] * mz[2][0] + result[1] * mz[2][1] + result[2] * mz[2][2]
+        x * mz[0][0] + y * mz[0][1] + z * mz[0][2],
+        x * mz[1][0] + y * mz[1][1] + z * mz[1][2],
+        x * mz[2][0] + y * mz[2][1] + z * mz[2][2]
     });
 
+    x = result[0];
+    y = result[1];
+    z = result[2];
     // Поворот вокруг Y
     result = Vector<double>({
-        result[0] * my[0][0] + result[1] * my[0][1] + result[2] * my[0][2],
-        result[0] * my[1][0] + result[1] * my[1][1] + result[2] * my[1][2],
-        result[0] * my[2][0] + result[1] * my[2][1] + result[2] * my[2][2]
+        x * my[0][0] + y * my[0][1] + z * my[0][2],
+        x * my[1][0] + y * my[1][1] + z * my[1][2],
+        x * my[2][0] + y * my[2][1] + z * my[2][2]
     });
 
+    x = result[0];
+    y = result[1];
+    z = result[2];
     // Поворот вокруг X
     result = Vector<double>({
-        result[0] * mx[0][0] + result[1] * mx[0][1] + result[2] * mx[0][2],
-        result[0] * mx[1][0] + result[1] * mx[1][1] + result[2] * mx[1][2],
-        result[0] * mx[2][0] + result[1] * mx[2][1] + result[2] * mx[2][2]
+        x * mx[0][0] + y * mx[0][1] + z * mx[0][2],
+        x * mx[1][0] + y * mx[1][1] + z * mx[1][2],
+        x * mx[2][0] + y * mx[2][1] + z * mx[2][2]
     });
 
     v = result;
 }
-
-//     if (data.ax == data.ay == data.az == 0)
-//         return;
-//     Point barycenter = find_barycenter(points);
-//     Point offs = data.offset;
-//     data.offset = -barycenter;
-//     move(points);
-//
-//     std::vector<std::vector<double>> m = {{std::cos(data.ay)*std::cos(data.az), std::cos(data.ay)*-std::sin(data.az), std::sin(data.ay)},
-//                                          {std::sin(data.ax)*std::sin(data.ay)*std::cos(data.az) + std::cos(data.ax)*std::sin(data.ay),
-//                                          -std::sin(data.ax)*std::sin(data.ay)*std::sin(data.az)+std::cos(data.ax)*std::cos(data.az),
-//                                          -std::sin(data.ax)*std::cos(data.ay)},
-//                                          {std::sin(data.ax) * std::sin(data.az) - std::cos(data.ax)*std::sin(data.ay)*std::cos(data.az),
-//                                          std::sin(data.ax)*std::cos(data.az) + std::cos(data.ax)*std::sin(data.ay)*std::sin(data.az),
-//                                          std::cos(data.ax)*std::cos(data.ay)}};
-//     for (auto& point : points)
-//     {
-//         std::vector<double> pt = { point.x, point.y, point.z };
-//         for (auto i = 0; i < 3; i++)
-//             pt[i] = pt[0] * m[i][0] + pt[1] * m[i][1] + pt[2] * m[i][2];
-//         point.x = pt[0];
-//         point.y = pt[1];
-//         point.z = pt[2];
-//     }
-//
-//     data.offset = -data.offset;
-//     move(points);
-//     data.offset = offs;
-// }
-//
 void Transformer::scale(std::vector<Point> &points)
 {
     if (data.multip == 0)

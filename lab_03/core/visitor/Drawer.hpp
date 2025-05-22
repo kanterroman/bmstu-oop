@@ -28,6 +28,7 @@ public:
 private:
     Point projectOnCam(Point pt);
     bool checkVisibility(Point pt);
+    Point tr(Point pr);
     std::shared_ptr<objects::BasePlainCameraImpl> cam;
     std::shared_ptr<graphics::Painter> p;
 };

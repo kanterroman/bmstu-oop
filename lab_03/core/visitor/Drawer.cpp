@@ -50,6 +50,7 @@ void Drawer::draw(std::shared_ptr<objects::BaseListMeshFigureImpl> fig, std::sha
         {
             if (!checkVisibility(baseNodes[i]) || !checkVisibility(baseNodes[j]))
                 continue;
+
             p->drawLine(graphic->createGraphicPoint(nodes[i]), graphic->createGraphicPoint(nodes[j]));
         }
     }
@@ -57,40 +58,26 @@ void Drawer::draw(std::shared_ptr<objects::BaseListMeshFigureImpl> fig, std::sha
 
 Point Drawer::projectOnCam(Point pt)
 {
-    // Vector<double> n = cam->getN();
-    // Point visPoint = cam->getVisPoint();
-    // const double t = -(n[0] * pt.x
-    //         + n[1] * pt.y
-    //         + n[2] * pt.z
-    //         + visPoint.y + visPoint.y + visPoint.z) /
-    //     (pow(n[0], 2) +
-    //         pow(n[1], 2) +
-    //         pow(n[2], 2));
-    //
-    // pt.x += n[0] * t - pt.y;
-    // pt.y += n[1] * t - pt.y;
-    // _point.setX(_point.getX() + camera._direction.getX() * t - camera._position.getX());
-    // _point.setY(_point.getY() + camera._direction.getY() * t - camera._position.getY());
-    // pt.z = 0;
-    // return pt;
-    Vector n = cam->getN().normalize();
-    Point camPoint = cam->getVisPoint();
-    //
-    // 2. Вектор от точки плоскости к проектируемой точке
-    // Point dp = pt + -camPoint;
-    // Vector<double> dv({dp.x, dp.y, dp.z});
-    //
-    // 3. Вычисляем расстояние от точки до плоскости (со знаком)
-    // double distance = dv.dotProduct(n);
-    //
-    //
-    // // 4. Находим проекцию
-    // Vector<double> ans = -distance*n;
-    // return {pt.x + ans[0], pt.y + ans[1], pt.z + ans[2]};
-    Vector<double> r = { pt.x, pt.y, pt.z };
-    double d = -n[0]*camPoint.x - n[1]*camPoint.y - n[2]*camPoint.z;
-    Vector rProj = r - ((r^n) + d)/(n^n) * n;
-    return { rProj[0], rProj[1], rProj[2] };
+    Vector planeNormal = cam->getN().normalize();
+
+    Vector<double> planeU{3}, planeV{3};
+    if (planeNormal[0] != 0) {
+        planeU = Vector<double>({0, 1, 0});
+    } else if (planeNormal[1] != 0) {
+        planeU = Vector<double>({1, 0, 0});
+    } else {
+        planeU = Vector<double>({1, 0, 0});
+    }
+    planeV = planeNormal.crossProduct(planeU).normalized();
+    planeU = planeV.crossProduct(planeNormal).normalized();
+
+    auto vp = cam->getVisPoint();
+    Vector<double> v = { pt.x - vp.x, pt.y - vp.y, pt.z - vp.z };
+
+    double u = v.dotProduct(planeU);
+    double vCoord = v.dotProduct(planeV);
+
+    return Point(u, vCoord);
 }
 
 bool Drawer::checkVisibility(Point pt)
@@ -101,6 +88,32 @@ bool Drawer::checkVisibility(Point pt)
     if (n.dotProduct(v) < 0)
         return false;
     return true;
+}
+
+Point Drawer::tr(Point pr)
+{
+    Vector planeNormal = cam->getN().normalize(); // Пример: плоскость YZ (игнорируем X)
+
+    // Находим базисные векторы плоскости
+    Vector<double> planeU{3}, planeV{3};
+    if (planeNormal[0] != 0) {
+        planeU = Vector<double>({0, 1, 0}); // Второй вектор
+    } else if (planeNormal[1] != 0) {
+        planeU = Vector<double>({1, 0, 0});
+    } else {
+        planeU = Vector<double>({1, 0, 0});
+    }
+    planeV = planeNormal.crossProduct(planeU).normalized();
+    planeU = planeV.crossProduct(planeNormal).normalized();
+
+    auto vp = cam->getVisPoint();
+    Vector<double> v = { pr.x - vp.x, pr.y - vp.y, pr.z - vp.z };
+
+    // Проекция на базисные векторы плоскости
+    double u = v.dotProduct(planeU);
+    double vCoord = v.dotProduct(planeV);
+
+    return Point(u, vCoord);
 }
 } // visitor
 } // core

@@ -15,7 +15,7 @@ namespace graphics {
 class QtGraphicPoint : public GraphicPoint {
 public:
     QtGraphicPoint(double x, double y);
-    QtGraphicPoint(Point p);
+    explicit QtGraphicPoint(Point p);
     double getX() override;
     double gety() override;
 private:
