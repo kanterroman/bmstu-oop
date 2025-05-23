@@ -4,6 +4,7 @@
 
 #include "ObjMeshFigureReaderImpl.hpp"
 #include "../../exceptions/BadFileException.hpp"
+#include "../../exceptions/OutOfBondsException.hpp"
 
 namespace loader {
 namespace reader {
@@ -34,7 +35,7 @@ void ObjMeshFigureReaderImpl::parseEdge(std::istream &stream)
     --first;
     --second;
     if (first >= points.size() || second >= points.size())
-        throw std::bad_cast();
+        throw exceptions::OutOfBondsException(__FILE__, __LINE__, __FUNCTION__);
     buf->addEdge(points[first], points[second]);
 }
 

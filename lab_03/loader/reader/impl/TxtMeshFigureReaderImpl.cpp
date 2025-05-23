@@ -5,6 +5,7 @@
 #include "TxtMeshFigureReaderImpl.hpp"
 
 #include "../../exceptions/BadFileException.hpp"
+#include "../../exceptions/OutOfBondsException.hpp"
 
 namespace loader {
 namespace reader {
@@ -32,8 +33,10 @@ void TxtMeshFigureReaderImpl::parseEdge(std::istream &stream)
     int first, second;
     stream >> first;
     stream >> second;
+    --first;
+    --second;
     if (first >= points.size() || second >= points.size())
-        throw std::bad_cast();
+        throw exceptions::OutOfBondsException(__FILE__, __LINE__, __FUNCTION__);
     buf->addEdge(points[first], points[second]);
 }
 
@@ -47,9 +50,9 @@ std::shared_ptr<core::creators::buffers::MeshFigureBuffer> TxtMeshFigureReaderIm
         return nullptr;
     }
 
-    while (!stream.eof())
+    std::string lex;
+    while (stream >> lex)
     {
-        std::string lex;
         if (lex == NODE_NAME)
             parseVertex(stream);
         else if (lex == EDGE_NAME)

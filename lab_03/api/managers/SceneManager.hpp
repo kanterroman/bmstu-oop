@@ -15,8 +15,8 @@ namespace managers {
 class SceneManager {
 public:
     SceneManager();
-    std::shared_ptr<core::Scene> get_scene() const;
-    void set_scene(const std::shared_ptr<core::Scene> &scene);
+    std::shared_ptr<core::Scene> getScene() const;
+    void setScene(const std::shared_ptr<core::Scene> &scene);
 private:
     std::shared_ptr<core::Scene> scene;
 };

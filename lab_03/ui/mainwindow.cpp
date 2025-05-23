@@ -9,6 +9,7 @@
 #include "../api/commands/TransformCommand.hpp"
 #include "../api/commands/UnselectCommand.hpp"
 #include "../api/exceptions/NotACameraException.hpp"
+#include "../api/exceptions/NotFoundException.hpp"
 
 #include <QFileDialog>
 #include <QStandardItemModel>
@@ -35,7 +36,13 @@ MainWindow::MainWindow(QWidget* parent)
                 QString text = index.data(Qt::DisplayRole).toString();
                 int id = index.data(Qt::UserRole).toInt();
                 auto command = std::make_shared<api::commands::UnselectCommand>(id);
-                facade->execute(command);
+                try
+                {
+                    facade->execute(command);
+                } catch (api::exceptions::NotFoundException &e)
+                {
+                    model.removeRow(index.row());
+                }
             }
     });
 
@@ -122,7 +129,6 @@ void MainWindow::on_remove_btn_clicked()
         int id = index.data(Qt::UserRole).toInt();
         auto command = std::make_shared<api::commands::RemoveObjectCommand>(id);
         facade->execute(command);
-        model.removeRow(index.row());
     }
     comboModel.removeRows(0, selectedIndexes.count());
     updateCanvas();

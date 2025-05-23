@@ -59,9 +59,9 @@ void Transformer::rotate(std::vector<Point> &points)
     if (data.ax == 0 && data.ay == 0 && data.az == 0) {
         return;
     }
-    data.ax = data.ax * M_PI / 180;
-    data.ay = data.ay * M_PI / 180;
-    data.az = data.az * M_PI / 180;
+    double ax = data.ax * M_PI / 180;
+    double ay = data.ay * M_PI / 180;
+    double az = data.az * M_PI / 180;
 
     Point barycenter = find_barycenter(points);
 
@@ -69,10 +69,9 @@ void Transformer::rotate(std::vector<Point> &points)
     data.offset = -barycenter;
     move(points);
 
-    // Создаем отдельные матрицы для каждого поворота
-    double cx = cos(data.ax), sx = sin(data.ax);
-    double cy = cos(data.ay), sy = sin(data.ay);
-    double cz = cos(data.az), sz = sin(data.az);
+    double cx = cos(ax), sx = sin(ax);
+    double cy = cos(ay), sy = sin(ay);
+    double cz = cos(az), sz = sin(az);
 
     // Матрица поворота (Z-Y-X порядок)
     std::vector<std::vector<double>> m = {
@@ -81,7 +80,6 @@ void Transformer::rotate(std::vector<Point> &points)
         {sx*sz - cx*sy*cz, sx*cz + cx*sy*sz, cx*cy}
     };
 
-    // Применяем поворот
     for (auto& point : points) {
         double x = point.x;
         double y = point.y;
@@ -92,7 +90,6 @@ void Transformer::rotate(std::vector<Point> &points)
         point.z = x * m[2][0] + y * m[2][1] + z * m[2][2];
     }
 
-    // Возвращаем объект на место
     data.offset = barycenter;
     move(points);
     data.offset = old_offset;
@@ -104,38 +101,33 @@ void Transformer::rotate(Vector<double> &v)
         return;
     }
 
-    data.ax = data.ax * M_PI / 180;
-    data.ay = data.ay * M_PI / 180;
-    data.az = data.az * M_PI / 180;
+    double ax = data.ax * M_PI / 180;
+    double ay = data.ay * M_PI / 180;
+    double az = data.az * M_PI / 180;
 
-    // Матрица поворота вокруг X
     double mx[3][3] = {
         {1, 0,       0},
-        {0, cos(data.ax), sin(data.ax)},
-        {0, -sin(data.ax), cos(data.ax)}
+        {0, cos(ax), sin(ax)},
+        {0, -sin(ax), cos(ax)}
     };
 
-    // Матрица поворота вокруг Y
     double my[3][3] = {
-        {cos(data.ay),  0, -sin(data.ay)},
+        {cos(ay),  0, -sin(ay)},
         {0,        1, 0},
-        {sin(data.ay), 0, cos(data.ay)}
+        {sin(ay), 0, cos(ay)}
     };
 
-    // Матрица поворота вокруг Z
     double mz[3][3] = {
-        {cos(data.az), sin(data.az), 0},
-        {-sin(data.az), cos(data.az),  0},
+        {cos(az), sin(az), 0},
+        {-sin(az), cos(az),  0},
         {0,       0,        1}
     };
 
-    // Применяем повороты в порядке Z -> Y -> X
-    Vector<double> result{v};
+    Vector result{v};
 
     double x = result[0];
     double y = result[1];
     double z = result[2];
-    // Поворот вокруг Z
     result = Vector<double>({
         x * mz[0][0] + y * mz[0][1] + z * mz[0][2],
         x * mz[1][0] + y * mz[1][1] + z * mz[1][2],
@@ -145,7 +137,6 @@ void Transformer::rotate(Vector<double> &v)
     x = result[0];
     y = result[1];
     z = result[2];
-    // Поворот вокруг Y
     result = Vector<double>({
         x * my[0][0] + y * my[0][1] + z * my[0][2],
         x * my[1][0] + y * my[1][1] + z * my[1][2],
@@ -155,7 +146,6 @@ void Transformer::rotate(Vector<double> &v)
     x = result[0];
     y = result[1];
     z = result[2];
-    // Поворот вокруг X
     result = Vector<double>({
         x * mx[0][0] + y * mx[0][1] + z * mx[0][2],
         x * mx[1][0] + y * mx[1][1] + z * mx[1][2],

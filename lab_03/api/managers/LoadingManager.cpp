@@ -20,7 +20,7 @@ void LoadingManager::loadToScene(std::filesystem::path &filepath, std::shared_pt
     auto loader = loaderSolution.createCreator(loader::creator::SceneLoaderCreatorSolution::STREAM)->create(stream);
     loader->setCamReader(camReader);
     loader->setFigReader(figReader);
-    loader->load(manager->get_scene());
+    loader->load(manager->getScene());
 }
 
 std::shared_ptr<std::ifstream> LoadingManager::openFile(std::filesystem::path &filepath)

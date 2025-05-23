@@ -20,7 +20,7 @@ void Scene::remove(iterator &iter)
     objs.erase(iter);
 }
 
-void Scene::add(std::shared_ptr<objects::SceneObject> obj)
+void Scene::add(value_type obj)
 {
     objs.push_back(obj);
 }

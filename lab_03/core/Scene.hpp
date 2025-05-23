@@ -20,10 +20,11 @@ public:
     using iterator = std::vector<value_type>::iterator;
     using const_iterator = std::vector<value_type>::const_iterator;
     using size_type = size_t;
+
     iterator begin();
     iterator end();
     void remove(iterator &iter);
-    void add(std::shared_ptr<objects::SceneObject> obj);
+    void add(value_type obj);
 private:
     dataType objs;
 };

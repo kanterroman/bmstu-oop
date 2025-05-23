@@ -20,6 +20,7 @@ public:
     void unselect(core::objects::SceneObject::idType id);
     std::shared_ptr<core::objects::SceneComposite> getSelected();
 private:
+    void checkIfFound(core::Scene::iterator iter, core::Scene::iterator end);
     std::shared_ptr<core::objects::SceneComposite> focused;
 };
 

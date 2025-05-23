@@ -10,7 +10,7 @@ void RemoveObjectManager::removeObject(core::objects::SceneObject::idType id,
     const std::shared_ptr<SceneManager>& sceneManager, const std::shared_ptr<SelectionManager>& selManager)
 {
     selManager->unselect(id);
-    auto scene = sceneManager->get_scene();
+    auto scene = sceneManager->getScene();
     for (auto i = scene->begin(); i != scene->end(); ++i)
         if ((*i)->id() == id)
         {

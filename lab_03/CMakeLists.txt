@@ -204,11 +204,11 @@ add_executable(${APP_NAME}
         loader/BaseSceneLoader.cpp
         ui/mainwindow.h
         ui/mainwindow.cpp
-        api/exceptions/NotACameraException.cpp
         api/exceptions/NotACameraException.hpp
-        loader/exceptions/BadFileException.cpp
         loader/exceptions/BadFileException.hpp
         loader/exceptions/CantOpenFileException.hpp
+        loader/exceptions/OutOfBondsException.hpp
+        api/exceptions/NotFoundException.hpp
 )
 
 include_directories(

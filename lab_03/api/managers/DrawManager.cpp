@@ -17,7 +17,7 @@ DrawManager::DrawManager(const std::shared_ptr<QGraphicsScene>& scene)
 void DrawManager::draw(const std::shared_ptr<SceneManager>& sceneManager, const std::shared_ptr<ActiveCameraManager>&
                        cameraManager)
 {
-    auto scene = sceneManager->get_scene();
+    auto scene = sceneManager->getScene();
 
     auto sizes = graphics->getGraphics()->getSize();
     auto canvas = graphics->createCanvas(sizes.first, sizes.second);

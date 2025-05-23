@@ -13,12 +13,12 @@ SceneManager::SceneManager()
     scene = std::make_shared<core::Scene>();
 }
 
-std::shared_ptr<core::Scene> SceneManager::get_scene() const
+std::shared_ptr<core::Scene> SceneManager::getScene() const
 {
     return scene;
 }
 
-void SceneManager::set_scene(const std::shared_ptr<core::Scene> &scene)
+void SceneManager::setScene(const std::shared_ptr<core::Scene> &scene)
 {
     this->scene = scene;
 }
