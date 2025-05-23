@@ -8,9 +8,9 @@
 
 namespace loader {
 namespace creator {
-std::shared_ptr<BaseSceneLoader> StreamSceneLoaderCreator::create(std::shared_ptr<std::istream> stream)
+std::shared_ptr<BaseSceneLoader> StreamSceneLoaderCreator::create()
 {
-    return std::make_shared<StreamSceneLoader>(stream);
+    return std::make_shared<StreamSceneLoader>();
 }
 } // creator
 } // loader

@@ -13,7 +13,7 @@ namespace creator {
 
 class SceneLoaderCreator {
 public:
-    virtual std::shared_ptr<BaseSceneLoader> create(std::shared_ptr<std::istream>) = 0;
+    virtual std::shared_ptr<BaseSceneLoader> create() = 0;
     virtual ~SceneLoaderCreator();
 };
 

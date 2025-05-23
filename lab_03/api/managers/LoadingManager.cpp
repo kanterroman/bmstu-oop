@@ -17,7 +17,7 @@ void LoadingManager::loadToScene(std::filesystem::path &filepath, std::shared_pt
     auto stream = openFile(filepath);
     auto camReader = camSolution.createCreator(loader::reader::creator::CameraReaderCreatorSolution::PlainCamera)->create(stream, camImpl);
     auto figReader = figSolution.createCreator(loader::reader::creator::BaseMeshFigureCreatorSolution::MeshFigure)->create(stream, figImpl);
-    auto loader = loaderSolution.createCreator(loader::creator::SceneLoaderCreatorSolution::STREAM)->create(stream);
+    auto loader = loaderSolution.createCreator(loader::creator::SceneLoaderCreatorSolution::STREAM)->create();
     loader->setCamReader(camReader);
     loader->setFigReader(figReader);
     loader->load(manager->getScene());

@@ -11,7 +11,7 @@
 namespace loader {
 void StreamSceneLoader::load(std::shared_ptr<core::Scene> scene)
 {
-    builder->setStream(stream);
+    // builder->setStream(stream);
     builder->setFigReader(figReader);
     builder->setCamReader(camReader);
     builder->loadCameras(scene);

@@ -15,7 +15,7 @@ class BaseSceneBuilder {
 public:
     virtual void loadCameras(std::shared_ptr<core::Scene> scene) = 0;
     virtual void loadFigures(std::shared_ptr<core::Scene> scene) = 0;
-    virtual void setStream(std::shared_ptr<std::istream>) = 0;
+    // virtual void setStream(std::shared_ptr<std::istream>) = 0;
     virtual void setCamReader(std::shared_ptr<reader::CameraReader>) = 0;
     virtual void setFigReader(std::shared_ptr<reader::BaseMeshFigureReader>) = 0;
     virtual ~BaseSceneBuilder();

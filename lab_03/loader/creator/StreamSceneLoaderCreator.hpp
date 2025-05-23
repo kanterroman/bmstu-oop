@@ -11,7 +11,7 @@ namespace creator {
 
 class StreamSceneLoaderCreator : public SceneLoaderCreator {
 public:
-    std::shared_ptr<BaseSceneLoader> create(std::shared_ptr<std::istream> stream) override;
+    std::shared_ptr<BaseSceneLoader> create() override;
 };
 
 } // creator

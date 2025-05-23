@@ -31,10 +31,10 @@ void StreamSceneBuilder::loadFigures(std::shared_ptr<core::Scene> scene)
     scene->add(obj);
 }
 
-void StreamSceneBuilder::setStream(std::shared_ptr<std::istream> stream)
-{
-    this->stream = stream;
-}
+// void StreamSceneBuilder::setStream(std::shared_ptr<std::istream> stream)
+// {
+//     this->stream = stream;
+// }
 
 void StreamSceneBuilder::setCamReader(std::shared_ptr<reader::CameraReader> reader)
 {
