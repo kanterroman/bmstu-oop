@@ -3,10 +3,10 @@
 //
 
 #include "Controller.hpp"
-#include "TimerInfo.hpp"
+#include "Config.hpp"
 #include <QDebug>
 
-Controller::Controller(QObject *parent) : QObject(parent), _state(PENDING), _direction(UP), _currentFloor(INITIAL_FLOOOR)
+Controller::Controller(QObject *parent) : QObject(parent), _state(PENDING), _direction(UP), _currentFloor(INITIAL_FLOOR)
 {
     connect(this, SIGNAL(noTargets()), this, SLOT(toPending()));
     connect(this, SIGNAL(floorReached()), this, SLOT(handleArrival()));

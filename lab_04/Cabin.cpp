@@ -5,7 +5,7 @@
 #include "Cabin.hpp"
 #include <QDebug>
 
-#include "TimerInfo.hpp"
+#include "Config.hpp"
 
 Cabin::Cabin(QObject *parent) : QObject(parent), _state(UNLOCKED)
 {

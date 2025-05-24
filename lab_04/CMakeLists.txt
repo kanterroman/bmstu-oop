@@ -19,7 +19,7 @@ find_package(Qt6 COMPONENTS
 add_executable(${APP_NAME}
         Doors.cpp
         Doors.hpp
-        TimerInfo.hpp
+        Config.hpp
         Cabin.cpp
         Cabin.hpp
         Controller.cpp

@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-#include "TimerInfo.hpp"
+#include "Config.hpp"
 #include "ui_mainwindow.h"
 
 #include <QHBoxLayout>
@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
     generateUI();
 
-    qDebug() << "Лифт на этаже №" << INITIAL_FLOOOR << "Двери закрыты, кабина готова к движению";
+    qDebug() << "Лифт на этаже №" << INITIAL_FLOOR << "Двери закрыты, кабина готова к движению";
 }
 
 
@@ -65,7 +65,7 @@ void MainWindow::generateUI()
         btn->setStyleSheet(FLOOR_INDICATOR_STYLESHEET);
     }
 
-    floorIndicators->button(INITIAL_FLOOOR)->setChecked(true);
+    floorIndicators->button(INITIAL_FLOOR)->setChecked(true);
     connect(&elevator._controller, &Controller::onFloor, this, &MainWindow::updateFloorIndicator);
 }
 
