@@ -99,7 +99,7 @@ void Controller::addToQueue(int floor)
     while (snd != _queue.end() && (*snd - *fst) * _direction > 0) ++fst, ++snd;
     auto end = snd;
 
-    if ((floor - _currentFloor) * _direction > 0)
+    if ((floor - _currentFloor) * _direction >= 0)
     {
         auto it = _queue.begin();
         for (; it != end && (floor - *it) * _direction > 0; ++it);
