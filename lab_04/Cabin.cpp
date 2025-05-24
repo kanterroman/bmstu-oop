@@ -17,11 +17,13 @@ Cabin::Cabin(QObject *parent) : QObject(parent), _state(UNLOCKED)
 
 void Cabin::lockCabin()
 {
-    if (_state != UNLOCKED && _state != MOVING)
+    if (_state != UNLOCKED && _state != MOVING && _state != LOCKED)
         return;
+    auto _prevState = _state;
     _state = LOCKED;
 
-    qDebug() << "Кабина заблокирована";
+    if (_prevState != LOCKED)
+        qDebug() << "Кабина заблокирована";
     emit cabinLocked();
 }
 

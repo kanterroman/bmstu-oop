@@ -70,10 +70,11 @@ void Controller::toPending()
 
 void Controller::addNewTarget(int floor)
 {
+    _state = ADDING_TARGET;
     if (std::ranges::find(_queue, floor) != _queue.end())
         return;
-    _state = ADDING_TARGET;
 
+    determineDirection(_currentFloor);
     addToQueue(floor);
     emit moveToTarget();
 }
