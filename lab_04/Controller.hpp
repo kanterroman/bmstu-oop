@@ -26,6 +26,7 @@ signals:
 public slots:
     void handleMovingToNext();
     void handleArrival();
+private slots:
     void toPending();
     void addNewTarget(int floor);
 private:
