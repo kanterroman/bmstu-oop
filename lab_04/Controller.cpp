@@ -3,10 +3,10 @@
 //
 
 #include "Controller.hpp"
-#include "TimerInfo.hpp"
+#include "Config.hpp"
 #include <QDebug>
 
-Controller::Controller(QObject *parent) : QObject(parent), _state(PENDING), _direction(UP), _currentFloor(INITIAL_FLOOOR)
+Controller::Controller(QObject *parent) : QObject(parent), _state(PENDING), _direction(UP), _currentFloor(INITIAL_FLOOR)
 {
     connect(this, SIGNAL(noTargets()), this, SLOT(toPending()));
     connect(this, SIGNAL(floorReached()), this, SLOT(handleArrival()));
@@ -70,10 +70,11 @@ void Controller::toPending()
 
 void Controller::addNewTarget(int floor)
 {
+    _state = ADDING_TARGET;
     if (std::ranges::find(_queue, floor) != _queue.end())
         return;
-    _state = ADDING_TARGET;
 
+    determineDirection(_currentFloor);
     addToQueue(floor);
     emit moveToTarget();
 }
@@ -98,7 +99,7 @@ void Controller::addToQueue(int floor)
     while (snd != _queue.end() && (*snd - *fst) * _direction > 0) ++fst, ++snd;
     auto end = snd;
 
-    if ((floor - _currentFloor) * _direction > 0)
+    if ((floor - _currentFloor) * _direction >= 0)
     {
         auto it = _queue.begin();
         for (; it != end && (floor - *it) * _direction > 0; ++it);

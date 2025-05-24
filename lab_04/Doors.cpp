@@ -5,7 +5,7 @@
 #include "Doors.hpp"
 
 #include <QDebug>
-#include "TimerInfo.hpp"
+#include "Config.hpp"
 
 Doors::Doors(QObject *parent) : QObject(parent), _state(CLOSED)
 {
